@@ -13,6 +13,12 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.List;
 import java.util.concurrent.Executors;
 
+/**
+ * local database
+ * get all value from the .json file and
+ * load into local database
+ * Similar to Lab 5
+ */
 @Database(entities = {ExhibitsItem.class}, version = 2, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class ExhibitsDatabase extends RoomDatabase {

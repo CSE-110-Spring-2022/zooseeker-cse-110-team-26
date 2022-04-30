@@ -6,6 +6,11 @@ import androidx.room.TypeConverters;
 import java.util.Arrays;
 import java.util.List;
 
+
+/**
+ * Database cannot store Object. We need this class
+ * to convert object to a string vice versa.
+ */
 public class Converters {
     @TypeConverter
     public static String convertToString(List<String> tags){

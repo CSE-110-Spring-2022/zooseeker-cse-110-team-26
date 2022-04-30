@@ -20,11 +20,19 @@ public class ExhibitsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exhibits);
+
+        // get singleton from database
         ExhibitsItemDao dao = ExhibitsDatabase.getSingleton(this).exhibitsItemDao();
+        //get all elements from database
         List<ExhibitsItem> list = dao.getAll();
 
+        //Need to add all the 'tags' into list
+        //because user will search for 'id'
         List<String> name = new LinkedList<>();
+        //keep track of duplicate element in the dropdown list
         Set<String> duplicate = new HashSet<>();
+
+        //add all strings in the tags.
         for(ExhibitsItem i : list){
             for(String s: i.tags){
                 if(duplicate.add(s)){
@@ -32,6 +40,7 @@ public class ExhibitsActivity extends AppCompatActivity {
                 }
             }
         }
+
         autoComplete = (AutoCompleteTextView)
                 findViewById(R.id.search_bar);
 
