@@ -44,9 +44,9 @@ public class ExhibitsActivity extends AppCompatActivity {
         autoComplete = (AutoCompleteTextView)
                 findViewById(R.id.search_bar);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                this, android.R.layout.select_dialog_item, name);
-
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+//                this, android.R.layout.select_dialog_item, name);
+        ExhibitsItemAdapter adapter = new ExhibitsItemAdapter(this, list);
         autoComplete.setThreshold(1);
         autoComplete.setAdapter(adapter);
     }

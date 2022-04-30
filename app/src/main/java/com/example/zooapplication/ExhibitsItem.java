@@ -46,7 +46,9 @@ public class ExhibitsItem {
         this.tags = tags;
     }
 
-
+    public String getId(){
+        return this.id;
+    }
     //get content from .json
     public static List<ExhibitsItem> loadJSON(Context context, String path){
         try{
