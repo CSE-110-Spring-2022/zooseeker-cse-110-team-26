@@ -19,17 +19,31 @@ import java.util.Locale;
  * custom adapter, to show the dropdown list
  */
 public class ExhibitsItemAdapter extends ArrayAdapter<ExhibitsItem> {
-    private final List<ExhibitsItem> suggestions;
+    private List<ExhibitsItem> suggestions;
     public ExhibitsItemAdapter(@NonNull Context context,@NonNull List<ExhibitsItem> originalList) {
         super(context, 0, originalList);
         suggestions = new ArrayList<>(originalList);
     }
 
+
+    public void setSuggestions(List<ExhibitsItem> suggestions){
+        clear();
+        this.suggestions = suggestions;
+        notifyDataSetChanged();
+    }
     @Override
     public Filter getFilter(){
         return filter;
     }
 
+    /**
+     * update our UI
+     * @param position, position in the list that match the prefix from
+     *                  search bar
+     * @param convertView, current view(UI)
+     * @param parent
+     * @return, updated view.
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
@@ -47,11 +61,13 @@ public class ExhibitsItemAdapter extends ArrayAdapter<ExhibitsItem> {
     }
 
 
-
-
-
+    /**
+     * search our database from whatever uses type in
+     * the search bar
+     */
     private Filter filter = new Filter() {
         @Override
+        //searching from data from our database
         protected FilterResults performFiltering(CharSequence charSequence) {
             //store the suggestion;
             FilterResults filterResults = new FilterResults();
@@ -63,6 +79,7 @@ public class ExhibitsItemAdapter extends ArrayAdapter<ExhibitsItem> {
             else{
                 //get whatever uses type
                 String word = charSequence.toString().toLowerCase().trim();
+                //add it to result
                 for(ExhibitsItem ex : suggestions){
                     if(ex.getId().contains(word)){
                         exhibitsItemList.add(ex);
@@ -71,10 +88,11 @@ public class ExhibitsItemAdapter extends ArrayAdapter<ExhibitsItem> {
             }
             filterResults.values = exhibitsItemList;
             filterResults.count = exhibitsItemList.size();
-
+            //this results contains all the matched items.
             return filterResults;
         }
 
+        //use this new results to update our UI.
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
             clear();

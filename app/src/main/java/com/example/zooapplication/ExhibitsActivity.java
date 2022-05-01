@@ -1,6 +1,9 @@
 package com.example.zooapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +12,7 @@ import android.widget.AutoCompleteTextView;
 
 import com.google.gson.Gson;
 
+import java.time.chrono.JapaneseChronology;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -40,12 +44,9 @@ public class ExhibitsActivity extends AppCompatActivity {
                 }
             }
         }
-
         autoComplete = (AutoCompleteTextView)
                 findViewById(R.id.search_bar);
 
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-//                this, android.R.layout.select_dialog_item, name);
         ExhibitsItemAdapter adapter = new ExhibitsItemAdapter(this, list);
         autoComplete.setThreshold(1);
         autoComplete.setAdapter(adapter);

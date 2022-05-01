@@ -64,54 +64,54 @@ public class ExhibitsDatabaseTest {
         assertNotEquals(id,id2);
 
     }
-//    @Test
-//    public void testGet() {
-//        List<String> list1 = new LinkedList<String>();
-//        list1.add("enter");
-//        list1.add("start");
-//        list1.add("begin");
-//        ExhibitsItem item1 = new ExhibitsItem("entrance-exit-gate-1", "gate", list1);
-//        long key = dao.insert(item1);
-//
-//        ExhibitsItem item2 = dao.get(key);
-//        assertEquals(key, item2.key);
-//        assertEquals(item1.id, item2.id);
-//        assertEquals(item1.tags, item2.tags);
-//        assertEquals(item1.itemType, item2.itemType);
-//    }
+    @Test
+    public void testGet() {
+        List<String> list1 = new LinkedList<String>();
+        list1.add("enter");
+        list1.add("start");
+        list1.add("begin");
+        ExhibitsItem item1 = new ExhibitsItem("entrance-exit-gate-1", "gate", list1);
+        long key = dao.insert(item1);
 
-//    @Test
-//    public void testUpdate(){
-//        List<String> list1 = new LinkedList<String>();
-//        list1.add("enter");
-//        list1.add("start");
-//        list1.add("begin");
-//        ExhibitsItem item1 = new ExhibitsItem("entrance-exit-gate-1", "gate", list1);
-//        long key = dao.insert(item1);
-//
-//        item1 = dao.get(key);
-//        item1.id = "test";
-//        int itemsUpdated = dao.update(item1);
-//        assertEquals(1, itemsUpdated);
-//
-//        item1 = dao.get(key);
-//        assertEquals("test", item1.id);
-//    }
+        ExhibitsItem item2 = dao.get(key);
+        assertEquals(key, item2.key);
+        assertEquals(item1.id, item2.id);
+        assertEquals(item1.tags, item2.tags);
+        assertEquals(item1.itemType, item2.itemType);
+    }
 
-//    @Test
-//    public void testDelete() {
-//        List<String> list1 = new LinkedList<String>();
-//        list1.add("enter");
-//        list1.add("start");
-//        list1.add("begin");
-//        ExhibitsItem item1 = new ExhibitsItem("entrance-exit-gate-1", "gate", list1);
-//        long key = dao.insert(item1);
-//
-//        item1 = dao.get(key);
-//        int item1Deleted = dao.delete(item1);
-//        assertEquals(1, item1Deleted);
-//        assertNull(dao.get(key));
-//    }
+    @Test
+    public void testUpdate(){
+        List<String> list1 = new LinkedList<String>();
+        list1.add("enter");
+        list1.add("start");
+        list1.add("begin");
+        ExhibitsItem item1 = new ExhibitsItem("entrance-exit-gate-1", "gate", list1);
+        long key = dao.insert(item1);
+
+        item1 = dao.get(key);
+        item1.id = "test";
+        int itemsUpdated = dao.update(item1);
+        assertEquals(1, itemsUpdated);
+
+        item1 = dao.get(key);
+        assertEquals("test", item1.id);
+    }
+
+    @Test
+    public void testDelete() {
+        List<String> list1 = new LinkedList<String>();
+        list1.add("enter");
+        list1.add("start");
+        list1.add("begin");
+        ExhibitsItem item1 = new ExhibitsItem("entrance-exit-gate-1", "gate", list1);
+        long key = dao.insert(item1);
+
+        item1 = dao.get(key);
+        int item1Deleted = dao.delete(item1);
+        assertEquals(1, item1Deleted);
+        assertNull(dao.get(key));
+    }
 
     @Test
     public void testGetAll(){

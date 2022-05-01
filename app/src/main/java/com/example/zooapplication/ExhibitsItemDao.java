@@ -1,5 +1,6 @@
 package com.example.zooapplication;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -22,6 +23,9 @@ public interface ExhibitsItemDao {
 
     @Query("SELECT * FROM `exhibits_items` ORDER by `id`")
     List<ExhibitsItem> getAll();
+
+    @Query("SELECT * FROM `exhibits_items` ORDER by `id`")
+    LiveData<List<ExhibitsItem>> getAllLive();
 
     @Update
     int update(ExhibitsItem exhibitsItem);
