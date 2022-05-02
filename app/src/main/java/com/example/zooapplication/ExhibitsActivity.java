@@ -5,8 +5,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
@@ -50,5 +52,12 @@ public class ExhibitsActivity extends AppCompatActivity {
         ExhibitsItemAdapter adapter = new ExhibitsItemAdapter(this, list);
         autoComplete.setThreshold(1);
         autoComplete.setAdapter(adapter);
+
+    }
+
+    public void onPlanClicked(View view) {
+        Intent intent = new Intent(this,DisplayPlanActivity.class);
+
+        startActivity(intent);
     }
 }
