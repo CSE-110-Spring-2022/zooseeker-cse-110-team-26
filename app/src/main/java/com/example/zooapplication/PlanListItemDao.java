@@ -1,5 +1,6 @@
 package com.example.zooapplication;
 
+import androidx.annotation.Size;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -32,6 +33,7 @@ public interface PlanListItemDao {
 
     @Delete
     int delete(PlanListItems todoListItem);
+
 
     @Insert
     List<Long> insertAll(List<PlanListItems> planListItems);
