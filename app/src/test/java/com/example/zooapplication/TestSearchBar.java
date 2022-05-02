@@ -23,7 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.remote.EspressoRemoteMessage;
+//import androidx.test.espresso.remote.EspressoRemoteMessage;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.example.zooapplication.ExhibitsDatabase;
