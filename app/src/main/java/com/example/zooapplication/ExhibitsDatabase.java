@@ -47,4 +47,10 @@ public abstract class ExhibitsDatabase extends RoomDatabase {
                 })
                 .build();
     }
+    public static void injectTestDatabase(ExhibitsDatabase exhibitsDatabase){
+        if(singleton != null){
+            singleton.close();
+        }
+        singleton = exhibitsDatabase;
+    }
 }
