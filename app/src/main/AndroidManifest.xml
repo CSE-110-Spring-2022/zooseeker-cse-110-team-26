@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ZooApplication">
         <activity
+            android:name=".DisplayPlanActivity"
+            android:exported="false" />
+        <activity
             android:name=".ExhibitsActivity"
             android:exported="false" />
         <activity
