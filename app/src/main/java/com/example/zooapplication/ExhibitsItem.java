@@ -33,17 +33,18 @@ public class ExhibitsItem {
     public long key;
     @NonNull
     public String id;
-    public String itemType;
-
+    public String kind;
+    public String name;
     // Database cannot store object, we need to convert it to a string.
     @TypeConverters
     public List<String> tags;
 
     //Constructor
-    public ExhibitsItem(@NonNull String id, String itemType, List<String> tags){
+    public ExhibitsItem(@NonNull String id, String kind, List<String> tags, String name){
         this.id = id;
-        this.itemType = itemType;
+        this.kind = kind;
         this.tags = tags;
+        this.name = name;
     }
 
     public String getId(){
@@ -68,7 +69,7 @@ public class ExhibitsItem {
     public String toString() {
         return "ExhibitsItem{" +
                 "id='" + id + '\'' +
-                ", type='" + itemType + '\'' +
+                ", type='" + kind + '\'' +
                 ", tags=" + tags +
                 '}';
     }

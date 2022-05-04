@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -28,7 +29,6 @@ import java.util.Set;
 
 public class ExhibitsActivity extends AppCompatActivity {
     AutoCompleteTextView autoComplete;
-    public RecyclerView recyclerView;
     ArrayList<String> result;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class ExhibitsActivity extends AppCompatActivity {
 
         //add all strings in the tags.
         for(ExhibitsItem i : list){
-            if(i.itemType.equals("exhibit")){
+            if(i.kind.equals("exhibit")){
                 for(String s: i.tags){
                     if(duplicate.add(s)){
                         name.add(s);
@@ -58,28 +58,42 @@ public class ExhibitsActivity extends AppCompatActivity {
         }
         autoComplete = (AutoCompleteTextView)
                 findViewById(R.id.search_bar);
+        //contains what users have clicked
         result = new ArrayList<>();
         ExhibitsItemAdapter adapter = new ExhibitsItemAdapter(this, name);
         autoComplete.setThreshold(1);
         autoComplete.setAdapter(adapter);
-        TextView view1 = findViewById(R.id.display);
-        DisplayAdapter displayAdapter = new DisplayAdapter();
-        displayAdapter.setHasStableIds(true);
-        displayAdapter.setStringList(name);
+        TextView view1 = findViewById(R.id.dis);
+//        Button button = findViewById(R.id.button);
+//        TextView view2 = findViewById(R.id.exhibits_items);
+//        DisplayAdapter displayAdapter = new DisplayAdapter();
+//        displayAdapter.setHasStableIds(true);
 //        recyclerView = findViewById(R.id.recycle);
 //        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 //        recyclerView.setAdapter(displayAdapter);
-        //displayAdapter.setStringList(adapter.getSuggestions());
+//        displayAdapter.setStringList(name);
 
+//        if(button != null){
+//            button.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Log.d("test", "yes");
+//                    result.add(view2.getText().toString());
+//                    for(String s:result){
+//                        Log.d("test", s);
+//                    }
+//                    view1.setText(view2.getText().toString());
+//                }
+//            });
+//        }
         autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 result.add(adapterView.getItemAtPosition(i).toString());
-                Log.d("test", String.valueOf(result.size()));
+                //displayAdapter.setStringList(new ArrayList<>(result));
                 view1.setText(adapterView.getItemAtPosition(i).toString());
             }
         });
-
     }
 
     public void onPlanClicked(View view) {

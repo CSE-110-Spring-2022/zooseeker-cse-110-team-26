@@ -1,5 +1,6 @@
 package com.example.zooapplication;
 
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,10 +18,12 @@ public class DisplayAdapter extends RecyclerView.Adapter<DisplayAdapter.ViewHold
 
     private List<String> displayResult = Collections.emptyList();
 
-    void setStringList(List<String> newList){
+    public void setStringList(List<String> newList){
         this.displayResult.clear();
         this.displayResult = newList;
+
         notifyDataSetChanged();
+
     }
     @NonNull
     @Override
@@ -33,7 +36,8 @@ public class DisplayAdapter extends RecyclerView.Adapter<DisplayAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setResult(displayResult.get(position));
+        //Log.d("test", String.valueOf(displayResult.get(position)));
+        holder.setResult(displayResult);
 
     }
 
@@ -46,18 +50,21 @@ public class DisplayAdapter extends RecyclerView.Adapter<DisplayAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private final TextView textView;
-        private String result;
+        private List<String> result;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.textView = itemView.findViewById(R.id.display);
+            this.textView = itemView.findViewById(R.id.dis);
         }
-        public String getResult(){
+        public List<String> getResult(){
             return result;
         }
 
-        public void setResult(String result){
+        public void setResult(List<String> result){
             this.result = result;
-            this.textView.setText(result);
+            for(String s: result) {
+                this.textView.setText(s);
+                Log.d("test", String.valueOf(textView.getText()));
+            }
         }
     }
 }

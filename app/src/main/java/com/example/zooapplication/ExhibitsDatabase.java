@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
  * load into local database
  * Similar to Lab 5
  */
-@Database(entities = {ExhibitsItem.class}, version = 2, exportSchema = false)
+@Database(entities = {ExhibitsItem.class}, version = 3, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class ExhibitsDatabase extends RoomDatabase {
     private static ExhibitsDatabase singleton = null;

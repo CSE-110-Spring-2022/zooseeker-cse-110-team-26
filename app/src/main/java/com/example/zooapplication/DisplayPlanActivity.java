@@ -20,7 +20,9 @@ public class DisplayPlanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_plan);
+        
         display = getIntent().getStringArrayListExtra("result");
+
         PlanListViewModel viewModel = new ViewModelProvider(this)
                 .get(PlanListViewModel.class);
 
