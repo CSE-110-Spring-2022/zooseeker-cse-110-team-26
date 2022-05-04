@@ -36,6 +36,23 @@
         app:layout_constraintHorizontal_bias="0.892"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:id="@+id/display"
+        android:layout_width="378dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="57dp"
+        android:layout_marginEnd="17dp"
+        android:layout_marginBottom="458dp"
+        android:text=""
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/button11"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_bar"
+        app:layout_constraintVertical_bias="0.0" />
+
 
 
 

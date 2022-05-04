@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.TextView;
 
@@ -12,24 +13,31 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
 /**
  * custom adapter, to show the dropdown list
  */
-public class ExhibitsItemAdapter extends ArrayAdapter<ExhibitsItem> {
-    private List<ExhibitsItem> suggestions;
-    public ExhibitsItemAdapter(@NonNull Context context,@NonNull List<ExhibitsItem> originalList) {
+public class ExhibitsItemAdapter extends ArrayAdapter<String> {
+    private List<String> suggestions;
+    private List<String> result;
+    public ExhibitsItemAdapter(@NonNull Context context,@NonNull List<String> originalList) {
         super(context, 0, originalList);
         suggestions = new ArrayList<>(originalList);
+        result = new LinkedList<>();
     }
 
 
-    public void setSuggestions(List<ExhibitsItem> suggestions){
+    public void setSuggestions(List<String> suggestions){
         clear();
         this.suggestions = suggestions;
         notifyDataSetChanged();
+    }
+
+    public List<String> getSuggestions(){
+        return this.result;
     }
     @Override
     public Filter getFilter(){
@@ -53,9 +61,10 @@ public class ExhibitsItemAdapter extends ArrayAdapter<ExhibitsItem> {
 
         }
         TextView textView = convertView.findViewById(R.id.exhibits_items);
-        ExhibitsItem exhibitsItem = getItem(position);
+        String exhibitsItem = getItem(position);
         if(exhibitsItem != null){
-            textView.setText(exhibitsItem.getId());
+            result.add(exhibitsItem);
+            textView.setText(exhibitsItem);
         }
         return convertView;
     }
@@ -71,7 +80,7 @@ public class ExhibitsItemAdapter extends ArrayAdapter<ExhibitsItem> {
         protected FilterResults performFiltering(CharSequence charSequence) {
             //store the suggestion;
             FilterResults filterResults = new FilterResults();
-            List<ExhibitsItem> exhibitsItemList = new ArrayList<>();
+            List<String> exhibitsItemList = new ArrayList<>();
             //users don't type anything
             if(charSequence == null || charSequence.length() == 0){
                 exhibitsItemList.addAll(suggestions);
@@ -80,8 +89,8 @@ public class ExhibitsItemAdapter extends ArrayAdapter<ExhibitsItem> {
                 //get whatever uses type
                 String word = charSequence.toString().toLowerCase().trim();
                 //add it to result
-                for(ExhibitsItem ex : suggestions){
-                    if(ex.getId().contains(word)){
+                for(String ex : suggestions){
+                    if(ex.contains(word)){
                         exhibitsItemList.add(ex);
                     }
                 }

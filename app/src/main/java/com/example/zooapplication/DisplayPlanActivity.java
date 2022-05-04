@@ -8,18 +8,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Bundle;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DisplayPlanActivity extends AppCompatActivity {
     public RecyclerView recyclerView;
     private PlanListViewModel viewModel;
-
+    private ArrayList<String> display;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_plan);
-
+        display = getIntent().getStringArrayListExtra("result");
         PlanListViewModel viewModel = new ViewModelProvider(this)
                 .get(PlanListViewModel.class);
 
