@@ -37,6 +37,7 @@ public class ExhibitsActivity extends AppCompatActivity {
 
         // get singleton from database
         ExhibitsItemDao dao = ExhibitsDatabase.getSingleton(this).exhibitsItemDao();
+
         //get all elements from database
         List<ExhibitsItem> list = dao.getAll();
 
@@ -63,7 +64,9 @@ public class ExhibitsActivity extends AppCompatActivity {
         ExhibitsItemAdapter adapter = new ExhibitsItemAdapter(this, name);
         autoComplete.setThreshold(1);
         autoComplete.setAdapter(adapter);
-        TextView view1 = findViewById(R.id.dis);
+        ListView view1 = findViewById(R.id.dis);
+        ArrayAdapter displayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, result);
+        view1.setAdapter(displayAdapter);
 //        Button button = findViewById(R.id.button);
 //        TextView view2 = findViewById(R.id.exhibits_items);
 //        DisplayAdapter displayAdapter = new DisplayAdapter();
@@ -89,9 +92,10 @@ public class ExhibitsActivity extends AppCompatActivity {
         autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                result.add(adapterView.getItemAtPosition(i).toString());
+                result.add(0, adapterView.getItemAtPosition(i).toString());
+                displayAdapter.notifyDataSetChanged();
                 //displayAdapter.setStringList(new ArrayList<>(result));
-                view1.setText(adapterView.getItemAtPosition(i).toString());
+                //view1.setText(adapterView.getItemAtPosition(i).toString());
             }
         });
     }
