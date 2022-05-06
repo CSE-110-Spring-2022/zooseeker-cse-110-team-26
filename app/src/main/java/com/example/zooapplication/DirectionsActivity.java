@@ -1,2 +1,4 @@
-package com.example.zooapplication;public class DirectionsActivity {
+package com.example.zooapplication;
+public class DirectionsActivity {
+
 }
