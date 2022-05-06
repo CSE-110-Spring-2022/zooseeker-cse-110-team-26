@@ -78,16 +78,18 @@ public class ExhibitsActivity extends AppCompatActivity {
         intent.putStringArrayListExtra("result", result);
         startActivity(intent);
         /*
+            GENERAL TODOS:
             Need to use sample_node_info to populate the database.
             We need to edit the search bar so that you can click a tag, but inside the travel
             list it will show the name
-            When we click the Plan button, go to the next activity WHICH
-            Calls the algorithm and the algorithm should return a List of Strings of Directions from
-            starting parting point to first node to be visited.
+
+            When we click the Plan button, go to the next activity
+
             Things we need to pass into next intent:
             Graph g
-            String start (the new current node)
-            List<String> unvisited, removing the new current node from that list
+            String start (actual starting location) - first time we call the algorithm will be in the onCreate
+            inside the next activity
+            List<String> unvisited, in the first case, every node inside the travel list
             Map<String, ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> eInfo
         */
     }
