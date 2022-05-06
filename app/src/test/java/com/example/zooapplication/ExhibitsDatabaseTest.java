@@ -25,7 +25,7 @@ import java.util.List;
  * Database test work properly
  */
 @RunWith(AndroidJUnit4.class)
-public class ExhibitsDatabaseTest {
+public class    ExhibitsDatabaseTest {
     private ExhibitsItemDao dao;
     private ExhibitsDatabase db;
 
