@@ -1,25 +1,16 @@
 package com.example.zooapplication;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
-import java.time.chrono.JapaneseChronology;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -83,8 +74,21 @@ public class ExhibitsActivity extends AppCompatActivity {
     }
 
     public void onPlanClicked(View view) {
-        Intent intent = new Intent(this,DisplayPlanActivity.class);
+        Intent intent = new Intent(this,DirectionsActivity.class);
         intent.putStringArrayListExtra("result", result);
         startActivity(intent);
+        /*
+            Need to use sample_node_info to populate the database.
+            We need to edit the search bar so that you can click a tag, but inside the travel
+            list it will show the name
+            When we click the Plan button, go to the next activity WHICH
+            Calls the algorithm and the algorithm should return a List of Strings of Directions from
+            starting parting point to first node to be visited.
+            Things we need to pass into next intent:
+            Graph g
+            String start (the new current node)
+            List<String> unvisited, removing the new current node from that list
+            Map<String, ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> eInfo
+        */
     }
 }
