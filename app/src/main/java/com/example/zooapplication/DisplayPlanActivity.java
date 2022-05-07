@@ -15,16 +15,17 @@ import com.google.gson.Gson;
 import org.jgrapht.Graph;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * displau the route plan, delagate to Direction class
  */
 public class DisplayPlanActivity extends AppCompatActivity {
-    public RecyclerView recyclerView;
     private ArrayList<String> unvisited;
     private Gson gson;
     Map<String, ZooData.VertexInfo> vertexInfo;
@@ -38,13 +39,14 @@ public class DisplayPlanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_plan);
-
+        //load data from json file
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 vertexInfo = ZooData.loadVertexInfoJSON("sample_node_info.json", DisplayPlanActivity.this);
                 edgeInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json", DisplayPlanActivity.this);
                 g = ZooData.loadZooGraphJSON("sample_zoo_graph.json", DisplayPlanActivity.this);
+
             }
         });
 
@@ -58,9 +60,36 @@ public class DisplayPlanActivity extends AppCompatActivity {
         String unvisitedId = getIntent().getStringExtra("id");
         id = gson.fromJson(unvisitedId, ArrayList.class);
 
-        Log.d("id", String.valueOf(id.size()));
-        plan = directions.printDirections(start, id, g, vertexInfo, edgeInfo);
-        Log.d("plan", String.valueOf(plan));
+        List<String> sortUnvisited = new LinkedList<>();
+        String copyStart = start;
+        sortUnvisited.add(copyStart);
+        String endPoint = copyStart;
+
+        //1. Select a starting city.
+        //2. Find the nearest city to your current one and go there.
+        //3. If there are still cities not yet visited, repeat step 2. Else, return to the starting city.
+        while(id.size() > 0){
+            int distance = Integer.MAX_VALUE;
+            int count = 0;
+            while(count < id.size()){
+                int tempDis = Directions.findDistance(copyStart, id.get(count), g, vertexInfo, edgeInfo);
+                if(tempDis < distance)
+                    endPoint = id.get(count);
+                count++;
+            }
+            sortUnvisited.add(endPoint);
+            //Log.d("test", String.valueOf(endPoint));
+            id.remove(endPoint);
+            copyStart = endPoint;
+        }
+
+        //find the path according to the sortVisited list
+        copyStart = start;
+        for(String s: sortUnvisited){
+            plan.add(Directions.findPath(copyStart,s,g,vertexInfo,edgeInfo));
+            copyStart = s;
+        }
+
 
         ListView view1 = findViewById(R.id.planlist);
         ArrayAdapter displayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, plan);
