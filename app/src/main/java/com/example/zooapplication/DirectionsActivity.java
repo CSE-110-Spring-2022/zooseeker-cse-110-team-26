@@ -4,8 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import org.jgrapht.Graph;
+
+import java.util.Map;
+
 public class DirectionsActivity extends AppCompatActivity {
 
+
+    Map<String, ZooData.VertexInfo> vertexInfo;
+    Map<String, ZooData.EdgeInfo> edgeInfo;
+    Graph g;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

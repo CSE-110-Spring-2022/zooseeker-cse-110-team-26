@@ -45,4 +45,26 @@ public class Directions {
         return directions;
     }
 
+
+    public static String getNextNeighbor(String start, List<String> unvisited, Graph g, Map<String, ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> eInfo) {
+        List<String> directions = new ArrayList<String>();
+        float maximum = Integer.MAX_VALUE;
+        String nearestNeighbor = "";
+        GraphPath<String, IdentifiedWeightedEdge> shortestPath = null;
+        for (String dest : unvisited) {
+            GraphPath<String, IdentifiedWeightedEdge> path =
+                    DijkstraShortestPath.findPathBetween(g, start, dest);
+            int totalDistance = 0;
+            for (IdentifiedWeightedEdge e : path.getEdgeList()) {
+                totalDistance += g.getEdgeWeight(e);
+            }
+            if (totalDistance < maximum) {
+                maximum = totalDistance;
+                nearestNeighbor = dest;
+                shortestPath = path;
+            }
+        }
+        return nearestNeighbor;
+    }
+
 }
