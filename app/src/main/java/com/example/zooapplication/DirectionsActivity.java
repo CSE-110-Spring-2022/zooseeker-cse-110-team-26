@@ -2,7 +2,11 @@ package com.example.zooapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+
+import com.google.gson.Gson;
 
 import org.jgrapht.Graph;
 
@@ -29,5 +33,9 @@ public class DirectionsActivity extends AppCompatActivity {
             List<String> unvisited, removing the new current node from that list
             Map<String, ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> eInfo
  */
+    }
+    public void onPlanClicked(View view) {
+        Intent intent = new Intent(this,DisplayPlanActivity.class);
+        Gson gson = new Gson();
     }
 }

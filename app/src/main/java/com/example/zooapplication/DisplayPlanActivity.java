@@ -65,6 +65,10 @@ public class DisplayPlanActivity extends AppCompatActivity {
         sortUnvisited.add(copyStart);
         String endPoint = copyStart;
 
+        for(int i = 0; i < id.size(); i++){
+            Log.d("test", id.get(i));
+        }
+
         //1. Select a starting city.
         //2. Find the nearest city to your current one and go there.
         //3. If there are still cities not yet visited, repeat step 2. Else, return to the starting city.
@@ -73,14 +77,19 @@ public class DisplayPlanActivity extends AppCompatActivity {
             int count = 0;
             while(count < id.size()){
                 int tempDis = Directions.findDistance(copyStart, id.get(count), g, vertexInfo, edgeInfo);
-                if(tempDis < distance)
+                //Log.d("test", String.valueOf(tempDis));
+                if(tempDis < distance) {
                     endPoint = id.get(count);
+                    //Log.d("test", "Reassigned to " + String.valueOf(endPoint));
+                    distance = tempDis;
+                }
                 count++;
             }
             sortUnvisited.add(endPoint);
             //Log.d("test", String.valueOf(endPoint));
             id.remove(endPoint);
             copyStart = endPoint;
+            //Log.d("test", String.valueOf(endPoint));
         }
 
         //find the path according to the sortVisited list
