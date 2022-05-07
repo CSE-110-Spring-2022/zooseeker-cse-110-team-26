@@ -1,17 +1,18 @@
 package com.example.zooapplication;
 
 
-
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class Directions {
-    public void printDirections(String start, List<String> unvisited, Graph g, Map<String, ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> eInfo) {
+    public static List<String> printDirections(String start, List<String> unvisited, Graph g, Map<String, ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> eInfo) {
+        List<String> directions = new ArrayList<String>();
         float maximum = Integer.MAX_VALUE;
         String nearestNeighbor;
         GraphPath<String, IdentifiedWeightedEdge> shortestPath = null;
@@ -37,10 +38,11 @@ public class Directions {
             }
             System.out.printf("%s on %s %.0f ft towards %s", startWord,
                     current_edge, g.getEdgeWeight(e), vInfo.get(g.getEdgeTarget(e).toString()).name);
+            directions.add(startWord + " on " + current_edge + " "+ g.getEdgeWeight(e) + " ft towards " + vInfo.get(g.getEdgeTarget(e).toString()).name);
             //    edge name, edge weight, node name,
             previous_edge = current_edge;
         }
-
+        return directions;
     }
 
 }
