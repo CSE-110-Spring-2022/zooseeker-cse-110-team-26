@@ -38,7 +38,7 @@ public class Directions {
             }
             System.out.printf("%s on %s %.0f ft towards %s", startWord,
                     current_edge, g.getEdgeWeight(e), vInfo.get(g.getEdgeTarget(e).toString()).name);
-            directions.add(startWord + " on " + current_edge + g.getEdgeWeight(e) + "ft towards " + vInfo.get(g.getEdgeTarget(e).toString()).name);
+            directions.add(startWord + " on " + current_edge + " "+ g.getEdgeWeight(e) + " ft towards " + vInfo.get(g.getEdgeTarget(e).toString()).name);
             //    edge name, edge weight, node name,
             previous_edge = current_edge;
         }
