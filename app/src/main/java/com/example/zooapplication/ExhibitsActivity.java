@@ -29,7 +29,7 @@ import java.util.Set;
 
 public class ExhibitsActivity extends AppCompatActivity {
     AutoCompleteTextView autoComplete;
-    ArrayList<String> result;
+    ArrayList<String> exhibitsId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,29 +60,52 @@ public class ExhibitsActivity extends AppCompatActivity {
         autoComplete = (AutoCompleteTextView)
                 findViewById(R.id.search_bar);
         //contains what users have clicked
-        result = new ArrayList<>();
+        exhibitsId = new ArrayList<>();
+        //use custom adapter, maybe don't need custom adapter.
         ExhibitsItemAdapter adapter = new ExhibitsItemAdapter(this, name);
         autoComplete.setThreshold(1);
         autoComplete.setAdapter(adapter);
-
+        //display the list of the clicked items.
         ListView view1 = findViewById(R.id.dis);
-        ArrayAdapter displayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, result);
+        //display the number of selected items
+        TextView number = findViewById(R.id.number_of_exhibits);
+        //listview custom view
+        ArrayAdapter displayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, exhibitsId);
         view1.setAdapter(displayAdapter);
 
+        //one of the item in drop-down list is clicked.
         autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                result.add(0, adapterView.getItemAtPosition(i).toString());
-                displayAdapter.notifyDataSetChanged();
-                //displayAdapter.setStringList(new ArrayList<>(result));
-                //view1.setText(adapterView.getItemAtPosition(i).toString());
+                //item already in the display list
+                if(exhibitsId.contains(adapterView.getItemAtPosition(i).toString())){
+                    Utilities.showAlert(ExhibitsActivity.this, "Item already in the exhibits list");
+                }
+               else{
+                    //the drop-down menu is base on "tags", so need to figure out the
+                    //correspond name of the item. And the suggestion should only
+                    //show the "exhibits"
+                    for(ExhibitsItem ex : list){
+                        for(String s: ex.tags){
+                            if(s.contains(adapterView.getItemAtPosition(i).toString()) && ex.kind.equals("exhibit")){
+                                exhibitsId.add(ex.name);
+                            }
+                        }
+                    }
+                    //result has been dated, call adapter to update the UI
+                    displayAdapter.notifyDataSetChanged();
+                    //update the number of item
+                    number.setText(String.valueOf(exhibitsId.size()));
+                }
+
             }
         });
     }
 
     public void onPlanClicked(View view) {
         Intent intent = new Intent(this,DisplayPlanActivity.class);
-        intent.putStringArrayListExtra("result", result);
+        //pass the name that in the list to plan activity
+        intent.putStringArrayListExtra("result", exhibitsId);
         startActivity(intent);
     }
 }

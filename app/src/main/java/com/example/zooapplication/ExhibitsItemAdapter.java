@@ -25,20 +25,18 @@ public class ExhibitsItemAdapter extends ArrayAdapter<String> {
     private List<String> result;
     public ExhibitsItemAdapter(@NonNull Context context,@NonNull List<String> originalList) {
         super(context, 0, originalList);
+        //copy the whole list that contains all strings in "tags"
         suggestions = new ArrayList<>(originalList);
         result = new LinkedList<>();
     }
 
-
+    //not use yet
     public void setSuggestions(List<String> suggestions){
         clear();
         this.suggestions = suggestions;
         notifyDataSetChanged();
     }
 
-    public List<String> getSuggestions(){
-        return this.result;
-    }
     @Override
     public Filter getFilter(){
         return filter;
@@ -78,7 +76,7 @@ public class ExhibitsItemAdapter extends ArrayAdapter<String> {
         @Override
         //searching from data from our database
         protected FilterResults performFiltering(CharSequence charSequence) {
-            //store the suggestion;
+            //store the match results;
             FilterResults filterResults = new FilterResults();
             List<String> exhibitsItemList = new ArrayList<>();
             //users don't type anything
@@ -88,7 +86,8 @@ public class ExhibitsItemAdapter extends ArrayAdapter<String> {
             else{
                 //get whatever uses type
                 String word = charSequence.toString().toLowerCase().trim();
-                //add it to result
+                //get all matched string and add them to
+                //exhibitsItemList in order to assign to filterResulte.
                 for(String ex : suggestions){
                     if(ex.contains(word)){
                         exhibitsItemList.add(ex);
@@ -104,7 +103,9 @@ public class ExhibitsItemAdapter extends ArrayAdapter<String> {
         //use this new results to update our UI.
         @Override
         protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            //clear the the current drop-down menu
             clear();
+            //need to show the matched list
             addAll((List) filterResults.values);
             notifyDataSetChanged();
         }

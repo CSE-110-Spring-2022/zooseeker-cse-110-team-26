@@ -29,23 +29,54 @@
         android:hint="Search animal here..."
         android:maxLines="1"
         android:textColorHint="@color/black"
+        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="27dp"
         tools:layout_editor_absoluteY="16dp"
-        tools:visibility="visible"
-        tools:ignore="MissingConstraints" />
+        tools:visibility="visible" />
 
     <ListView
         android:id="@+id/dis"
         android:layout_width="376dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="33dp"
+        android:layout_height="300dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="55dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="600dp"
         android:text=""
         android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_bar" />
+        app:layout_constraintTop_toBottomOf="@+id/search_bar"
+        app:layout_constraintVertical_bias="0.103" />
+
+    <TextView
+        android:id="@+id/number_of_exhibits"
+        android:layout_width="38dp"
+        android:layout_height="22dp"
+        android:layout_marginEnd="46dp"
+        android:text=""
+        android:textSize="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/display_number_of_exhitbis"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/display_number_of_exhitbis"
+        app:layout_constraintTop_toBottomOf="@+id/search_bar"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/display_number_of_exhitbis"
+        android:layout_width="wrap_content"
+        android:layout_height="22dp"
+        android:layout_marginStart="240dp"
+        android:layout_marginTop="1dp"
+        android:text="Selected: "
+        android:textSize="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/button11"
+        app:layout_constraintEnd_toStartOf="@+id/number_of_exhibits"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_bar"
+        app:layout_constraintVertical_bias="0.001" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
