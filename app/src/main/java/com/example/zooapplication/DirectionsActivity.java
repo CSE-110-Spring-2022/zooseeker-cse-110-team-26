@@ -1,16 +1,16 @@
 package com.example.zooapplication;
 
-import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Bundle;
+
 public class DirectionsActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-    }
-    /*
+        setContentView(R.layout.activity_directions);
+        /*
         Calls the algorithm and the algorithm should return a List of Strings of Directions from
         starting parting point to first node to be visited, also need to return the destination somehow
 
@@ -21,4 +21,5 @@ public class DirectionsActivity extends AppCompatActivity {
             List<String> unvisited, removing the new current node from that list
             Map<String, ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> eInfo
  */
+    }
 }
