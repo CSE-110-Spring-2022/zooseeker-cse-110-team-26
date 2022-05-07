@@ -15,7 +15,6 @@ import java.util.List;
 
 public class DisplayPlanActivity extends AppCompatActivity {
     public RecyclerView recyclerView;
-    private PlanListViewModel viewModel;
     private ArrayList<String> display;
 
     @Override
