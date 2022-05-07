@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +20,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+
+import org.jgrapht.Graph;
 
 import java.time.chrono.JapaneseChronology;
 import java.util.ArrayList;
@@ -33,11 +36,18 @@ public class ExhibitsActivity extends AppCompatActivity {
     ArrayList<String> exhibitsId;
     Map<String, ZooData.VertexInfo> vertexInfo;
     Map<String, ZooData.EdgeInfo> edgeInfo;
+    Graph g;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exhibits);
+
+        vertexInfo = ZooData.loadVertexInfoJSON("sample_node_info", this);
+        edgeInfo = ZooData.loadEdgeInfoJSON("sample_edge_info", this);
+        g = ZooData.loadZooGraphJSON("sample_zoo_graph", this);
+
+
 
         // get singleton from database
         ExhibitsItemDao dao = ExhibitsDatabase.getSingleton(this).exhibitsItemDao();
@@ -107,9 +117,22 @@ public class ExhibitsActivity extends AppCompatActivity {
     }
 
     public void onPlanClicked(View view) {
-        Intent intent = new Intent(this,DisplayPlanActivity.class);
+        Intent intent = new Intent(this,DirectionsActivity.class);
+        Gson gson = new Gson();
         //pass the name that in the list to plan activity
-        intent.putStringArrayListExtra("result", exhibitsId);
+
+        intent.putExtra("start", "entrance_exit_gate");
+        String names = gson.toJson(exhibitsId);
+        intent.putExtra("names", names);
+        String vertex = gson.toJson(vertexInfo);
+        intent.putExtra("vertexInfo", vertex);
+        String edges = gson.toJson(edgeInfo);
+        intent.putExtra("edgeInfo", edges);
+        String graph = gson.toJson(g);
+        intent.putExtra("graph", graph);
+
+//        String s = intent.getExtras("graph");
+//        Map<String, ZooData.EdgeInfo> map = gson.fromJson(s, Map<String, ZooData.EdgeInfo>());
         startActivity(intent);
     }
 }
