@@ -90,7 +90,6 @@ public class DisplayPlanActivity extends AppCompatActivity {
             copyStart = s;
         }
 
-
         ListView view1 = findViewById(R.id.planlist);
         ArrayAdapter displayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, plan);
         view1.setAdapter(displayAdapter);

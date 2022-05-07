@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -47,7 +48,7 @@ public class ExhibitsActivity extends AppCompatActivity {
         Set<String> duplicate = new HashSet<>();
         //Need to add all the 'tags' into list
         //because user will search for 'id'
-        List<String> name = new LinkedList<>();
+        List<String> typeName = new LinkedList<>();
         // get singleton from database
         ExhibitsItemDao dao = ExhibitsDatabase.getSingleton(this).exhibitsItemDao();
 
@@ -56,19 +57,17 @@ public class ExhibitsActivity extends AppCompatActivity {
         
         //add all strings in the tags.
         for(ExhibitsItem i : list){
-            if(i.kind.equals("exhibit")){
-                for(String s: i.tags){
-                    if(duplicate.add(s)){
-                        name.add(s);
-                    }
-                }
+            if(i.kind.equals("exhibit") && duplicate.add(i.name)){
+                String temp = i.name.toLowerCase();
+                typeName.add(temp);
+                Log.d("test", String.valueOf(temp));
             }
         }
         autoComplete = (AutoCompleteTextView)
                 findViewById(R.id.search_bar);
 
         //use custom adapter, maybe don't need custom adapter.
-        ExhibitsItemAdapter adapter = new ExhibitsItemAdapter(this, name);
+        ExhibitsItemAdapter adapter = new ExhibitsItemAdapter(this, typeName);
         autoComplete.setThreshold(1);
         autoComplete.setAdapter(adapter);
         //display the list of the clicked items.
@@ -78,32 +77,33 @@ public class ExhibitsActivity extends AppCompatActivity {
         //listview custom view
         ArrayAdapter displayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, resultName);
         view1.setAdapter(displayAdapter);
-
         //one of the item in drop-down list is clicked.
         autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //item already in the display list
-                if(resultName.contains(adapterView.getItemAtPosition(i).toString())){
-                    Utilities.showAlert(ExhibitsActivity.this, "Item already in the exhibits list");
-                }
-               else{
-                    //the drop-down menu is base on "tags", so need to figure out the
-                    //correspond name of the item. And the suggestion should only
-                    //show the "exhibits"
-                    for(ExhibitsItem ex : list){
-                        for(String s: ex.tags){
-                            if(s.contains(adapterView.getItemAtPosition(i).toString()) && ex.kind.equals("exhibit")){
-                                resultId.add(ex.id);
-                                resultName.add(ex.name);
-                            }
+                //the drop-down menu is base on "tags", so need to figure out the
+                //correspond name of the item. And the suggestion should only
+                //show the "exhibits"
+                for(ExhibitsItem ex : list){
+                    String temp = ex.name.toLowerCase();
+                    //found the matched result
+                    if(temp.contains(adapterView.getItemAtPosition(i).toString()) && ex.kind.equals("exhibit")){
+                        //result does not in the display menu
+                        if(!resultName.contains(ex.name)) {
+                            resultId.add(ex.id);
+                            resultName.add(ex.name);
+                        }
+                        //show error
+                        else{
+                            Utilities.showAlert(ExhibitsActivity.this, "Item already in the exhibits list");
                         }
                     }
-                    //result has been dated, call adapter to update the UI
-                    displayAdapter.notifyDataSetChanged();
-                    //update the number of item
-                    number.setText(String.valueOf(resultName.size()));
                 }
+                //result has been dated, call adapter to update the UI
+                displayAdapter.notifyDataSetChanged();
+                //update the number of item
+                number.setText(String.valueOf(resultName.size()));
+                //clear the text box after click item
                 autoComplete.getText().clear();
             }
         });
