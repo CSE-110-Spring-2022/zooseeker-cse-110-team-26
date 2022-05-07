@@ -25,11 +25,15 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class ExhibitsActivity extends AppCompatActivity {
     AutoCompleteTextView autoComplete;
     ArrayList<String> exhibitsId;
+    Map<String, ZooData.VertexInfo> vertexInfo;
+    Map<String, ZooData.EdgeInfo> edgeInfo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
