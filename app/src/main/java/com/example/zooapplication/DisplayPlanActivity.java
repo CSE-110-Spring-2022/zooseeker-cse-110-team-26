@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,33 +25,15 @@ public class DisplayPlanActivity extends AppCompatActivity {
         
         display = getIntent().getStringArrayListExtra("result");
 
-        PlanListViewModel viewModel = new ViewModelProvider(this)
-                .get(PlanListViewModel.class);
+        for(int i = 0; i < display.size();i++){
+            System.out.println(display.get(i)+"\n");
+        }
 
-        PlanListItemDao todoListItemDao = PlanDatabase.getSingleton(this).planListItemDao();
-        List<PlanListItems> todoListItems = todoListItemDao.getAll();
+        ListView view1 = findViewById(R.id.planlist);
+        ArrayAdapter displayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, display);
+        view1.setAdapter(displayAdapter);
 
-        PlanListAdapter adapter = new PlanListAdapter();
-        adapter.setHasStableIds(true);
-        adapter.setPlanListItems(todoListItems);
 
-        recyclerView = findViewById(R.id.plan_items);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-
-//
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_display_plan);
-//
-//
-//        PlanListAdapter adapter = new PlanListAdapter();
-//        adapter.setHasStableIds(true);
-//
-//        recyclerView = findViewById(R.id.plan_items);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        recyclerView.setAdapter(adapter);
-//
-//        adapter.setPlanListItems(PlanListItems.loadJSON(this,"animal_list.json"));
 
 
     }

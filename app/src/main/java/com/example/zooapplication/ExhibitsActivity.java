@@ -64,31 +64,11 @@ public class ExhibitsActivity extends AppCompatActivity {
         ExhibitsItemAdapter adapter = new ExhibitsItemAdapter(this, name);
         autoComplete.setThreshold(1);
         autoComplete.setAdapter(adapter);
+
         ListView view1 = findViewById(R.id.dis);
         ArrayAdapter displayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, result);
         view1.setAdapter(displayAdapter);
-//        Button button = findViewById(R.id.button);
-//        TextView view2 = findViewById(R.id.exhibits_items);
-//        DisplayAdapter displayAdapter = new DisplayAdapter();
-//        displayAdapter.setHasStableIds(true);
-//        recyclerView = findViewById(R.id.recycle);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        recyclerView.setAdapter(displayAdapter);
-//        displayAdapter.setStringList(name);
 
-//        if(button != null){
-//            button.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Log.d("test", "yes");
-//                    result.add(view2.getText().toString());
-//                    for(String s:result){
-//                        Log.d("test", s);
-//                    }
-//                    view1.setText(view2.getText().toString());
-//                }
-//            });
-//        }
         autoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
