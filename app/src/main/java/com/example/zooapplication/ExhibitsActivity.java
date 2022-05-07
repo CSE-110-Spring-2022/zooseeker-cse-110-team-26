@@ -117,7 +117,7 @@ public class ExhibitsActivity extends AppCompatActivity {
     }
 
     public void onPlanClicked(View view) {
-        Intent intent = new Intent(this,DirectionsActivity.class);
+        Intent intent = new Intent(this,DisplayPlanActivity.class);
         Gson gson = new Gson();
         //pass the name that in the list to plan activity
 
