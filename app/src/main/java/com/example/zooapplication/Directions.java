@@ -31,11 +31,12 @@ public class Directions {
             }
             String correctTarget = vInfo.get(g.getEdgeTarget(e).toString()).name;
             Log.d("test", "Current Location " + currentLoc);
-            Log.d("test", "Edge Source " + vInfo.get(g.getEdgeSource(e).toString()).name);
-            Log.d("test", "Edge Target " + vInfo.get(g.getEdgeTarget(e).toString()).name);
-            if(currentLoc == vInfo.get(g.getEdgeTarget(e).toString()).name) {
+            Log.d("test", "Edge Source " + vInfo.get(g.getEdgeSource(e).toString()).id);
+            Log.d("test", "Edge Target " + vInfo.get(g.getEdgeTarget(e).toString()).id);
+            if(currentLoc.equals(vInfo.get(g.getEdgeTarget(e).toString()).id) || currentLoc.equals(vInfo.get(g.getEdgeTarget(e).toString()).name)) {
                 correctTarget = vInfo.get(g.getEdgeSource(e).toString()).name;
             }
+            currentLoc = correctTarget;
             plan += startWord + " on " + current_edge + " "+ g.getEdgeWeight(e) + " ft towards " + correctTarget + "\n";
             //    edge name, edge weight, node name,
             previous_edge = current_edge;
