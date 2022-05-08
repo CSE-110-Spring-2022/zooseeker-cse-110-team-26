@@ -94,7 +94,8 @@ public class DisplayPlanActivity extends AppCompatActivity {
         //find the path according to the sortVisited list
         copyStart = start;
         for(String s: sortUnvisited){
-            plan.add(Directions.findPath(copyStart,s,g,vertexInfo,edgeInfo));
+            plan.add(Directions.findPath(copyStart, s, g, vertexInfo, edgeInfo));
+            Log.d("plan", String.valueOf(plan));
             copyStart = s;
         }
 
