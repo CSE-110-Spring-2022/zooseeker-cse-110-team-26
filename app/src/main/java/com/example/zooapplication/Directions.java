@@ -15,7 +15,7 @@ import java.util.Map;
 
 /**
  * find the closest exhibit and the path base on current location
- */
+ */ 
 public class Directions {
     //find the path from current position to destination
     public static String findPath(String start, String end, Graph g, Map<String, ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> eInfo){
