@@ -45,8 +45,10 @@ public class DirectionsActivity extends AppCompatActivity {
                 count++;
                 if(count >= directions.size()){
                     Utilities.showAlert(DirectionsActivity.this, "The exhibits list is empty!");
+
                 }
                 else{
+                    Log.d("direction", String.valueOf(directions.get(count)));
                     displayDirection.setText(directions.get(count));
                 }
             }
