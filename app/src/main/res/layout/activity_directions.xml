@@ -7,10 +7,18 @@
     tools:context=".DirectionsActivity">
 
     <Button
-        android:id="@+id/nextDirection"
+        android:id="@+id/getNextDirection"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Next"
         tools:layout_editor_absoluteX="287dp"
         tools:layout_editor_absoluteY="656dp" />
+
+    <TextView
+        android:id="@+id/currentDirection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        tools:layout_editor_absoluteX="178dp"
+        tools:layout_editor_absoluteY="66dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

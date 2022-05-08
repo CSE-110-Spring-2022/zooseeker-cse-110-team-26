@@ -1,6 +1,8 @@
 package com.example.zooapplication;
 
 
+import android.util.Log;
+
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
@@ -19,6 +21,7 @@ public class Directions {
     public static String findPath(String start, String end, Graph g, Map<String, ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> eInfo){
         String plan = "";
         GraphPath<String, IdentifiedWeightedEdge> shortestPath = DijkstraShortestPath.findPathBetween(g, start, end);
+        String currentLoc = start;
         for(IdentifiedWeightedEdge e: shortestPath.getEdgeList()) {
             String previous_edge = "";
             String startWord = "Proceed";
@@ -26,9 +29,17 @@ public class Directions {
             if(previous_edge == current_edge) {
                 startWord = "Continue";
             }
-            plan += startWord + " on " + current_edge + " "+ g.getEdgeWeight(e) + " ft towards " + vInfo.get(g.getEdgeTarget(e).toString()).name + "\n";
+            String correctTarget = vInfo.get(g.getEdgeTarget(e).toString()).name;
+            Log.d("test", "Current Location " + currentLoc);
+            Log.d("test", "Edge Source " + vInfo.get(g.getEdgeSource(e).toString()).name);
+            Log.d("test", "Edge Target " + vInfo.get(g.getEdgeTarget(e).toString()).name);
+            if(currentLoc == vInfo.get(g.getEdgeTarget(e).toString()).name) {
+                correctTarget = vInfo.get(g.getEdgeSource(e).toString()).name;
+            }
+            plan += startWord + " on " + current_edge + " "+ g.getEdgeWeight(e) + " ft towards " + correctTarget + "\n";
             //    edge name, edge weight, node name,
             previous_edge = current_edge;
+
         }
         return plan;
     }
