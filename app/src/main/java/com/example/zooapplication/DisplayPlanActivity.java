@@ -96,12 +96,12 @@ public class DisplayPlanActivity extends AppCompatActivity {
         copyStart = start;
         for(String s: sortUnvisited){
             plan.add(Directions.findPath(copyStart, s, g, vertexInfo, edgeInfo));
-            Log.d("plan", String.valueOf(plan));
             copyStart = s;
         }
-
+        List<String> displayPlan = new LinkedList<>(sortUnvisited);
+        displayPlan.remove(0);
         ListView view1 = findViewById(R.id.planlist);
-        ArrayAdapter displayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, plan);
+        ArrayAdapter displayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, displayPlan);
         view1.setAdapter(displayAdapter);
 
 

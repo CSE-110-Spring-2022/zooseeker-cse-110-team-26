@@ -44,7 +44,7 @@ public class DirectionsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 count++;
                 if(count >= directions.size()){
-                    Utilities.showAlert(DirectionsActivity.this, "The exhibits list is empty!");
+                    Utilities.showAlert(DirectionsActivity.this, "The route is done!");
 
                 }
                 else{
