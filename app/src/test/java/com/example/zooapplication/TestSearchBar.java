@@ -77,7 +77,7 @@ public class TestSearchBar {
 
 
             int key = adapter.getCount();
-            assertEquals(9, key);
+            assertEquals(4, key);
 
         });
     }

@@ -20,22 +20,25 @@ import java.util.Map;
 
 public class DirectionsActivity extends AppCompatActivity {
     private List<String> directions;
-    int count = 0;
+    int count = 1;
     TextView displayDirection;
     Button getNextDirection;
+    Button goBack;
     Iterator<String> it = null;
+    private String start;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_directions);
         displayDirection = findViewById(R.id.currentDirection);
         getNextDirection = findViewById(R.id.getNextDirection);
+        goBack = findViewById(R.id.back);
         Gson gson = new Gson();
         String str = getIntent().getStringExtra("names");
         directions = gson.fromJson(str, List.class);
 
-        //Log.d("direction", String.valueOf(directions.size()));
-        displayDirection.setText(directions.get(0));
+
+        displayDirection.setText(directions.get(1));
         getNextDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -46,6 +49,13 @@ public class DirectionsActivity extends AppCompatActivity {
                 else{
                     displayDirection.setText(directions.get(count));
                 }
+            }
+        });
+
+        goBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
 
@@ -61,12 +71,4 @@ public class DirectionsActivity extends AppCompatActivity {
             Map<String, ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> eInfo
  */
     }
-//    public void onPlanClicked(View view) {
-//        TextView textSetter = findViewById(R.id.currentDirection);
-//        if(count >= directions.size()){
-//            Utilities.showAlert(this, "Finished Plan!");
-//        }
-//        textSetter.setText(directions.get(count));
-//        count++;
-//    }
 }

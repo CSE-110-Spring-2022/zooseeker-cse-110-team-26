@@ -39,11 +39,12 @@ public class DisplayPlanActivity extends AppCompatActivity {
     List<String> id;
     private final String  start = "entrance_exit_gate";
     private Button directionButton;
+    private Button goBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_plan);
-
+        goBack = findViewById(R.id.go_back);
         directionButton = findViewById(R.id.direction);
         //load data from json file
         runOnUiThread(new Runnable() {
@@ -109,10 +110,18 @@ public class DisplayPlanActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Gson gson = new Gson();
-                String dire = gson.toJson(sortUnvisited);
+                //sortUnvisited.add(start);
+                String dire = gson.toJson(plan);
                 Intent intent = new Intent(DisplayPlanActivity.this, DirectionsActivity.class);
                 intent.putExtra("names", dire);
                 startActivity(intent);
+            }
+        });
+
+        goBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
     }
