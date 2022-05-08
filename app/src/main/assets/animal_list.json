@@ -1,5 +1,0 @@
-[
-  {"text": "Elephants",     "completed": true,  "order": 1},
-  {"text": "Tigers",        "completed": false, "order": 2},
-  {"text": "Bears", "completed": false, "order": 3}
-]
