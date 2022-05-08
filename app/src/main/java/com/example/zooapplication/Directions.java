@@ -22,11 +22,11 @@ public class Directions {
         String plan = "";
         GraphPath<String, IdentifiedWeightedEdge> shortestPath = DijkstraShortestPath.findPathBetween(g, start, end);
         String currentLoc = start;
+        String previous_edge = "";
         for(IdentifiedWeightedEdge e: shortestPath.getEdgeList()) {
-            String previous_edge = "";
             String startWord = "Proceed";
             String current_edge = eInfo.get(e.getId()).street;
-            if(previous_edge == current_edge) {
+            if(previous_edge.equals(current_edge)) {
                 startWord = "Continue";
             }
             String correctTarget = vInfo.get(g.getEdgeTarget(e).toString()).name;
