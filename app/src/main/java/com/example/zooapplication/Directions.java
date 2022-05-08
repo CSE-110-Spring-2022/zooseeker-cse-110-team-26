@@ -1,46 +1,57 @@
 package com.example.zooapplication;
 
 
+import android.util.Log;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * find the closest exhibit and the path base on current location
+ */
 public class Directions {
-    public void printDirections(String start, List<String> unvisited, Graph g, Map<String, ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> eInfo) {
-        float maximum = Integer.MAX_VALUE;
-        String nearestNeighbor;
-        GraphPath<String, IdentifiedWeightedEdge> shortestPath = null;
-        for(String dest: unvisited) {
-            GraphPath<String, IdentifiedWeightedEdge> path =
-                    DijkstraShortestPath.findPathBetween(g, start, dest);
-            int totalDistance = 0;
-            for (IdentifiedWeightedEdge e : path.getEdgeList()) {
-                totalDistance += g.getEdgeWeight(e);
-            }
-            if (totalDistance < maximum) {
-                maximum = totalDistance;
-                nearestNeighbor = dest;
-                shortestPath = path;
-            }
-        }
+    //find the path from current position to destination
+    public static String findPath(String start, String end, Graph g, Map<String, ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> eInfo){
+        String plan = "";
+        GraphPath<String, IdentifiedWeightedEdge> shortestPath = DijkstraShortestPath.findPathBetween(g, start, end);
+        String currentLoc = start;
+        String previous_edge = "";
         for(IdentifiedWeightedEdge e: shortestPath.getEdgeList()) {
-            String previous_edge = "";
             String startWord = "Proceed";
             String current_edge = eInfo.get(e.getId()).street;
-            if(previous_edge == current_edge) {
+            if(previous_edge.equals(current_edge)) {
                 startWord = "Continue";
             }
-            System.out.printf("%s on %s %.0f ft towards %s", startWord,
-                    current_edge, g.getEdgeWeight(e), vInfo.get(g.getEdgeTarget(e).toString()).name);
+            String correctTarget = vInfo.get(g.getEdgeTarget(e).toString()).name;
+            Log.d("test", "Current Location " + currentLoc);
+            Log.d("test", "Edge Source " + vInfo.get(g.getEdgeSource(e).toString()).id);
+            Log.d("test", "Edge Target " + vInfo.get(g.getEdgeTarget(e).toString()).id);
+            if(currentLoc.equals(vInfo.get(g.getEdgeTarget(e).toString()).id) || currentLoc.equals(vInfo.get(g.getEdgeTarget(e).toString()).name)) {
+                correctTarget = vInfo.get(g.getEdgeSource(e).toString()).name;
+            }
+            currentLoc = correctTarget;
+            plan += startWord + " on " + current_edge + " "+ g.getEdgeWeight(e) + " ft towards " + correctTarget + "\n";
             //    edge name, edge weight, node name,
             previous_edge = current_edge;
-        }
 
+        }
+        return plan;
     }
 
+    //find the closest exhibit base on current location
+    public static int findDistance(String start, String end, Graph g, Map<String, ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> eInfo) {
+        GraphPath<String, IdentifiedWeightedEdge> shortestPath = DijkstraShortestPath.findPathBetween(g, start, end);
+        int distance = 0;
+        for(IdentifiedWeightedEdge e: shortestPath.getEdgeList()){
+            distance += g.getEdgeWeight(e);
+        }
+        return distance;
+    }
 }
