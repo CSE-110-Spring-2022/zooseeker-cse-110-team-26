@@ -60,7 +60,6 @@ public class ExhibitsActivity extends AppCompatActivity {
             if(i.kind.equals("exhibit") && duplicate.add(i.name)){
                 String temp = i.name.toLowerCase();
                 typeName.add(temp);
-                Log.d("test", String.valueOf(temp));
             }
         }
         autoComplete = (AutoCompleteTextView)

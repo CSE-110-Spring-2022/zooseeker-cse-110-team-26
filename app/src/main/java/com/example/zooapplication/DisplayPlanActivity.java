@@ -71,9 +71,6 @@ public class DisplayPlanActivity extends AppCompatActivity {
         sortUnvisited.add(copyStart);
         String endPoint = copyStart;
 
-        for(int i = 0; i < id.size(); i++){
-            Log.d("test", id.get(i));
-        }
 
         //1. Select a starting city.
         //2. Find the nearest city to your current one and go there.
@@ -83,19 +80,15 @@ public class DisplayPlanActivity extends AppCompatActivity {
             int count = 0;
             while(count < id.size()){
                 int tempDis = Directions.findDistance(copyStart, id.get(count), g, vertexInfo, edgeInfo);
-                //Log.d("test", String.valueOf(tempDis));
                 if(tempDis < distance) {
                     endPoint = id.get(count);
-                    //Log.d("test", "Reassigned to " + String.valueOf(endPoint));
                     distance = tempDis;
                 }
                 count++;
             }
             sortUnvisited.add(endPoint);
-            //Log.d("test", String.valueOf(endPoint));
             id.remove(endPoint);
             copyStart = endPoint;
-            //Log.d("test", String.valueOf(endPoint));
         }
 
         //find the path according to the sortVisited list
@@ -117,7 +110,7 @@ public class DisplayPlanActivity extends AppCompatActivity {
                 Gson gson = new Gson();
                 String dire = gson.toJson(sortUnvisited);
                 Intent intent = new Intent(DisplayPlanActivity.this, DirectionsActivity.class);
-                intent.putExtra("sortUnvisited", dire);
+                intent.putExtra("names", dire);
                 startActivity(intent);
             }
         });
