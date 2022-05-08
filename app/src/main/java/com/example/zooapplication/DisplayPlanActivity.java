@@ -5,9 +5,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.google.gson.Gson;
@@ -35,10 +38,13 @@ public class DisplayPlanActivity extends AppCompatActivity {
     Directions directions;
     List<String> id;
     private final String  start = "entrance_exit_gate";
+    private Button directionButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_plan);
+
+        directionButton = findViewById(R.id.direction);
         //load data from json file
         runOnUiThread(new Runnable() {
             @Override
@@ -93,5 +99,18 @@ public class DisplayPlanActivity extends AppCompatActivity {
         ListView view1 = findViewById(R.id.planlist);
         ArrayAdapter displayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, plan);
         view1.setAdapter(displayAdapter);
+
+
+
+        directionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Gson gson = new Gson();
+                String dire = gson.toJson(sortUnvisited);
+                Intent intent = new Intent(DisplayPlanActivity.this, DirectionsActivity.class);
+                intent.putExtra("sortUnvisited", dire);
+                startActivity(intent);
+            }
+        });
     }
 }
