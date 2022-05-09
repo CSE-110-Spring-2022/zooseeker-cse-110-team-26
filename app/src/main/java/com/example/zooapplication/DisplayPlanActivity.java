@@ -1,3 +1,7 @@
+/**
+ * This file displays the route plan, prints the list of animals in sorted order, and sends the
+ * plan to the DirectionsActivity class to display instructions
+ */
 package com.example.zooapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,9 +29,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 
-/**
- * displau the route plan, delagate to Direction class
- */
 public class DisplayPlanActivity extends AppCompatActivity {
     private ArrayList<String> unvisited;
     private Gson gson;
@@ -44,15 +45,19 @@ public class DisplayPlanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_plan);
+        //Connect to UI views
         goBack = findViewById(R.id.go_back);
         directionButton = findViewById(R.id.direction);
         //load data from json file
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                vertexInfo = ZooData.loadVertexInfoJSON("sample_node_info.json", DisplayPlanActivity.this);
-                edgeInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json", DisplayPlanActivity.this);
-                g = ZooData.loadZooGraphJSON("sample_zoo_graph.json", DisplayPlanActivity.this);
+                vertexInfo = ZooData.loadVertexInfoJSON("sample_node_info.json",
+                        DisplayPlanActivity.this);
+                edgeInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json",
+                        DisplayPlanActivity.this);
+                g = ZooData.loadZooGraphJSON("sample_zoo_graph.json",
+                        DisplayPlanActivity.this);
 
             }
         });
@@ -73,14 +78,14 @@ public class DisplayPlanActivity extends AppCompatActivity {
         String endPoint = copyStart;
 
 
-        //1. Select a starting city.
-        //2. Find the nearest city to your current one and go there.
-        //3. If there are still cities not yet visited, repeat step 2. Else, return to the starting city.
+        //Creates the route and puts the order in which we visit the animals into sortUnvisited list
         while(id.size() > 0){
             int distance = Integer.MAX_VALUE;
             int count = 0;
             while(count < id.size()){
-                int tempDis = Directions.findDistance(copyStart, id.get(count), g, vertexInfo, edgeInfo);
+                int tempDis = Directions.findDistance
+                        (copyStart, id.get(count), g, vertexInfo, edgeInfo);
+                //Takes smallest distance
                 if(tempDis < distance) {
                     endPoint = id.get(count);
                     distance = tempDis;
@@ -101,18 +106,20 @@ public class DisplayPlanActivity extends AppCompatActivity {
         List<String> displayPlan = new LinkedList<>(sortUnvisited);
         displayPlan.remove(0);
         ListView view1 = findViewById(R.id.planlist);
-        ArrayAdapter displayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, displayPlan);
+        ArrayAdapter displayAdapter = new ArrayAdapter
+                (this, android.R.layout.simple_list_item_1, displayPlan);
         view1.setAdapter(displayAdapter);
 
 
-
+        //Button that transfers you to the DirectionsActivity class
         directionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Gson gson = new Gson();
-                //sortUnvisited.add(start);
+                //Passes the plan to DirectionsActivity
                 String dire = gson.toJson(plan);
-                Intent intent = new Intent(DisplayPlanActivity.this, DirectionsActivity.class);
+                Intent intent = new Intent
+                        (DisplayPlanActivity.this, DirectionsActivity.class);
                 intent.putExtra("names", dire);
                 startActivity(intent);
             }

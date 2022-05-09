@@ -1,3 +1,6 @@
+/**
+ * This file displays the search bar displaying and adding selected searched items
+ */
 package com.example.zooapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -108,6 +111,10 @@ public class ExhibitsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Sends the travel list (added from search Bar) to DisplayPlanActivity class
+     * @param view
+     */
     public void onPlanClicked(View view) {
         Intent intent = new Intent(this,DisplayPlanActivity.class);
         Gson gson = new Gson();

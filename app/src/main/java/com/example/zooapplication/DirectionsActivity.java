@@ -1,3 +1,6 @@
+/**
+ * This file contains the the methods and UI for the screens that display the directions
+ */
 package com.example.zooapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,47 +33,39 @@ public class DirectionsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_directions);
+        //Connects to UI
         displayDirection = findViewById(R.id.currentDirection);
         getNextDirection = findViewById(R.id.getNextDirection);
         goBack = findViewById(R.id.back);
+        //Inputs the list of instructions passed in from DisplayPlayActivity
         Gson gson = new Gson();
         String str = getIntent().getStringExtra("names");
         directions = gson.fromJson(str, List.class);
 
-
+        //Connects the plan with the UI
         displayDirection.setText(directions.get(1));
+        //Updates the Textview UI if the Next button is clicked
         getNextDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 count++;
                 if(count >= directions.size()){
-                    Utilities.showAlert(DirectionsActivity.this, "The route is done!");
+                    Utilities.showAlert(DirectionsActivity.this,
+                            "The route is done!");
 
                 }
                 else{
-                    Log.d("direction", String.valueOf(directions.get(count)));
+                    //Log.d("direction", String.valueOf(directions.get(count)));
                     displayDirection.setText(directions.get(count));
                 }
             }
         });
-
+        //If the goBack button is clicked, exit DirectionsAcitivty class
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-
-        /*
-        Calls the algorithm and the algorithm should return a List of Strings of Directions from
-        starting parting point to first node to be visited, also need to return the destination somehow
-
-        When we click NEXT:
-            Things we need to pass into next intent:
-            Graph g
-            String start (the new current node)
-            List<String> unvisited, removing the new current node from that list
-            Map<String, ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> eInfo
- */
     }
 }
