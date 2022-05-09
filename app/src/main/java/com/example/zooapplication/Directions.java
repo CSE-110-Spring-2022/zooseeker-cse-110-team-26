@@ -43,7 +43,11 @@ public class Directions {
             if(previous_edge.equals(current_edge)) {
                 startWord = "Continue";
             }
+
             String correctTarget = vInfo.get(g.getEdgeTarget(e).toString()).name;
+            Log.d("test", correctTarget);
+            Log.d("test", vInfo.get(g.getEdgeTarget(e).toString()).name);
+            Log.d("test", vInfo.get(g.getEdgeSource(e).toString()).name);
             if(currentLoc.equals(vInfo.get(g.getEdgeTarget(e).toString()).id)
                     || currentLoc.equals(vInfo.get(g.getEdgeTarget(e).toString()).name)) {
                 correctTarget = vInfo.get(g.getEdgeSource(e).toString()).name;
