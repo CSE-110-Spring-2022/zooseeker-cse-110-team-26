@@ -1,3 +1,6 @@
+/**
+ * This file handles creation and insertions of the database
+ */
 package com.example.zooapplication;
 
 import android.content.Context;

@@ -1,3 +1,7 @@
+/**
+ * This file holds an item for each exhibit object
+ *
+ */
 package com.example.zooapplication;
 import android.content.Context;
 import android.util.Log;
