@@ -1,4 +1,9 @@
 package com.example.zooapplication;
+/**
+ * File Name: ExhibitsItemAdapter.java
+ * Description: This file is for customizing adapter.
+ *              Decide how to display the items.
+ */
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -18,11 +23,20 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * custom adapter, to show the dropdown list
+ * Class: ExhibitsItemAdapter
+ * Descrition: The main activity pass the
+ *             the original list that contains
+ *             all the animal's name
+ *  Field:               suggestions     - contains all the animal's name
+ *                       result          - contains the matched result
+ * public function:      setSuggestion   - update the list if it's changed
+ *                       getFilter       - get the filter result
  */
 public class ExhibitsItemAdapter extends ArrayAdapter<String> {
     private List<String> suggestions;
     private List<String> result;
+
+    //constructor
     public ExhibitsItemAdapter(@NonNull Context context,@NonNull List<String> originalList) {
         super(context, 0, originalList);
         //copy the whole list that contains all strings in "tags"
@@ -60,8 +74,9 @@ public class ExhibitsItemAdapter extends ArrayAdapter<String> {
         }
         TextView textView = convertView.findViewById(R.id.exhibits_items);
         String exhibitsItem = getItem(position);
+        //decide what we need to display in the UI
         if(exhibitsItem != null){
-            result.add(exhibitsItem);
+            //result.add(exhibitsItem);
             textView.setText(exhibitsItem);
         }
         return convertView;

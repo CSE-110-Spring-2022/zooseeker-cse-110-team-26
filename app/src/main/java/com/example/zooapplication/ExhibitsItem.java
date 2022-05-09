@@ -27,7 +27,7 @@ import java.util.List;
 
 
 /**
- * This class is for initilizing object.
+ * This class is for initializing object.
  * every object contains the animal's type, tag, and id
  */
 @Entity(tableName = "exhibits_items")
