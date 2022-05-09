@@ -57,16 +57,20 @@ public class AddExhibitsTest {
     *  Test the list by adding three animal
     *
     * */
-    public void AddTest() {
+    public void AddTest() throws InterruptedException {
         // adding three exhibits to the list
         onView(withId(R.id.search_bar)).perform(typeText("el"));
-        onView(withText(containsString("elephant"))).inRoot(isPlatformPopup()).perform(click());
-
+        sleep(500);
+        onView(withText(containsString("elephant odyssey"))).inRoot(isPlatformPopup()).perform(click());
+        sleep(500);
         onView(withId(R.id.search_bar)).perform(typeText("li"));
+        sleep(500);
         onView(withText(containsString("lions"))).inRoot(isPlatformPopup()).perform(click());
-
+        sleep(500);
         onView(withId(R.id.search_bar)).perform(typeText("f"));
+        sleep(500);
         onView(withText(containsString("fox"))).inRoot(isPlatformPopup()).perform(click());
+        sleep(500);
 
         // Check if the context of the list is correct
         String[] context = new String[]{"Elephant Odyssey", "Lions", "Arctic Foxes"}; // a string list contains the excepted output value
@@ -82,13 +86,15 @@ public class AddExhibitsTest {
     /*
     *   Test if the app would prevent the user from adding duplicated exhibits
     * */
-    public void DuplicatedTest(){
+    public void DuplicatedTest() throws InterruptedException {
         onView(withId(R.id.search_bar)).perform(typeText("el"));
+        sleep(500);
         onView(withText(containsString("elephant"))).inRoot(isPlatformPopup()).perform(click());
-
+        sleep(500);
         onView(withId(R.id.search_bar)).perform(typeText("el"));
+        sleep(500);
         onView(withText(containsString("elephant"))).inRoot(isPlatformPopup()).perform(click());
-
+        sleep(500);
         onView(withText("Item already in the exhibits list")).check(matches(isDisplayed()));
     }
 }
