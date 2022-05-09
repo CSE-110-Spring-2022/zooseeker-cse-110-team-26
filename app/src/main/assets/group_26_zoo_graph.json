@@ -1,0 +1,54 @@
+{
+  "nodes": [
+    { "id": "entrance_exit_gate"},
+    { "id": "entrance_plaza"},
+    { "id": "tiger"},
+    { "id": "panda" },
+    { "id": "elephant" },
+    { "id": "rhino"}
+  ],
+  "edges": [
+    {
+      "id": "edge-0",
+      "source": "entrance_exit_gate",
+      "target": "entrance_plaza",
+      "weight": 10.0
+    },
+    {
+      "id": "edge-1",
+      "source": "entrance_plaza",
+      "target": "rhino",
+      "weight": 100.0
+    },
+    {
+      "id": "edge-2",
+      "source": "entrance_plaza",
+      "target": "tiger",
+      "weight": 150.0
+    },
+    {
+      "id": "edge-3",
+      "source": "tiger",
+      "target": "panda",
+      "weight": 50.0
+    },
+    {
+      "id": "edge-4",
+      "source": "panda",
+      "target": "rhino",
+      "weight": 150.0
+    },
+    {
+      "id": "edge-5",
+      "source": "elephant",
+      "target": "panda",
+      "weight": 75.0
+    },
+    {
+      "id": "edge-6",
+      "source": "elephant",
+      "target": "rhino",
+      "weight": 200.0
+    }
+  ]
+}

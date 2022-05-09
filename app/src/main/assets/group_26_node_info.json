@@ -1,0 +1,61 @@
+[
+  {
+    "id": "entrance_exit_gate",
+    "kind": "gate",
+    "name": "Entrance and Exit Gate",
+    "tags": [
+      "enter",
+      "leave",
+      "start",
+      "begin",
+      "entrance",
+      "exit"
+    ]
+  },
+  {
+    "id": "entrance_plaza",
+    "kind": "intersection",
+    "name": "Entrance Plaza",
+    "tags": []
+  },
+  {
+    "id": "tiger",
+    "kind": "exhibit",
+    "name": "Tigers",
+    "tags": [
+      "cats",
+      "feline",
+      "tiger"
+    ]
+  },
+  {
+    "id": "panda",
+    "kind": "exhibit",
+    "name": "Pandas",
+    "tags": [
+      "bear",
+      "panda"
+    ]
+  },
+  {
+    "id": "elephant",
+    "kind": "exhibit",
+    "name": "Elephants",
+    "tags": [
+      "elephant",
+      "mammal",
+      "africa"
+    ]
+  },
+
+  {
+    "id": "rhino",
+    "kind": "exhibit",
+    "name": "Rhinos",
+    "tags": [
+      "rhinos",
+      "mammal",
+      "africa"
+    ]
+  }
+]
