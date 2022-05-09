@@ -57,18 +57,25 @@ public class DirectionTest {
     /**
      * Test the if the direction display correctly
      * */
-    public void PlanTest() {
+    public void PlanTest() throws InterruptedException {
 
         // Add exhibits to the list
         onView(withId(R.id.search_bar)).perform(typeText("el"));
-        onView(withText(containsString("elephant"))).inRoot(isPlatformPopup()).perform(click());
+        sleep(500);
+        onView(withText(containsString("elephant odyssey"))).inRoot(isPlatformPopup()).perform(click());
+        sleep(500);
         onView(withId(R.id.search_bar)).perform(typeText("li"));
+        sleep(500);
         onView(withText(containsString("lions"))).inRoot(isPlatformPopup()).perform(click());
+        sleep(500);
         onView(withId(R.id.search_bar)).perform(typeText("f"));
-        onView(withText(containsString("fox"))).inRoot(isPlatformPopup()).perform(click());
+        sleep(500);
+        onView(withText(containsString("arctic fox"))).inRoot(isPlatformPopup()).perform(click());
+        sleep(500);
         Espresso.closeSoftKeyboard();
 
         // Click the "PLAN" button
+        sleep(500);
         onView(withId(R.id.button11)).perform(click());
 
         // Check if the context of the list is correct
@@ -81,10 +88,14 @@ public class DirectionTest {
         }
 
         // Click "Direction" button
+        sleep(500);
         onView(withId(R.id.direction)).perform(click());
         // Click the "NEXT" button
+        sleep(500);
         onView(withId(R.id.getNextDirection)).perform(click());
+        sleep(500);
         onView(withId(R.id.getNextDirection)).perform(click());
+        sleep(500);
         onView(withId(R.id.getNextDirection)).perform(click());
 
         // Check if Error message display when the trip is finished
