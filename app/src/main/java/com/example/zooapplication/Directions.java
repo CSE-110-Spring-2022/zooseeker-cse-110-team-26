@@ -30,9 +30,6 @@ public class Directions {
                 startWord = "Continue";
             }
             String correctTarget = vInfo.get(g.getEdgeTarget(e).toString()).name;
-            Log.d("test", "Current Location " + currentLoc);
-            Log.d("test", "Edge Source " + vInfo.get(g.getEdgeSource(e).toString()).id);
-            Log.d("test", "Edge Target " + vInfo.get(g.getEdgeTarget(e).toString()).id);
             if(currentLoc.equals(vInfo.get(g.getEdgeTarget(e).toString()).id) || currentLoc.equals(vInfo.get(g.getEdgeTarget(e).toString()).name)) {
                 correctTarget = vInfo.get(g.getEdgeSource(e).toString()).name;
             }
