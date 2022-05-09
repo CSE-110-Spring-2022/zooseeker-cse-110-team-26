@@ -32,6 +32,7 @@ public class TestDirections {
     }
 
 
+    //Test from entrance/exit gate to the gorillas exhibit
     @Test
     public void testSample(){
         String actual = Directions.findPath("entrance_exit_gate","gorillas", g, vInfo, eInfo);
@@ -40,7 +41,7 @@ public class TestDirections {
         assertEquals(expected, actual);
     }
 
-    //make another test from gators --> lions
+    //Test from gorillas exhibit gate to the elephants exhibit
     @Test
     public void testSample2(){
         String actual = Directions.findPath("gorillas","elephant_odyssey", g, vInfo, eInfo);
@@ -49,6 +50,7 @@ public class TestDirections {
         assertEquals(expected, actual);
     }
 
+    //Test from elephant exhibit gate to the foxes exhibit
     @Test
     public void testSample3(){
         String actual = Directions.findPath("elephant_odyssey","arctic_foxes", g, vInfo, eInfo);

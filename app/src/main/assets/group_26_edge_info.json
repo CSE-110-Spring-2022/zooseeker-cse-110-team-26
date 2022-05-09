@@ -1,0 +1,30 @@
+[
+  {
+    "id": "edge-0",
+    "street": "Entrance Way"
+  },
+  {
+    "id": "edge-1",
+    "street": "Orange Path"
+  },
+  {
+    "id": "edge-2",
+    "street": "Orange Path"
+  },
+  {
+    "id": "edge-3",
+    "street": "Black Path"
+  },
+  {
+    "id": "edge-4",
+    "street": "Green Path"
+  },
+  {
+    "id": "edge-5",
+    "street": "White Path"
+  },
+  {
+    "id": "edge-6",
+    "street": "White Path"
+  }
+]
