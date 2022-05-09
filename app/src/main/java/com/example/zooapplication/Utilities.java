@@ -1,4 +1,8 @@
 package com.example.zooapplication;
+/**
+ * File Name: Utilities.java
+ * Description: show error box if users type some illegal input.
+ */
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -8,6 +12,7 @@ import android.app.AlertDialog;
  */
 public class Utilities {
     public static void showAlert(Activity activity, String message){
+        //construct error box
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity);
         alertBuilder
                 .setTitle("Error")

@@ -1,4 +1,7 @@
 package com.example.zooapplication;
+/**
+ * Main activity for starting our app.
+ */
 
 import androidx.appcompat.app.AppCompatActivity;
 

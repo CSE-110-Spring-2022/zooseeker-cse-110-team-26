@@ -1,4 +1,7 @@
 package com.example.zooapplication;
+/**
+ * provide by TA
+ */
 
 import android.content.Context;
 
@@ -50,13 +53,6 @@ public class ZooData {
             }.getType();
             List<ZooData.VertexInfo> zooData = gson.fromJson(reader, type);
 
-            // This code is equivalent to:
-            //
-            // Map<String, ZooData.VertexInfo> indexedZooData = new HashMap();
-            // for (ZooData.VertexInfo datum : zooData) {
-            //   indexedZooData[datum.id] = datum;
-            // }
-            //
             Map<String, ZooData.VertexInfo> indexedZooData = zooData
                     .stream()
                     .collect(Collectors.toMap(v -> v.id, datum -> datum));
