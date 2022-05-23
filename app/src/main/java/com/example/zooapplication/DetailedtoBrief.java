@@ -26,7 +26,7 @@ public class DetailedtoBrief {
         }
         String toReturn = "";
         for(String s: splitArrayList) {
-            toReturn += s;
+            toReturn += s + "\n";
         }
         return toReturn;
     }

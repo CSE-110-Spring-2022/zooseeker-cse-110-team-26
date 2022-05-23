@@ -10,7 +10,6 @@
         android:supportsRtl="true"
         android:name=".App"
         android:theme="@style/Theme.ZooApplication">
-
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 

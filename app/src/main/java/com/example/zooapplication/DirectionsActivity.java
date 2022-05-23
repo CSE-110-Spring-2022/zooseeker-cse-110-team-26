@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -33,6 +34,7 @@ public class DirectionsActivity extends AppCompatActivity {
     Button getNextDirection;
     Button skipDirection;
     Button goBack;
+    Switch detailed;
     private final String start = "entrance_exit_gate";
     List<String> id;
     Map<String, ZooData.VertexInfo> vertexInfo;
@@ -40,6 +42,16 @@ public class DirectionsActivity extends AppCompatActivity {
     Graph g;
     Iterator<String> it = null;
     String copyStart = start;
+
+    private void setDirections(List<String> directions){
+        if(detailed.isChecked()) {
+            displayDirection.setText(directions.get(count));
+        }
+        else {
+            displayDirection.setText(DetailedtoBrief.toBrief(directions.get(count)));
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +68,7 @@ public class DirectionsActivity extends AppCompatActivity {
         getNextDirection = findViewById(R.id.getNextDirection);
         skipDirection = findViewById(R.id.skip);
         goBack = findViewById(R.id.back);
+        detailed = findViewById(R.id.setting);
 
         //load data from json file
         runOnUiThread(new Runnable() {
@@ -84,7 +97,7 @@ public class DirectionsActivity extends AppCompatActivity {
         }*/
 
         //Connects the plan with the UI
-        displayDirection.setText(directions.get(1));
+        setDirections(directions);
         //Updates the Textview UI if the Next button is clicked
         getNextDirectionClicked();
         //If the goBack button is clicked, exit DirectionsAcitivty class
@@ -127,7 +140,7 @@ public class DirectionsActivity extends AppCompatActivity {
                 }
                 else{
                     //Log.d("direction", String.valueOf(directions.get(count)));
-                    displayDirection.setText(directions.get(count));
+                    setDirections(directions);
                     copyStart = id.get(0);
                     id.remove(0);
 
@@ -159,7 +172,7 @@ public class DirectionsActivity extends AppCompatActivity {
                     directions = Route.createRoute(id, copyStart, g, vertexInfo, edgeInfo);
                     count = 1;
                     id.remove(0);
-                    displayDirection.setText(directions.get(count));
+                    setDirections(directions);
                     for (int i = 0; i < id.size(); i++) {
                         Log.d("hi", id.get(i));
                     }
@@ -169,6 +182,13 @@ public class DirectionsActivity extends AppCompatActivity {
                     copyStart = id.get(0);
                     id.remove(0);
                 }
+            }
+        });
+
+        detailed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setDirections(directions);
             }
         });
     }
