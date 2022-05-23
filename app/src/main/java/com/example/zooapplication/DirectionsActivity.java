@@ -110,7 +110,6 @@ public class DirectionsActivity extends AppCompatActivity {
     }
     private void shareData(){;
         ShareData.setLastActivity(App.getContext(), "last activity", getClass().getName());
-        //ShareData.setNames(App.getContext(), "names", s);
     }
     private void goBackClicked() {
         goBack.setOnClickListener(new View.OnClickListener() {
@@ -136,14 +135,12 @@ public class DirectionsActivity extends AppCompatActivity {
                 if(count >= directions.size()){
                     Utilities.showAlert(DirectionsActivity.this,
                             "The route is done!");
-
                 }
                 else{
                     //Log.d("direction", String.valueOf(directions.get(count)));
                     setDirections(directions);
                     copyStart = id.get(0);
                     id.remove(0);
-
                 }
             }
         });

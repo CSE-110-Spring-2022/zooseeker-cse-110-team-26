@@ -57,10 +57,8 @@ public class DisplayPlanActivity extends AppCompatActivity {
         //we need to use gson to convert back the original structure
         String unvisitedName = ShareData.getResultName(App.getContext(), "result name");
         String unvisitedId = ShareData.getResultId(App.getContext(), "result id");
-        Gson gson = new Gson();
         unvisited = gson.fromJson(unvisitedName, ArrayList.class);
         id = gson.fromJson(unvisitedId, ArrayList.class);
-
 
         //load data from json file
         runOnUiThread(new Runnable() {
@@ -75,8 +73,6 @@ public class DisplayPlanActivity extends AppCompatActivity {
 
             }
         });
-
-
         String copyStart = start;
 
         sortUnvisited = Route.sortExhibits(id, copyStart, g, vertexInfo, edgeInfo);
@@ -94,9 +90,13 @@ public class DisplayPlanActivity extends AppCompatActivity {
         ArrayAdapter displayAdapter = new ArrayAdapter
                 (this, android.R.layout.simple_list_item_1, displayPlan);
         view1.setAdapter(displayAdapter);
-
-
         //Button that transfers you to the DirectionsActivity class
+        directionButtonClicked();
+        goBackClicked();
+        ShareData.setLastActivity(App.getContext(),"last activity", getClass().getName());
+    }
+
+    private void directionButtonClicked() {
         directionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -105,15 +105,15 @@ public class DisplayPlanActivity extends AppCompatActivity {
                 String dire = gson.toJson(plan);
                 Intent intent = new Intent
                         (DisplayPlanActivity.this, DirectionsActivity.class);
-                //intent.putExtra("names", dire);
                 ShareData.setNames(App.getContext(),"names", dire);
                 String ids = gson.toJson(sortUnvisited);
-//                intent.putExtra("id", ids);
                 ShareData.setIds(App.getContext(),"ids", ids);
                 startActivity(intent);
             }
         });
+    }
 
+    private void goBackClicked() {
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
