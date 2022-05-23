@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 /**
  * Class: ExhibitsItemAdapter
@@ -44,12 +45,6 @@ public class ExhibitsItemAdapter extends ArrayAdapter<String> {
         result = new LinkedList<>();
     }
 
-    //not use yet
-    public void setSuggestions(List<String> suggestions){
-        clear();
-        this.suggestions = suggestions;
-        notifyDataSetChanged();
-    }
 
     @Override
     public Filter getFilter(){

@@ -72,8 +72,10 @@ public class ExhibitsItem {
     @Override
     public String toString() {
         return "ExhibitsItem{" +
-                "id='" + id + '\'' +
-                ", type='" + kind + '\'' +
+                "key=" + key +
+                ", id='" + id + '\'' +
+                ", kind='" + kind + '\'' +
+                ", name='" + name + '\'' +
                 ", tags=" + tags +
                 '}';
     }

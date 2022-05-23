@@ -26,15 +26,20 @@ public interface ExhibitsItemDao {
     @Query("SELECT * FROM `exhibits_items` WHERE `key`=:key")
     ExhibitsItem get(long key);
     //get all object from our databse
-    @Query("SELECT * FROM `exhibits_items` ORDER by `id`")
+    @Query("SELECT * FROM `exhibits_items` ORDER by `name`")
     List<ExhibitsItem> getAll();
-    @Query("SELECT * FROM `exhibits_items` ORDER by `id`")
+//
+    @Query("SELECT * FROM `exhibits_items`WHERE `id` = 'add'")
     LiveData<List<ExhibitsItem>> getAllLive();
+
+    @Query("SELECT * FROM `exhibits_items`WHERE `id` = 'add'")
+    List<ExhibitsItem> getLive();
 
     @Update
     int update(ExhibitsItem exhibitsItem);
 
     @Delete
     int delete(ExhibitsItem exhibitsItem);
+
 
 }
