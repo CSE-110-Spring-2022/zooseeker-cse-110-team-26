@@ -40,10 +40,12 @@ public class DisplayPlanActivity extends AppCompatActivity {
     Graph g;
     private List<String> plan;
     Directions directions;
-    List<String> id;
-    private final String  start = "entrance_exit_gate";
+    ArrayList<String> id;
+    List<String> sortUnvisited;
+    private final String start = "entrance_exit_gate";
     private Button directionButton;
     private Button goBack;
+    String copyStart = start;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,9 +81,20 @@ public class DisplayPlanActivity extends AppCompatActivity {
             }
         });
 
-        List<String> sortUnvisited = new LinkedList<>();
-        String copyStart = start;
+
+        plan = new ArrayList<String>();
+        gson = new Gson();
+        //the list that contains all the elements that users have typed
+        String str = getIntent().getStringExtra("names");
+        unvisited = gson.fromJson(str, ArrayList.class);
+        //the list that contains all the id that correspond to the clicked items
+        id = gson.fromJson(unvisitedId, ArrayList.class);
+
+
+
+        /*
         sortUnvisited.add(copyStart);
+
         String endPoint = copyStart;
 
         //Creates the route and puts the order in which we visit the animals into sortUnvisited list
@@ -102,74 +115,90 @@ public class DisplayPlanActivity extends AppCompatActivity {
         goBack();
         shareData();
     }
-
+         */
+    }
     /**
      * store this activity as the last activity in case user kills the app in this activity
      */
-    private void shareData() {
+    private void shareData () {
         ShareData.setLastActivity(App.getContext(), "last activity", getClass().getName());
     }
 
-    /**
-     * Give a detail description base on the optimal route plan
-     * @param sortUnvisited the optimal route plan
-     * @param copyStart Starting point
-     * @param endPoint next point
-     */
-    private void createRoute(List<String> sortUnvisited, String copyStart, String endPoint) {
-        while(id.size() > 0){
-            int distance = Integer.MAX_VALUE;
-            int count = 0;
-            while(count < id.size()){
-                int tempDis = Directions.findDistance
-                        (copyStart, id.get(count), g, vertexInfo, edgeInfo);
-                //Takes smallest distance
-                if(tempDis < distance) {
-                    endPoint = id.get(count);
-                    distance = tempDis;
+        /**
+         * Give a detail description base on the optimal route plan
+         * @param sortUnvisited the optimal route plan
+         * @param copyStart Starting point
+         * @param endPoint next point
+         */
+        private void createRoute (List < String > sortUnvisited, String copyStart, String endPoint){
+            while (id.size() > 0) {
+                int distance = Integer.MAX_VALUE;
+                int count = 0;
+                while (count < id.size()) {
+                    int tempDis = Directions.findDistance
+                            (copyStart, id.get(count), g, vertexInfo, edgeInfo);
+                    //Takes smallest distance
+                    if (tempDis < distance) {
+                        endPoint = id.get(count);
+                        distance = tempDis;
+                    }
+                    count++;
                 }
-                count++;
+                sortUnvisited.add(endPoint);
+                id.remove(endPoint);
+                copyStart = endPoint;
             }
-            sortUnvisited.add(endPoint);
-            id.remove(endPoint);
-            copyStart = endPoint;
+
+        }
+
+        private void display (List < String > sortUnvisited) {
+
+
+            sortUnvisited = Route.sortExhibits(id, copyStart, g, vertexInfo, edgeInfo);
+            //find the path according to the sortVisited list
+            copyStart = start;
+//        for(String s: sortUnvisited){
+//            plan.add(Directions.findPath(copyStart, s, g, vertexInfo, edgeInfo));
+//            copyStart = s;
+//        }
+
+            plan = Route.createRoute(sortUnvisited, copyStart, g, vertexInfo, edgeInfo);
+
+            List<String> displayPlan = new LinkedList<>(sortUnvisited);
+            displayPlan.remove(0);
+            ListView view1 = findViewById(R.id.planlist);
+            ArrayAdapter displayAdapter = new ArrayAdapter
+                    (this, android.R.layout.simple_list_item_1, displayPlan);
+            view1.setAdapter(displayAdapter);
+        }
+
+        private void directionClicked () {
+            directionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Gson gson = new Gson();
+                    //Passes the plan to DirectionsActivity
+                    String dire = gson.toJson(plan);
+                    Intent intent = new Intent
+                            (DisplayPlanActivity.this, DirectionsActivity.class);
+
+
+                    intent.putExtra("names", dire);
+                    String ids = gson.toJson(sortUnvisited);
+                    intent.putExtra("id", ids);
+                    startActivity(intent);
+                }
+            });
+        }
+
+        private void goBack () {
+            goBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(DisplayPlanActivity.this, ExhibitsActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            });
         }
     }
-
-    private void display(List<String> sortUnvisited) {
-        List<String> displayPlan = new LinkedList<>(sortUnvisited);
-        displayPlan.remove(0);
-        ListView view1 = findViewById(R.id.planlist);
-        ArrayAdapter displayAdapter = new ArrayAdapter
-                (this, android.R.layout.simple_list_item_1, displayPlan);
-        view1.setAdapter(displayAdapter);
-    }
-
-    private void directionClicked() {
-        directionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Gson gson = new Gson();
-                //Passes the plan to DirectionsActivity
-                String dire = gson.toJson(plan);
-                Intent intent = new Intent
-                        (DisplayPlanActivity.this, DirectionsActivity.class);
-                ShareData.setNames(App.getContext(), "names", dire);
-                startActivity(intent);
-            }
-        });
-    }
-
-    private void goBack() {
-        goBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(DisplayPlanActivity.this, ExhibitsActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });
-    }
-
-
-}
