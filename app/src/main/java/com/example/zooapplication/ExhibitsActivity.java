@@ -250,25 +250,31 @@ public class ExhibitsActivity extends AppCompatActivity {
      * @param view
      */
     public void onPlanClicked(View view) {
-        Intent intent = new Intent(this,DisplayPlanActivity.class);
-        Gson gson = new Gson();
-        //We need to update the list every time we click button
-        //so that we can get the newest list
-        resultName.clear();
-        resultId.clear();
-        //get the currect item listed in the recycle view.
-        //send list to the next activity
-        resultName = planListAdapter.getExhibitsItem();
-        //get the id list from the result name
-        for(String s : resultName){
-            for(ExhibitsItem ex : list){
-                if(s.equals(ex.name) && !ex.id.equals("add")){
-                    resultId.add(ex.id);
+        if(resultName.size() != 0){
+            Intent intent = new Intent(this,DisplayPlanActivity.class);
+            Gson gson = new Gson();
+            //We need to update the list every time we click button
+            //so that we can get the newest list
+            resultName.clear();
+            resultId.clear();
+            //get the currect item listed in the recycle view.
+            //send list to the next activity
+            resultName = planListAdapter.getExhibitsItem();
+            //get the id list from the result name
+            for(String s : resultName){
+                for(ExhibitsItem ex : list){
+                    if(s.equals(ex.name) && !ex.id.equals("add")){
+                        resultId.add(ex.id);
+                    }
                 }
             }
+            shareData();
+            startActivity(intent);
         }
-        shareData();
-        startActivity(intent);
+
+        else{
+            Utilities.showAlert(ExhibitsActivity.this, "No item is selected");
+        }
     }
 
     /**

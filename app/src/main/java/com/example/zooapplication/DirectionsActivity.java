@@ -35,7 +35,6 @@ public class DirectionsActivity extends AppCompatActivity {
     Button goBack;
     private final String start = "entrance_exit_gate";
     List<String> id;
-    private Gson gson;
     Map<String, ZooData.VertexInfo> vertexInfo;
     Map<String, ZooData.EdgeInfo> edgeInfo;
     Graph g;
@@ -47,14 +46,10 @@ public class DirectionsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_directions);
         Gson gson = new Gson();
         directions = new ArrayList<>();
-        if(!ShareData.getNames(App.getContext(), "names").equals("")){
-            String di = ShareData.getNames(App.getContext(), "names");
-            directions = gson.fromJson(di, ArrayList.class);
-        }
-        else{
-            String str = getIntent().getStringExtra("names");
-            directions = gson.fromJson(str, List.class);
-        }
+        String di = ShareData.getNames(App.getContext(), "names");
+        directions = gson.fromJson(di, ArrayList.class);
+        String i = ShareData.getResultId(App.getContext(), "ids");
+        id = gson.fromJson(i, ArrayList.class);
 
         //Connects to UI
         displayDirection = findViewById(R.id.currentDirection);
@@ -75,14 +70,7 @@ public class DirectionsActivity extends AppCompatActivity {
 
             }
         });
-        //Inputs the list of instructions passed in from DisplayPlayActivity
 
-        //Get the list of directions
-        String str = getIntent().getStringExtra("names");
-        directions = gson.fromJson(str, List.class);
-        //the list that contains all the id that correspond to the clicked items
-        String unvisitedId = getIntent().getStringExtra("id");
-        id = gson.fromJson(unvisitedId, ArrayList.class);
         //Removes entrance exit gate
         id.remove(0);
         //Removes first exhibit because we are already there
@@ -108,18 +96,21 @@ public class DirectionsActivity extends AppCompatActivity {
         return this.directions;
     }
     private void shareData(){;
-        Gson gson = new Gson();
-        String s = gson.toJson(getDirections());
         ShareData.setLastActivity(App.getContext(), "last activity", getClass().getName());
-        ShareData.setNames(App.getContext(), "names", s);
+        //ShareData.setNames(App.getContext(), "names", s);
     }
     private void goBackClicked() {
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), DisplayPlanActivity.class);
-                finish();
+                //List<String> list = gson.fromJson(s, ArrayList.class);
+//               for(String str :list){
+//                   Log.d("test", String.valueOf(str));
+//               }
                 startActivity(intent);
+                finish();
+
             }
         });
     }
