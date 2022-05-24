@@ -1,6 +1,5 @@
 package com.example.zooapplication;
 
-
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -28,24 +27,16 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-/**
- * Class name: DirectionTest
- * Description: Test if the direction can be displayed correctly
- * public function:
- *      DirectionTest - Check if the plan and route information can be displayed
- *
- * */
-public class DirectionTest {
+public class SkipDirectionsTest {
 
     @Rule
     public ActivityTestRule<ExhibitsActivity> mActivityTestRule = new ActivityTestRule<>(ExhibitsActivity.class);
 
     @Test
     /**
-     * Test the if the direction display correctly
+     * Test if the skip button works correctly
      * */
-    public void PlanTest() throws InterruptedException {
-
+    public void skipButtonTest() throws InterruptedException {
         // clear the recyclerView
         sleep(500);
         onView(withId(R.id.clear_all)).perform(click());
@@ -65,17 +56,6 @@ public class DirectionTest {
         sleep(500);
         Espresso.closeSoftKeyboard();
 
-        // Check if the context of the list(recyclerView) is correct
-        String[] context = new String[]{"Elephant Odyssey", "Lions", "Arctic Foxes"}; // a string list contains the excepted output value
-        for (int idx = 0; idx <context.length; idx++) {
-            // try ti scroll to an item that contains the exhibit
-            onView(ViewMatchers.withId(R.id.dis))
-                    // scroll with fail if item is not on the recyclerView
-                    .perform(RecyclerViewActions.scrollTo(
-                            hasDescendant(withText(context[idx])))
-                    );
-        }
-
         // Click the "PLAN" button
         sleep(500);
         onView(withId(R.id.button11)).perform(click());
@@ -84,16 +64,14 @@ public class DirectionTest {
         // Click "Direction" button
         sleep(500);
         onView(withId(R.id.direction)).perform(click());
-        // Click the "NEXT" button
+        // Click the "Skip" button
         sleep(500);
-        onView(withId(R.id.getNextDirection)).perform(click());
+        onView(withId(R.id.skip)).perform(click());
         sleep(500);
-        onView(withId(R.id.getNextDirection)).perform(click());
+        onView(withId(R.id.skip)).perform(click());
         sleep(500);
-        onView(withId(R.id.getNextDirection)).perform(click());
 
-        // Check if Error message display when the trip is finished
-        onView(withText("The route is done!")).check(matches(isDisplayed()));
-
+        // An error message should be displayed after skipping all route
+        onView(withText("The route is finished! Nothing to skip.")).check(matches(isDisplayed()));
     }
 }

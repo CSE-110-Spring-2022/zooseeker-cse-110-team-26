@@ -1,41 +1,28 @@
 package com.example.zooapplication;
 
 
-import androidx.test.espresso.DataInteraction;
-import androidx.test.espresso.ViewInteraction;
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.containsString;
+import static java.lang.Thread.sleep;
+
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.contrib.RecyclerViewActions;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.runner.AndroidJUnit4;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewParent;
 
-import static androidx.test.InstrumentationRegistry.getInstrumentation;
-import static androidx.test.espresso.Espresso.onData;
-import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.pressBack;
-import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
-import static androidx.test.espresso.action.ViewActions.*;
-import static androidx.test.espresso.assertion.ViewAssertions.*;
-import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
-import static androidx.test.espresso.matcher.ViewMatchers.*;
-
-import com.example.zooapplication.R;
-
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.hamcrest.TypeSafeMatcher;
-import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.is;
-import static java.lang.Thread.sleep;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
@@ -50,7 +37,7 @@ import static java.lang.Thread.sleep;
 public class AddExhibitsTest {
 
     @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    public ActivityTestRule<ExhibitsActivity> mActivityTestRule = new ActivityTestRule<>(ExhibitsActivity.class);
 
     @Test
     /*
@@ -58,10 +45,14 @@ public class AddExhibitsTest {
     *
     * */
     public void AddTest() throws InterruptedException {
-        // adding three exhibits to the list
+        // clear the recyclerView
+        sleep(500);
+        onView(withId(R.id.clear_all)).perform(click());
+        sleep(500);
+        // Add exhibits to the list
         onView(withId(R.id.search_bar)).perform(typeText("el"));
         sleep(500);
-        onView(withText(containsString("elephant odyssey"))).inRoot(isPlatformPopup()).perform(click());
+        onView(withText(containsString("elephant"))).inRoot(isPlatformPopup()).perform(click());
         sleep(500);
         onView(withId(R.id.search_bar)).perform(typeText("li"));
         sleep(500);
@@ -71,14 +62,17 @@ public class AddExhibitsTest {
         sleep(500);
         onView(withText(containsString("fox"))).inRoot(isPlatformPopup()).perform(click());
         sleep(500);
+        Espresso.closeSoftKeyboard();
 
         // Check if the context of the list is correct
         String[] context = new String[]{"Elephant Odyssey", "Lions", "Arctic Foxes"}; // a string list contains the excepted output value
         for (int idx = 0; idx <context.length; idx++) {
-            onData(anything())
-                    .inAdapterView(withId(R.id.dis))
-                    .atPosition(idx)
-                    .check(matches(withText(context[idx])));
+            // try ti scroll to an item that contains the exhibit
+            onView(ViewMatchers.withId(R.id.dis))
+                    // scroll with fail if item is not on the recyclerView
+                    .perform(RecyclerViewActions.scrollTo(
+                            hasDescendant(withText(context[idx])))
+                           );
             }
         }
 
@@ -87,6 +81,9 @@ public class AddExhibitsTest {
     *   Test if the app would prevent the user from adding duplicated exhibits
     * */
     public void DuplicatedTest() throws InterruptedException {
+        sleep(500);
+        onView(withId(R.id.clear_all)).perform(click());
+        sleep(500);
         onView(withId(R.id.search_bar)).perform(typeText("el"));
         sleep(500);
         onView(withText(containsString("elephant"))).inRoot(isPlatformPopup()).perform(click());

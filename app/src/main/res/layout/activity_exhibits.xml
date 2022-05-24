@@ -34,22 +34,22 @@
         tools:layout_editor_absoluteY="16dp"
         tools:visibility="visible" />
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/dis"
-        android:layout_width="376dp"
-        android:layout_height="300dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="55dp"
-        android:layout_marginEnd="25dp"
-        android:layout_marginBottom="600dp"
+        android:layout_width="385dp"
+        android:layout_height="474dp"
+        android:layout_marginStart="27dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="13dp"
+        android:layout_marginBottom="41dp"
         android:text=""
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/button11"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_bar"
-        app:layout_constraintVertical_bias="0.103" />
+        app:layout_constraintTop_toBottomOf="@+id/number_of_exhibits"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/number_of_exhibits"
@@ -77,6 +77,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_bar"
         app:layout_constraintVertical_bias="0.001" />
+
+    <Button
+        android:id="@+id/clear_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="567dp"
+        android:layout_marginEnd="176dp"
+        android:text="Clear All"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button11"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_bar"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

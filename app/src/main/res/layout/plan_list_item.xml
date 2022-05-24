@@ -3,18 +3,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="64dp">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/plan_list_item_text"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:hint="plan list item"
-        android:textSize="24sp"
+        android:layout_width="311dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="10dp"
+        android:maxLines="1"
+        android:text=""
+        android:textSize="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/delete_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <Button
+        android:id="@+id/delete_btn"
+        android:layout_width="50dp"
+        android:layout_height="33dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="5dp"
+        android:backgroundTint="@color/white"
+        android:text="X"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/plan_list_item_text"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 </androidx.constraintlayout.widget.ConstraintLayout>

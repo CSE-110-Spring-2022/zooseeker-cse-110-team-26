@@ -37,7 +37,8 @@ public class DisplayPlanActivity extends AppCompatActivity {
     Graph g;
     private List<String> plan;
     Directions directions;
-    List<String> id;
+    ArrayList<String> id;
+    List<String> sortUnvisited;
     private final String  start = "entrance_exit_gate";
     private Button directionButton;
     private Button goBack;
@@ -45,9 +46,20 @@ public class DisplayPlanActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_plan);
+        plan = new ArrayList<String>();
+        gson = new Gson();
         //Connect to UI views
         goBack = findViewById(R.id.go_back);
         directionButton = findViewById(R.id.direction);
+
+        //All infomation I need to use in this activity are store in Preferences.
+        //So we need to get info from that class, and also, that claas returns a string
+        //we need to use gson to convert back the original structure
+        String unvisitedName = ShareData.getResultName(App.getContext(), "result name");
+        String unvisitedId = ShareData.getResultId(App.getContext(), "result id");
+        unvisited = gson.fromJson(unvisitedName, ArrayList.class);
+        id = gson.fromJson(unvisitedId, ArrayList.class);
+
         //load data from json file
         runOnUiThread(new Runnable() {
             @Override
@@ -61,57 +73,30 @@ public class DisplayPlanActivity extends AppCompatActivity {
 
             }
         });
-
-        plan = new ArrayList<String>();
-        gson = new Gson();
-        id = new LinkedList<>();
-        //the list that contains all the elements that users have typed
-        String str = getIntent().getStringExtra("names");
-        unvisited = gson.fromJson(str, ArrayList.class);
-        //the list that contains all the id that correspond to the clicked items
-        String unvisitedId = getIntent().getStringExtra("id");
-        id = gson.fromJson(unvisitedId, ArrayList.class);
-
-        List<String> sortUnvisited = new LinkedList<>();
         String copyStart = start;
-        sortUnvisited.add(copyStart);
-        String endPoint = copyStart;
 
-
-        //Creates the route and puts the order in which we visit the animals into sortUnvisited list
-        while(id.size() > 0){
-            int distance = Integer.MAX_VALUE;
-            int count = 0;
-            while(count < id.size()){
-                int tempDis = Directions.findDistance
-                        (copyStart, id.get(count), g, vertexInfo, edgeInfo);
-                //Takes smallest distance
-                if(tempDis < distance) {
-                    endPoint = id.get(count);
-                    distance = tempDis;
-                }
-                count++;
-            }
-            sortUnvisited.add(endPoint);
-            id.remove(endPoint);
-            copyStart = endPoint;
-        }
-
+        sortUnvisited = Route.sortExhibits(id, copyStart, g, vertexInfo, edgeInfo);
         //find the path according to the sortVisited list
         copyStart = start;
-        for(String s: sortUnvisited){
+        /*for(String s: sortUnvisited){
             plan.add(Directions.findPath(copyStart, s, g, vertexInfo, edgeInfo));
             copyStart = s;
         }
+        */
+        plan = Route.createRoute(sortUnvisited, copyStart, g, vertexInfo, edgeInfo);
         List<String> displayPlan = new LinkedList<>(sortUnvisited);
         displayPlan.remove(0);
         ListView view1 = findViewById(R.id.planlist);
         ArrayAdapter displayAdapter = new ArrayAdapter
                 (this, android.R.layout.simple_list_item_1, displayPlan);
         view1.setAdapter(displayAdapter);
-
-
         //Button that transfers you to the DirectionsActivity class
+        directionButtonClicked();
+        goBackClicked();
+        ShareData.setLastActivity(App.getContext(),"last activity", getClass().getName());
+    }
+
+    private void directionButtonClicked() {
         directionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,14 +105,20 @@ public class DisplayPlanActivity extends AppCompatActivity {
                 String dire = gson.toJson(plan);
                 Intent intent = new Intent
                         (DisplayPlanActivity.this, DirectionsActivity.class);
-                intent.putExtra("names", dire);
+                ShareData.setNames(App.getContext(),"names", dire);
+                String ids = gson.toJson(sortUnvisited);
+                ShareData.setIds(App.getContext(),"ids", ids);
                 startActivity(intent);
             }
         });
+    }
 
+    private void goBackClicked() {
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(DisplayPlanActivity.this, ExhibitsActivity.class);
+                startActivity(intent);
                 finish();
             }
         });
