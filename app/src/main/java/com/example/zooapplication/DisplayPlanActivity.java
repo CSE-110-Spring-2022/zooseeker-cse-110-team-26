@@ -37,7 +37,8 @@ public class DisplayPlanActivity extends AppCompatActivity {
     Graph g;
     private List<String> plan;
     Directions directions;
-    List<String> id;
+    ArrayList<String> id;
+    List<String> sortUnvisited;
     private final String  start = "entrance_exit_gate";
     private Button directionButton;
     private Button goBack;
@@ -64,7 +65,6 @@ public class DisplayPlanActivity extends AppCompatActivity {
 
         plan = new ArrayList<String>();
         gson = new Gson();
-        id = new LinkedList<>();
         //the list that contains all the elements that users have typed
         String str = getIntent().getStringExtra("names");
         unvisited = gson.fromJson(str, ArrayList.class);
@@ -72,9 +72,11 @@ public class DisplayPlanActivity extends AppCompatActivity {
         String unvisitedId = getIntent().getStringExtra("id");
         id = gson.fromJson(unvisitedId, ArrayList.class);
 
-        List<String> sortUnvisited = new LinkedList<>();
         String copyStart = start;
+
+        /*
         sortUnvisited.add(copyStart);
+
         String endPoint = copyStart;
 
 
@@ -96,13 +98,16 @@ public class DisplayPlanActivity extends AppCompatActivity {
             id.remove(endPoint);
             copyStart = endPoint;
         }
-
+        */
+        sortUnvisited = Route.sortExhibits(id, copyStart, g, vertexInfo, edgeInfo);
         //find the path according to the sortVisited list
         copyStart = start;
-        for(String s: sortUnvisited){
+        /*for(String s: sortUnvisited){
             plan.add(Directions.findPath(copyStart, s, g, vertexInfo, edgeInfo));
             copyStart = s;
         }
+        */
+        plan = Route.createRoute(sortUnvisited, copyStart, g, vertexInfo, edgeInfo);
         List<String> displayPlan = new LinkedList<>(sortUnvisited);
         displayPlan.remove(0);
         ListView view1 = findViewById(R.id.planlist);
@@ -121,6 +126,8 @@ public class DisplayPlanActivity extends AppCompatActivity {
                 Intent intent = new Intent
                         (DisplayPlanActivity.this, DirectionsActivity.class);
                 intent.putExtra("names", dire);
+                String ids = gson.toJson(sortUnvisited);
+                intent.putExtra("id", ids);
                 startActivity(intent);
             }
         });
