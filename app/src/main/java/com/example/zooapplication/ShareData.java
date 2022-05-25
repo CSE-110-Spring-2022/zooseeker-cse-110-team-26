@@ -72,6 +72,20 @@ public class ShareData {
         edit.commit();
     }
 
+    /**
+     *
+     */
+    public static void setGroup(Context context, String key, String value){
+        SharedPreferences.Editor edit = getSharePref(context).edit();
+        edit.putString(key, value);
+        edit.commit();
+    }
+
+    public static void setIds(Context context, String key, String value){
+        SharedPreferences.Editor edit = getSharePref(context).edit();
+        edit.putString(key, value);
+        edit.commit();
+    }
 
     /**
      * get the last activity's name
@@ -114,11 +128,11 @@ public class ShareData {
         return getSharePref(context).getString(key, "");
     }
 
-    public static void setIds(Context context, String key, String value){
-        SharedPreferences.Editor edit = getSharePref(context).edit();
-        edit.putString(key, value);
-        edit.commit();
+
+    public static String getGroup(Context context, String key){
+        return getSharePref(context).getString(key, "");
     }
+
 
     public static String getIds(Context context, String key){
         return getSharePref(context).getString(key, "");
