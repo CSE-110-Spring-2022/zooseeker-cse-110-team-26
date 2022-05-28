@@ -44,6 +44,7 @@ dependencies {
     implementation 'androidx.core:core-animation:1.0.0-alpha02'
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
     implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.test.espresso:espresso-contrib:3.4.0'
     def gson_version = "2.9.0"
     def room_version = "2.4.2"
     implementation 'com.google.code.gson:gson:2.9.0'
