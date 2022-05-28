@@ -85,7 +85,7 @@ public class DisplayPlanActivity extends AppCompatActivity {
         */
         plan = Route.createRoute(sortUnvisited, copyStart, g, vertexInfo, edgeInfo);
         List<String> displayPlan = new LinkedList<>(sortUnvisited);
-        displayPlan.remove(0);
+        //displayPlan.remove(0);
         ListView view1 = findViewById(R.id.planlist);
         ArrayAdapter displayAdapter = new ArrayAdapter
                 (this, android.R.layout.simple_list_item_1, displayPlan);

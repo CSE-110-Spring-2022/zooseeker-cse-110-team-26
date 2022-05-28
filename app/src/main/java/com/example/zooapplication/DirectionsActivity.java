@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import org.jgrapht.Graph;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,7 +31,7 @@ import java.util.Stack;
 public class DirectionsActivity extends AppCompatActivity {
     private List<String> directions;
     private ExhibitsItemDao dao;
-    int count = 1;
+    int count = 0;
     TextView displayDirection;
     Button getNextDirection;
     Button skipDirection;
@@ -52,6 +53,14 @@ public class DirectionsActivity extends AppCompatActivity {
         }
         else {
             displayDirection.setText(DetailedtoBrief.toBrief(directions.get(count)));
+        }
+    }
+    private void setDirections(String directions){
+        if(detailed.isChecked()) {
+            displayDirection.setText(directions);
+        }
+        else {
+            displayDirection.setText(DetailedtoBrief.toBrief(directions));
         }
     }
 
@@ -90,22 +99,24 @@ public class DirectionsActivity extends AppCompatActivity {
 
             }
         });
-//        for(String s :id){
-//            Log.d("Test", String.valueOf(s));
-//        }
+        for(String s :id){
+            Log.d("Test", String.valueOf(s));
+        }
+        for(String s : directions){
+            Log.d("Test", String.valueOf(s));
+        }
+
         //stepBack.push(id.get(0));
         //Removes entrance exit gate
-        id.remove(0);
+        //id.remove(0);
         //Removes first exhibit because we are already there
         copyStart = id.get(0);
         id.remove(0);
+        stepBack.push(start);
         /*for(int i = 0; i < id.size(); i++){
             Log.d("test", id.get(i));
         }
-        for(int i = 0; i < id.size(); i++){
-            Log.d("test", directions.get(i));
-        }*/
-
+        */
         //Connects the plan with the UI
         setDirections(directions);
         //Updates the Textview UI if the Next button is clicked
@@ -121,16 +132,21 @@ public class DirectionsActivity extends AppCompatActivity {
                     Utilities.showAlert(DirectionsActivity.this, "No previous item!");
                 }
                 else{
-                   count--;
-                   String endPoint = stepBack.pop();
-                   id.add(0, endPoint);
+                    String endPoint = stepBack.pop();
+                    if(count != directions.size()){
+                        id.add(0, copyStart);
+                    }
+                    count--;
 //                    for(String s: id){
 //                        Log.d("Test", String.valueOf(s));
-//                    }
-                   String toPrevious = Directions.findPath(copyStart, endPoint, g, vertexInfo, edgeInfo);
-                   displayDirection.setText(toPrevious);
-
+//                  }
+                    Log.d("stepBack", "Copy Start: " + copyStart);
+                    Log.d("stepBack", "EndPoint: " + endPoint);
+                    String toPrevious = Directions.findPath(copyStart, endPoint, g, vertexInfo, edgeInfo);
+                    displayDirection.setText(toPrevious);
+                    copyStart = endPoint;
                 }
+                Log.d("Count", String.valueOf(count));
             }
         });
     }
@@ -161,18 +177,28 @@ public class DirectionsActivity extends AppCompatActivity {
         getNextDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                count++;
                 if(count >= directions.size()){
                     Utilities.showAlert(DirectionsActivity.this,
                             "The route is done!");
                 }
+                else if(count == directions.size() - 1) {
+                    count++;
+                    setDirections(Directions.findPath(copyStart, start, g, vertexInfo, edgeInfo));
+                    stepBack.push(copyStart);
+                    copyStart = start;
+                }
                 else{
+                    count++;
                     //Log.d("direction", String.valueOf(directions.get(count)));
                     setDirections(directions);
                     stepBack.push(copyStart);
                     copyStart = id.get(0);
                     id.remove(0);
+                    for(String s : stepBack){
+                        Log.d("Stack", String.valueOf(s));
+                    }
                 }
+                Log.d("Count", String.valueOf(count));
             }
         });
 
@@ -188,18 +214,30 @@ public class DirectionsActivity extends AppCompatActivity {
             public void onClick(View view){
                 if(id.size() == 0){
                     Utilities.showAlert(DirectionsActivity.this,
-                            "The route is finished! Nothing to skip.");
+                            "Unable to skip. No exhibits left!");
                 }
                 else if(id.size() == 1){
-                    Utilities.showAlert(DirectionsActivity.this,
-                            "Only 1 exhibit left! Unable to skip.");
+                    count++;
+                    setDirections(Directions.findPath(copyStart, start, g, vertexInfo, edgeInfo));
+                    stepBack.push(copyStart);
+                    copyStart = start;
+                    id.remove(0);
+                    directions.remove(directions.size() - 1);
+//                    Utilities.showAlert(DirectionsActivity.this,
+//                            "Only 1 exhibit left! Unable to skip.");
                 }
                 else {
+                    for (int i = 0; i < id.size(); i++) {
+                        Log.d("hi", id.get(i));
+                    }
                     id.remove(0);
                     id = Route.sortExhibits(id, copyStart, g, vertexInfo, edgeInfo);
-                    directions = Route.createRoute(id, copyStart, g, vertexInfo, edgeInfo);
-                    count = 1;
-                    id.remove(0);
+                    List<String> newDirections = Route.createRoute(id, copyStart, g, vertexInfo, edgeInfo);
+                    directions.subList(count + 1, directions.size()).clear();
+                    directions.addAll(newDirections);
+                    //count = 0;
+                    //id.remove(0);
+                    count++;
                     setDirections(directions);
 //                    for (int i = 0; i < id.size(); i++) {
 //                        Log.d("hi", id.get(i));
@@ -210,6 +248,9 @@ public class DirectionsActivity extends AppCompatActivity {
                     stepBack.push(copyStart);
                     copyStart = id.get(0);
                     id.remove(0);
+                    for(String s : stepBack){
+                        Log.d("Stack", String.valueOf(s));
+                    }
                 }
             }
         });
@@ -217,7 +258,12 @@ public class DirectionsActivity extends AppCompatActivity {
         detailed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setDirections(directions);
+//                if(count >= directions.size() - 1) {
+//                    setDirections(Directions.findPath(copyStart, start, g, vertexInfo, edgeInfo));
+//                }
+//                else {
+                    setDirections(directions);
+//                }
             }
         });
     }
