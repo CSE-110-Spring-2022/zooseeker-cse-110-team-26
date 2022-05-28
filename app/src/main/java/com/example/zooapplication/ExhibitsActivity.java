@@ -49,6 +49,7 @@ public class ExhibitsActivity extends AppCompatActivity {
     List<ExhibitsItem> list;
     Button clearAll;
     TextView number;
+    Map<String, String> group;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +57,8 @@ public class ExhibitsActivity extends AppCompatActivity {
         //For live data
         viewModel = new ViewModelProvider(this).get(ExhibitsItemViewModel.class);
         result = new ArrayList<>();
+        group = new HashMap<>();
+
         //contains what users have clicked, include the name and id
         resultName = new ArrayList<>();
         resultId = new ArrayList<>();
@@ -98,6 +101,8 @@ public class ExhibitsActivity extends AppCompatActivity {
         List<ExhibitsItem> temp1 = dao.getLive();
         for(ExhibitsItem ex: temp1){
             resultName.add(ex.name.toLowerCase());
+            resultId.add(ex.id);
+            group.put(ex.id, ex.group_id);
         }
         updateNumber(temp1.size());
         //clear the whole plan
@@ -213,6 +218,9 @@ public class ExhibitsActivity extends AppCompatActivity {
                 ExhibitsItem item = map.get(tag);
                 String temp = item.name.toLowerCase();
                 if(!resultName.contains(temp)){
+                    if(item.group_id != ""){
+                        group.put(item.id, item.group_id);
+                    }
                     //this is for custom adapter
                     result.add(item);
                     //contains the name and id that users have been clicked
@@ -223,7 +231,7 @@ public class ExhibitsActivity extends AppCompatActivity {
                     //is the name. When we want to retain the data, we can only get all the object that
                     //its id or kind is "add", I add a method in the database so that we can get those
                     //object
-                    dao.insert(new ExhibitsItem("add", "add", new ArrayList<>(), item.name));
+                    dao.insert(new ExhibitsItem("add", "add", new ArrayList<>(), item.name, "", 0.0d, 0.0d));
                     //result has been changed, call adapter to update the UI
                     planListAdapter.notifyDataSetChanged();
                     //update the number of item
@@ -257,6 +265,7 @@ public class ExhibitsActivity extends AppCompatActivity {
             //so that we can get the newest list
             resultName.clear();
             resultId.clear();
+            group.clear();
             //get the currect item listed in the recycle view.
             //send list to the next activity
             resultName = planListAdapter.getExhibitsItem();
@@ -265,6 +274,9 @@ public class ExhibitsActivity extends AppCompatActivity {
                 for(ExhibitsItem ex : list){
                     if(s.equals(ex.name) && !ex.id.equals("add")){
                         resultId.add(ex.id);
+                        if(ex.group_id != null)
+                            group.put(ex.id, ex.group_id);
+                        break;
                     }
                 }
             }
@@ -285,8 +297,10 @@ public class ExhibitsActivity extends AppCompatActivity {
         Gson gson = new Gson();
         String name = gson.toJson(resultName);
         String id = gson.toJson(resultId);
+        String temGroup = gson.toJson(group);
         ShareData.setResultName(context, "result name", name);
         ShareData.setResultId(context, "result id", id);
+        ShareData.setGroup(context, "group", temGroup);
 
     }
 

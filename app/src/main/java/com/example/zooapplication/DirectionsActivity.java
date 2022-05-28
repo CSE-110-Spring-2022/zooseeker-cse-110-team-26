@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 public class DirectionsActivity extends AppCompatActivity {
     private List<String> directions;
@@ -34,6 +35,7 @@ public class DirectionsActivity extends AppCompatActivity {
     Button getNextDirection;
     Button skipDirection;
     Button goBack;
+    Button getStepBack;
     Switch detailed;
     private final String start = "entrance_exit_gate";
     List<String> id;
@@ -42,6 +44,7 @@ public class DirectionsActivity extends AppCompatActivity {
     Graph g;
     Iterator<String> it = null;
     String copyStart = start;
+    Stack<String> stepBack;
 
     private void setDirections(List<String> directions){
         if(detailed.isChecked()) {
@@ -56,13 +59,17 @@ public class DirectionsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_directions);
+        getStepBack = findViewById(R.id.step_back);
+        stepBack = new Stack<>();
         Gson gson = new Gson();
         directions = new ArrayList<>();
         String di = ShareData.getNames(App.getContext(), "names");
         directions = gson.fromJson(di, ArrayList.class);
         String i = ShareData.getResultId(App.getContext(), "ids");
         id = gson.fromJson(i, ArrayList.class);
-
+        for(String s: id){
+            Log.d("id1234", String.valueOf(s));
+        }
         //Connects to UI
         displayDirection = findViewById(R.id.currentDirection);
         getNextDirection = findViewById(R.id.getNextDirection);
@@ -83,7 +90,10 @@ public class DirectionsActivity extends AppCompatActivity {
 
             }
         });
-
+//        for(String s :id){
+//            Log.d("Test", String.valueOf(s));
+//        }
+        //stepBack.push(id.get(0));
         //Removes entrance exit gate
         id.remove(0);
         //Removes first exhibit because we are already there
@@ -103,6 +113,26 @@ public class DirectionsActivity extends AppCompatActivity {
         //If the goBack button is clicked, exit DirectionsAcitivty class
         goBackClicked();
         shareData();
+
+        getStepBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(stepBack.empty()){
+                    Utilities.showAlert(DirectionsActivity.this, "No previous item!");
+                }
+                else{
+                   count--;
+                   String endPoint = stepBack.pop();
+                   id.add(0, endPoint);
+//                    for(String s: id){
+//                        Log.d("Test", String.valueOf(s));
+//                    }
+                   String toPrevious = Directions.findPath(copyStart, endPoint, g, vertexInfo, edgeInfo);
+                   displayDirection.setText(toPrevious);
+
+                }
+            }
+        });
     }
 
     public List<String> getDirections(){
@@ -139,6 +169,7 @@ public class DirectionsActivity extends AppCompatActivity {
                 else{
                     //Log.d("direction", String.valueOf(directions.get(count)));
                     setDirections(directions);
+                    stepBack.push(copyStart);
                     copyStart = id.get(0);
                     id.remove(0);
                 }
@@ -170,12 +201,13 @@ public class DirectionsActivity extends AppCompatActivity {
                     count = 1;
                     id.remove(0);
                     setDirections(directions);
-                    for (int i = 0; i < id.size(); i++) {
-                        Log.d("hi", id.get(i));
-                    }
-                    for (int i = 0; i < id.size(); i++) {
-                        Log.d("hi", directions.get(i));
-                    }
+//                    for (int i = 0; i < id.size(); i++) {
+//                        Log.d("hi", id.get(i));
+//                    }
+//                    for (int i = 0; i < id.size(); i++) {
+//                        Log.d("hi", directions.get(i));
+//                    }
+                    stepBack.push(copyStart);
                     copyStart = id.get(0);
                     id.remove(0);
                 }

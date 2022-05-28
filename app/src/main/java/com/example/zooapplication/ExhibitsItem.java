@@ -42,13 +42,19 @@ public class ExhibitsItem {
     // Database cannot store object, we need to convert it to a string.
     @TypeConverters
     public List<String> tags;
-
+    public String group_id;
+    public double lat;
+    public double lng;
     //Constructor
-    public ExhibitsItem(@NonNull String id, String kind, List<String> tags, String name){
+    public ExhibitsItem(@NonNull String id, String kind, List<String> tags, String name, String group_id, double lat, double lng){
         this.id = id;
         this.kind = kind;
         this.tags = tags;
         this.name = name;
+        this.group_id = group_id;
+        this.lng = lng;
+        this.lat = lat;
+
     }
 
     public String getId(){
