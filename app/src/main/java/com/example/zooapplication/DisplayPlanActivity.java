@@ -23,10 +23,12 @@ import org.jgrapht.Graph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 public class DisplayPlanActivity extends AppCompatActivity {
@@ -85,7 +87,20 @@ public class DisplayPlanActivity extends AppCompatActivity {
         */
         plan = Route.createRoute(sortUnvisited, copyStart, g, vertexInfo, edgeInfo);
         List<String> displayPlan = new LinkedList<>(sortUnvisited);
+
+
         displayPlan.remove(0);
+
+        for(int i = 0; i < displayPlan.size(); i++){
+            double dist = Directions.findDistance("entrance_exit_gate",displayPlan.get(i),g,vertexInfo,edgeInfo);
+            String street = Directions.findStreet(displayPlan.get(i),g,vertexInfo,edgeInfo);
+            displayPlan.set(i,displayPlan.get(i) + '\n'+ "Distance: " + dist + "\n" + "Street: " + street);
+        }
+
+
+
+
+
         ListView view1 = findViewById(R.id.planlist);
         ArrayAdapter displayAdapter = new ArrayAdapter
                 (this, android.R.layout.simple_list_item_1, displayPlan);

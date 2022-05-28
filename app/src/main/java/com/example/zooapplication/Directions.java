@@ -17,9 +17,11 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * find the closest exhibit and the path base on current location
@@ -80,5 +82,50 @@ public class Directions {
             distance += g.getEdgeWeight(e);
         }
         return distance;
+    }
+
+
+    public static String findStreet(String exhibit,Graph g, Map<String,
+            ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> edgeInfo){
+
+        //getting the edges that connect to the given exhibit
+        Set<String> edges = g.edgesOf(exhibit);
+
+        Iterator val = edges.iterator();
+
+        System.out.println("The iterator values are: ");
+        String id = "";
+        String iter;
+        List<String> edgeIds = new ArrayList<>();
+
+        //Iterating through the edges iterator and getting the ids of the edges for each
+        while (val.hasNext()) {
+            iter = val.next().toString();
+
+            /*g.edgesOf returns edges like this (flamingo :flamingo_to_capuchin: capuchin)
+              - cutting string using delimeter, then taking the index 1 which is id
+             */
+            String [] arr = iter.split(":");
+            edgeIds.add(arr[1]);
+            id = arr[1];
+
+            System.out.println(iter);
+        }
+        String street = null;
+        String curr = null;
+
+        //Checking to see if the street names are the same or not
+        for (int i = 0; i < edgeIds.size(); i++) {
+
+            if(street != null && !street.equals(edgeInfo.get(edgeIds.get(i)).street)){
+                street = street + "/" + edgeInfo.get(edgeIds.get(i)).street;
+            }
+            else{
+                street = edgeInfo.get(edgeIds.get(i)).street;
+            }
+        }
+
+
+        return street;
     }
 }
