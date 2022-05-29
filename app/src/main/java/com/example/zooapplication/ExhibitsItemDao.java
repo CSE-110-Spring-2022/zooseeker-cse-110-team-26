@@ -26,9 +26,13 @@ public interface ExhibitsItemDao {
     @Query("SELECT * FROM `exhibits_items` WHERE `key`=:key")
     ExhibitsItem get(long key);
     //get all object from our databse
-    @Query("SELECT * FROM `exhibits_items` ORDER by `name`")
+    @Query("SELECT * FROM `exhibits_items` ORDER by `name` AND `id` != 'add'")
     List<ExhibitsItem> getAll();
-//
+
+    @Query("SELECT * FROM `exhibits_items` WHERE `lat` != null")
+    List<ExhibitsItem> getAllWithLatLng();
+
+
     @Query("SELECT * FROM `exhibits_items`WHERE `id` = 'add'")
     LiveData<List<ExhibitsItem>> getAllLive();
 

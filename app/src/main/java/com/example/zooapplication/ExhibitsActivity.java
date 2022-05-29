@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import org.jgrapht.Graph;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -50,6 +51,9 @@ public class ExhibitsActivity extends AppCompatActivity {
     Button clearAll;
     TextView number;
     Map<String, String> group;
+    Map<String, ZooData.VertexInfo> vertexInfo;
+    Map<String, ZooData.EdgeInfo> edgeInfo;
+    Graph g;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,6 +113,7 @@ public class ExhibitsActivity extends AppCompatActivity {
         clearPlan();
         //save the last activity
         storeLastActivity();
+
 
     }
 

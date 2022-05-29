@@ -51,7 +51,6 @@ public class DisplayPlanActivity extends AppCompatActivity {
         //Connect to UI views
         goBack = findViewById(R.id.go_back);
         directionButton = findViewById(R.id.direction);
-
         //All infomation I need to use in this activity are store in Preferences.
         //So we need to get info from that class, and also, that claas returns a string
         //we need to use gson to convert back the original structure

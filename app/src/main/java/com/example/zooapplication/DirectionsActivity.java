@@ -7,12 +7,15 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -38,15 +41,16 @@ public class DirectionsActivity extends AppCompatActivity {
     Button goBack;
     Button getStepBack;
     Switch detailed;
+    Button set;
     private final String start = "entrance_exit_gate";
     List<String> id;
     Map<String, ZooData.VertexInfo> vertexInfo;
     Map<String, ZooData.EdgeInfo> edgeInfo;
     Graph g;
-    Iterator<String> it = null;
     String copyStart = start;
     Stack<String> stepBack;
-
+    EditText userLat;
+    EditText userLng;
     private void setDirections(List<String> directions){
         if(detailed.isChecked()) {
             displayDirection.setText(directions.get(count));
@@ -67,6 +71,8 @@ public class DirectionsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dao = ExhibitsDatabase.getSingleton(this).exhibitsItemDao();
+        List<ExhibitsItem> exhibitsItems = dao.getAllWithLatLng();
         setContentView(R.layout.activity_directions);
         getStepBack = findViewById(R.id.step_back);
         stepBack = new Stack<>();
@@ -85,6 +91,9 @@ public class DirectionsActivity extends AppCompatActivity {
         skipDirection = findViewById(R.id.skip);
         goBack = findViewById(R.id.back);
         detailed = findViewById(R.id.setting);
+        set = findViewById(R.id.set);
+        userLat = findViewById(R.id.lat);
+        userLng = findViewById(R.id.lng);
 
         //load data from json file
         runOnUiThread(new Runnable() {
@@ -125,6 +134,53 @@ public class DirectionsActivity extends AppCompatActivity {
         goBackClicked();
         shareData();
 
+        set.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                //get users lat and lng and store in coord
+//                double lat = Double.parseDouble(userLat.getText().toString());
+//                double lng = Double.parseDouble(userLng.getText().toString());
+//                Coord userCoord = new Coord(lat, lng);
+//                double firstLat = vertexInfo.get(id.get(0)).lat;
+//                double firstLng = vertexInfo.get(id.get(0)).lng;
+//                double firstToUserDist = userCoord.getDist(new Coord(firstLat, firstLng), userCoord);
+//                boolean needToReplan = false;
+//                Coord current = userCoord;
+//                for (String s: id){
+//                    lat = vertexInfo.get(s).lat;
+//                    lng = vertexInfo.get(s).lng;
+//                    Coord newCoord = new Coord(lat, lng);
+//                    if(userCoord.getDist(newCoord, current) < firstToUserDist){
+//                        needToReplan = true;
+//                        break;
+//                    }
+//                    current = newCoord;
+//                }
+                boolean needToReplan = true;
+                if(needToReplan){
+                    //Need to show alert w/ yes or no option
+                    //if yes, replan
+                    //if no, exit alert
+                    AlertDialog.Builder builder = new AlertDialog.Builder(DirectionsActivity.this);
+                    builder.setMessage("Off-route! Want to re-plan?");
+                    builder.setPositiveButton("re-plan", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            replan();
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    AlertDialog di = builder.create();
+                    di.show();
+                }
+            }
+        });
+
         getStepBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -149,6 +205,34 @@ public class DirectionsActivity extends AppCompatActivity {
                 Log.d("Count", String.valueOf(count));
             }
         });
+    }
+
+    private void replan() {
+        double lat = Double.parseDouble(userLat.getText().toString());
+        double lng = Double.parseDouble(userLng.getText().toString());
+
+
+        Coord inputStart = new Coord(lat, lng);
+        String newStart = "";
+        double distance = Integer.MAX_VALUE;
+        for(String s: id){
+//            double lat1 = vertexInfo.get(s).lat;
+//            double lng2 = vertexInfo.get(s).lng;
+            Coord coord = new Coord(vertexInfo.get(s).lat, vertexInfo.get(s).lng);
+            double temp  = Coord.getDist(coord, inputStart);
+            if(distance > temp){
+                distance = temp;
+                newStart = s;
+            }
+        }
+        id.remove(newStart);
+        id = Route.sortExhibits(id, newStart, g, vertexInfo, edgeInfo);
+        List<String> newRoute = Route.createRoute(id, newStart, g, vertexInfo, edgeInfo);
+        directions.subList(count + 1, directions.size()).clear();
+        directions.addAll(newRoute);
+        count++;
+        setDirections(directions);
+
     }
 
     public List<String> getDirections(){
@@ -255,15 +339,19 @@ public class DirectionsActivity extends AppCompatActivity {
             }
         });
 
+
+
         detailed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                if(count >= directions.size() - 1) {
-//                    setDirections(Directions.findPath(copyStart, start, g, vertexInfo, edgeInfo));
-//                }
-//                else {
+                if(count >= directions.size() - 1) {
+                    copyStart = stepBack.peek();
+                    setDirections(Directions.findPath(copyStart, start, g, vertexInfo, edgeInfo));
+                    copyStart = start;
+                }
+                else {
                     setDirections(directions);
-//                }
+                }
             }
         });
     }
