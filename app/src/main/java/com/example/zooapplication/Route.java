@@ -17,7 +17,7 @@ public class Route {
         Gson gson = new Gson();
         Map<String, String> group = gson.fromJson(temp, HashMap.class);
         List<String> sortUnvisited = new LinkedList<>();
-        sortUnvisited.add(copyStart);
+        //sortUnvisited.add(copyStart);
         String endPoint = copyStart;
         //Creates the route and puts the order in which we visit the animals into sortUnvisited list
         while(id.size() > 0){

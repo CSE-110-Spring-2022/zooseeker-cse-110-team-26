@@ -17,6 +17,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,7 +36,18 @@ public class Directions {
      */
     public static String findPath(String start, String end, Graph g, Map<String,
             ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> eInfo){
+        Gson gson = new Gson();
+        String temp = ShareData.getGroup(App.getContext(), "group");
+        Map<String, String> map = gson.fromJson(temp, HashMap.class);
         String plan = "";
+        if(map.containsKey(start)){
+            start = map.get(start);
+        }
+
+        if(map.containsKey(end)){
+            end = map.get(end);
+        }
+
         GraphPath<String, IdentifiedWeightedEdge> shortestPath =
                 DijkstraShortestPath.findPathBetween(g, start, end);
         String currentLoc = start;
@@ -75,6 +87,18 @@ public class Directions {
      */
     public static int findDistance(String start, String end, Graph g, Map<String,
             ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> eInfo) {
+
+        Gson gson = new Gson();
+        String temp = ShareData.getGroup(App.getContext(), "group");
+        Map<String, String> map = gson.fromJson(temp, HashMap.class);
+        if(map.containsKey(start)){
+            start = map.get(start);
+        }
+
+        if(map.containsKey(end)){
+            end = map.get(end);
+        }
+
         GraphPath<String, IdentifiedWeightedEdge> shortestPath =
                 DijkstraShortestPath.findPathBetween(g, start, end);
         int distance = 0;
@@ -83,17 +107,21 @@ public class Directions {
         }
         return distance;
     }
-
-
     public static String findStreet(String exhibit,Graph g, Map<String,
             ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> edgeInfo){
+
+
+        if (!g.containsVertex(exhibit)) {
+            return edgeInfo.get(exhibit).street;
+        }
+
 
         //getting the edges that connect to the given exhibit
         Set<String> edges = g.edgesOf(exhibit);
 
         Iterator val = edges.iterator();
 
-        System.out.println("The iterator values are: ");
+
         String id = "";
         String iter;
         List<String> edgeIds = new ArrayList<>();
@@ -109,7 +137,7 @@ public class Directions {
             edgeIds.add(arr[1]);
             id = arr[1];
 
-            System.out.println(iter);
+//            System.out.println(iter);
         }
         String street = null;
         String curr = null;
@@ -127,5 +155,29 @@ public class Directions {
 
 
         return street;
+    }
+
+    public static String getID (String exhibit,Graph g, Map<String,
+            ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> edgeInfo){
+
+
+
+        Gson gson = new Gson();
+        String temp = ShareData.getGroup(App.getContext(), "group");
+        Map<String, String> map = gson.fromJson(temp, HashMap.class);
+
+        if(g.containsVertex(exhibit)){
+//             System.out.println("Contains");
+            return exhibit;
+        }
+        else{
+//            System.out.println("DOES NOT Contains");
+            String real = map.get(exhibit);
+            System.out.println(real);
+
+            return real;
+        }
+
+
     }
 }
