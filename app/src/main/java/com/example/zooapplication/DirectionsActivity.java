@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 import org.jgrapht.Graph;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -30,9 +31,7 @@ public class DirectionsActivity extends AppCompatActivity {
     private List<String> directions;
     private ExhibitsItemDao dao;
     int count = 0;
-
     //String source = "entrance_exit_gate";
-
     TextView displayDirection;
     List<ExhibitsItem> exhibitsItems;
     Button getNextDirection;
@@ -107,15 +106,6 @@ public class DirectionsActivity extends AppCompatActivity {
             Log.d("Test", String.valueOf(s));
         }
 
-
-        //stepBack.push(id.get(0));
-        //Removes entrance exit gate
-        //id.remove(0);
-        //Removes first exhibit because we are already there
-
-        //copyStart = id.get(0);
-        //id.remove(0);
-
         stepBack.push(start);
         /*for(int i = 0; i < id.size(); i++){
             Log.d("test", id.get(i));
@@ -127,16 +117,19 @@ public class DirectionsActivity extends AppCompatActivity {
         getNextDirectionClicked();
         //If the goBack button is clicked, exit DirectionsAcitivty class
         goBackClicked();
+
         shareData();
 
-
         stepBackClicked();
-        setLocationClicked();
 
+        setLocationClicked();
 
         stepBackClicked();
     }
 
+    /**
+     * step back button is clicked
+     */
     private void stepBackClicked() {
         getStepBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,6 +167,9 @@ public class DirectionsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * set mock location
+     */
     private void setLocationClicked() {
         set.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,57 +179,46 @@ public class DirectionsActivity extends AppCompatActivity {
                 //if no, exit alert
                 double lat = Double.parseDouble(userLat.getText().toString());
                 double lng = Double.parseDouble(userLng.getText().toString());
-                Coord inputStart = new Coord(lat, lng);
+                //Coord inputStart = new Coord(lat, lng);
+                String inputPoint = "";
                 double shortestDis = Double.MAX_VALUE;
                 double temp = 0.0d;
                 boolean needToReplan = false;
                 String newStart = "";
+                //find the point input point
                 for(ExhibitsItem ex : exhibitsItems){
-                    Coord coord = new Coord(ex.lat, ex.lng);
-                    temp = Coord.getDist(inputStart, coord);
-                    Log.d("new start", String.valueOf(ex.id));
-                    Log.d("new dis", String.valueOf(temp));
-                    if(temp < shortestDis){
-                        shortestDis = temp;
+                    if(ex.lat == lat && ex.lng == lng){
                         newStart = ex.id;
+                        break;
                     }
                 }
-                //copyStart = newStart;
-                if(newStart.equals(id.get(count))){
-//                    if(exhibitsId.contains(newStart)){
-//                        exhibitsId.remove(newStart);
-//                    }
-//                    copyStart = newStart;
-                    replan(newStart);
+                List<String> tempSortList = new ArrayList<>(id.subList(count, id.size()));
+                tempSortList = Route.sortExhibits(tempSortList, newStart, g, vertexInfo, edgeInfo);
+                copyStart = newStart;
+                if(tempSortList.get(0) == id.get(count)){
+                    if(id.contains(newStart)){
+                        id.remove(newStart);
+                    }
+                    List<String> toAppend = new ArrayList<>();
+                    toAppend = Route.sortExhibits(id.subList(count, id.size()), copyStart, g, vertexInfo, edgeInfo);
+                    id.subList(count, id.size()).clear();
+                    id.addAll(toAppend);
+                    needToReplan = false;
+                    String s = Directions.findPath(newStart, tempSortList.get(0), g, vertexInfo, edgeInfo);
+                    setDirections(s);
+
                 }
                 else{
                     needToReplan = true;
                 }
 
+
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(DirectionsActivity.this);
                 builder.setMessage("Off-route! Want to re-plan?");
-                final String  newStart1 = newStart;
                 builder.setPositiveButton("re-plan", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-//                        double lat = Double.parseDouble(userLat.getText().toString());
-//                        double lng = Double.parseDouble(userLng.getText().toString());
-////                        double lat;
-////                        double lng;
-////                        lat = 32.74476120197887;
-////                        lng = -117.18369973246877;
-//                        String newStart = "";
-//                        Coord inputStart = new Coord(lat, lng);
-//
-//                        //int counter = count + 1;
-//                        if(temp != 0.0d || !newStart.equals(exhibitsId.get(count))){
-//                            if(exhibitsId.contains(newStart)){
-//                                exhibitsId.remove(newStart);
-//                            }
-//                            copyStart = newStart;
-//                            replan();
-//                        }
-//                        Log.d("new copy", String.valueOf(copyStart));
-                        replan(newStart1);
+                        replan();
                     }
                 });
 
@@ -243,13 +228,7 @@ public class DirectionsActivity extends AppCompatActivity {
                         dialog.cancel();
                     }
                 });
-                //Log.d("new start", String.valueOf(copyStart));
-//                if(exhibitsId.contains(copyStart)){
-//                    Log.d("check exist", String.valueOf(exhibitsId.contains(copyStart)));
-//                    exhibitsId.remove(copyStart);
-//
-//                }
-                Log.d("check exist", String.valueOf(id.contains(copyStart)));
+                //Log.d("check exist", String.valueOf(id.contains(copyStart)));
                 if(needToReplan){
                     Dialog builder1 = builder.create();
                     builder1.show();
@@ -258,7 +237,9 @@ public class DirectionsActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * load zoo data from json
+     */
     private void loadZooData() {
         runOnUiThread(new Runnable() {
             @Override
@@ -270,33 +251,37 @@ public class DirectionsActivity extends AppCompatActivity {
                 g = ZooData.loadZooGraphJSON("sample_zoo_graph.json",
                         DirectionsActivity.this);
 
-// >>>>>>> origin/BugFix
             }
         });
     }
 
-
-
-
-    private void replan(String newStart) {
-        copyStart = newStart;
+    /**
+     * replan if the user's location is set
+     */
+    private void replan() {
         if(id.contains(copyStart)){
             Log.d("check exist", String.valueOf(id.contains(copyStart)));
             id.remove(copyStart);
         }
-        id = Route.sortExhibits(id, copyStart, g, vertexInfo, edgeInfo);
-        List<String> newRoute = Route.createRoute(id, copyStart, g, vertexInfo, edgeInfo);
-        //directions.subList(count + 1, directions.size()).clear();
-        //directions.addAll(newRoute);
-        count++;
-        //setDirections(Directions.findPath(copyStart, ));
+        List<String> toAppend = new LinkedList<>();
+        toAppend = Route.sortExhibits(id.subList(count, id.size()), copyStart, g, vertexInfo, edgeInfo);
+        String s = Directions.findPath(copyStart, toAppend.get(0),g,vertexInfo, edgeInfo);
+        setDirections(s);
+        id.subList(count, id.size()).clear();
+        id.addAll((toAppend));
 
     }
 
-
+    /**
+     * save last activity and necessary infomation
+     */
     private void shareData(){;
         ShareData.setLastActivity(App.getContext(), "last activity", getClass().getName());
     }
+
+    /**
+     * go back button is clicked
+     */
     private void goBackClicked() {
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -313,6 +298,9 @@ public class DirectionsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * go next button is clicked
+     */
     private void getNextDirectionClicked() {
         getNextDirection.setOnClickListener(new View.OnClickListener() {
             @Override
