@@ -25,9 +25,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="56dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="100dp"
         android:layout_marginEnd="37dp"
-        android:layout_marginBottom="591dp"
+        android:layout_marginBottom="491dp"
         android:text=""
         android:textSize="20dp"
         app:layout_constraintBottom_toTopOf="@+id/getNextDirection"
@@ -41,15 +41,11 @@
         android:id="@+id/back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="19dp"
-        android:layout_marginEnd="172dp"
         android:text="Go Back"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/getNextDirection"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.929" />
+        app:layout_constraintVertical_bias="0.04"
+        tools:layout_editor_absoluteX="16dp" />
 
     <Button
         android:id="@+id/skip"
@@ -82,12 +78,59 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="570dp"
+
+        android:layout_marginTop="557dp"
         android:layout_marginEnd="23dp"
-        android:layout_marginBottom="17dp"
+        android:layout_marginBottom="49dp"
         android:text="Step Back"
-        app:layout_constraintBottom_toTopOf="@+id/back"
-        app:layout_constraintEnd_toStartOf="@+id/setting"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/skip"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/back" />
+
+    <EditText
+        android:id="@+id/lat"
+        android:layout_width="99dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="511dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="lat"
+        app:layout_constraintBottom_toTopOf="@+id/setting"
+        app:layout_constraintEnd_toStartOf="@+id/lng"
+        app:layout_constraintStart_toEndOf="@+id/back"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/lng"
+        android:layout_width="96dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="22dp"
+        android:layout_marginBottom="561dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:hint="lng"
+        app:layout_constraintBottom_toTopOf="@+id/getNextDirection"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/lat"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/set"
+        android:layout_width="74dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="505dp"
+        android:text="Set"
+        app:layout_constraintBottom_toTopOf="@+id/setting"
+        app:layout_constraintEnd_toStartOf="@+id/lat"
+        app:layout_constraintStart_toEndOf="@+id/back"
+
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

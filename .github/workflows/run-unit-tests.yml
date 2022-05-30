@@ -13,6 +13,10 @@ jobs:
           distribution: 'zulu'
           java-version: '11'
 
+      # Generate local.properties
+      - name: Generate local.properties
+        run: touch local.properties
+
       # Execute unit tests
       - name: Unit Test
         run: ./gradlew testDebugUnitTest

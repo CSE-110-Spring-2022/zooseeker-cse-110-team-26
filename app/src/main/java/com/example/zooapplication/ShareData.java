@@ -45,6 +45,7 @@ public class ShareData {
         edit.commit();
     }
 
+
     /**
      * contains what user has clicked and add to the plan list
      * this should be set in ExhibitsActivity.class

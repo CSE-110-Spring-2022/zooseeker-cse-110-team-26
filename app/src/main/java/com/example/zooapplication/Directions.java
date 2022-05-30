@@ -37,9 +37,11 @@ public class Directions {
     public static String findPath(String start, String end, Graph g, Map<String,
             ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> eInfo){
 
+
         if(start.equals(end)){
             return "We are already here";
         }
+
         Gson gson = new Gson();
         String temp = ShareData.getGroup(App.getContext(), "group");
         Map<String, String> map = gson.fromJson(temp, HashMap.class);
