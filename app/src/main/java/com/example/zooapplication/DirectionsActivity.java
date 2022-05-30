@@ -32,6 +32,7 @@ public class DirectionsActivity extends AppCompatActivity {
     private List<String> directions;
     private ExhibitsItemDao dao;
     int count = 0;
+    //String source = "entrance_exit_gate";
     TextView displayDirection;
     Button getNextDirection;
     Button skipDirection;
@@ -45,6 +46,7 @@ public class DirectionsActivity extends AppCompatActivity {
     Graph g;
     Iterator<String> it = null;
     String copyStart = start;
+    //String current = "entrance_exit_gate";
     Stack<String> stepBack;
 
     private void setDirections(List<String> directions){
@@ -106,45 +108,62 @@ public class DirectionsActivity extends AppCompatActivity {
             Log.d("Test", String.valueOf(s));
         }
 
+
+
         //stepBack.push(id.get(0));
         //Removes entrance exit gate
         //id.remove(0);
         //Removes first exhibit because we are already there
-        copyStart = id.get(0);
-        id.remove(0);
+        //copyStart = id.get(0);
+        //id.remove(0);
         stepBack.push(start);
         /*for(int i = 0; i < id.size(); i++){
             Log.d("test", id.get(i));
         }
         */
         //Connects the plan with the UI
-        setDirections(directions);
+        setDirections(Directions.findPath(copyStart,id.get(count),g,vertexInfo,edgeInfo));
         //Updates the Textview UI if the Next button is clicked
         getNextDirectionClicked();
         //If the goBack button is clicked, exit DirectionsAcitivty class
         goBackClicked();
         shareData();
 
+
         getStepBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(stepBack.empty()){
+
+                System.out.println("STEP Back: " + copyStart);
+
+                if(count == 0){
+                    count--;
+                    setDirections(Directions.findPath(copyStart, start, g, vertexInfo, edgeInfo));
+                }
+                else if(count < 0){
                     Utilities.showAlert(DirectionsActivity.this, "No previous item!");
                 }
                 else{
-                    String endPoint = stepBack.pop();
-                    if(count != directions.size()){
-                        id.add(0, copyStart);
-                    }
                     count--;
+                    String endPoint = id.get(count);
+//                    if(count != directions.size()){
+//                        id.add(0, copyStart);
+//                    }
+//                    count--;
 //                    for(String s: id){
 //                        Log.d("Test", String.valueOf(s));
 //                  }
                     Log.d("stepBack", "Copy Start: " + copyStart);
                     Log.d("stepBack", "EndPoint: " + endPoint);
+
+                    System.out.println(endPoint);
+
                     String toPrevious = Directions.findPath(copyStart, endPoint, g, vertexInfo, edgeInfo);
-                    displayDirection.setText(toPrevious);
-                    copyStart = endPoint;
+                    setDirections(toPrevious);
+
+
+
+
                 }
                 Log.d("Count", String.valueOf(count));
             }
@@ -177,23 +196,29 @@ public class DirectionsActivity extends AppCompatActivity {
         getNextDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                System.out.println("NEXT **********: " + copyStart);
+
+
                 if(count >= directions.size()){
                     Utilities.showAlert(DirectionsActivity.this,
                             "The route is done!");
                 }
                 else if(count == directions.size() - 1) {
                     count++;
+
+                    System.out.println("**********(******" + copyStart);
                     setDirections(Directions.findPath(copyStart, start, g, vertexInfo, edgeInfo));
                     stepBack.push(copyStart);
-                    copyStart = start;
+
                 }
                 else{
                     count++;
                     //Log.d("direction", String.valueOf(directions.get(count)));
-                    setDirections(directions);
+                    setDirections(Directions.findPath(copyStart,id.get(count), g, vertexInfo,edgeInfo));
                     stepBack.push(copyStart);
-                    copyStart = id.get(0);
-                    id.remove(0);
+//                    copyStart = id.get(0);
+                    //id.remove(0);
                     for(String s : stepBack){
                         Log.d("Stack", String.valueOf(s));
                     }

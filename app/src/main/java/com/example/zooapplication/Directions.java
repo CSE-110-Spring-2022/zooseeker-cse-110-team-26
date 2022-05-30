@@ -36,6 +36,10 @@ public class Directions {
      */
     public static String findPath(String start, String end, Graph g, Map<String,
             ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> eInfo){
+
+        if(start.equals(end)){
+            return "We are already here";
+        }
         Gson gson = new Gson();
         String temp = ShareData.getGroup(App.getContext(), "group");
         Map<String, String> map = gson.fromJson(temp, HashMap.class);
@@ -107,10 +111,18 @@ public class Directions {
         }
         return distance;
     }
+
+    /**
+     * Finds the street/intersection in which the exhibit is located in
+     *
+     * @param exhibit, end g, vInfo, edgeInfo
+     * @return String street/intersection
+     */
     public static String findStreet(String exhibit,Graph g, Map<String,
             ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> edgeInfo){
 
 
+        //checks if the given exhibit exist as node in the graph if not it just returns the name of the edge, which is the street
         if (!g.containsVertex(exhibit)) {
             return edgeInfo.get(exhibit).street;
         }
@@ -157,6 +169,12 @@ public class Directions {
         return street;
     }
 
+    /**
+     * Finds the ID of the given exhibit
+     *
+     * @param exhibit, end g, vInfo, edgeInfo
+     * @return String street/intersection
+     */
     public static String getID (String exhibit,Graph g, Map<String,
             ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> edgeInfo){
 
@@ -166,6 +184,8 @@ public class Directions {
         String temp = ShareData.getGroup(App.getContext(), "group");
         Map<String, String> map = gson.fromJson(temp, HashMap.class);
 
+
+        //if exhibit vertex exists in the graph, returns the id exhibit given, if not it searches for id in the map
         if(g.containsVertex(exhibit)){
 //             System.out.println("Contains");
             return exhibit;

@@ -87,16 +87,18 @@ public class DisplayPlanActivity extends AppCompatActivity {
         List<String> displayPlan = new LinkedList<>(sortUnvisited);
 //        displayPlan.remove(0);
 
+        //looking for distance to planned item, and location where planned item is located
         for(int i = 0; i < displayPlan.size(); i++){
             String id = displayPlan.get(i);
 
             //Since not all of the planned items are in id form, must normalise
             id = Directions.getID(id,g,vertexInfo,edgeInfo);
 
-
+            //Getting Street and Distance
             double dist = Directions.findDistance("entrance_exit_gate",id,g,vertexInfo,edgeInfo);
             String street = Directions.findStreet(id,g,vertexInfo,edgeInfo);
 
+            //updating displayPlan list items to include distance and street
             displayPlan.set(i,displayPlan.get(i) + '\n'+ "Distance: " + dist + "\n" + "Street: " + street);
         }
 
