@@ -29,7 +29,7 @@ public interface ExhibitsItemDao {
     @Query("SELECT * FROM `exhibits_items` ORDER by `name` AND `id` != 'add'")
     List<ExhibitsItem> getAll();
 
-    @Query("SELECT * FROM `exhibits_items` WHERE `lat` != null")
+    @Query("SELECT * FROM `exhibits_items` WHERE `lat` != 0 AND `lng` != 0")
     List<ExhibitsItem> getAllWithLatLng();
 
 
