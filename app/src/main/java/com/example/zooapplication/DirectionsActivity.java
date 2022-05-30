@@ -3,14 +3,12 @@
  */
 package com.example.zooapplication;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,9 +22,6 @@ import com.google.gson.Gson;
 import org.jgrapht.Graph;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -105,7 +100,7 @@ public class DirectionsActivity extends AppCompatActivity {
 
         loadZooData();
 
-        for(String s :id){
+        for(String s : id){
             Log.d("Test", String.valueOf(s));
         }
         for(String s : directions){
@@ -127,15 +122,22 @@ public class DirectionsActivity extends AppCompatActivity {
         }
         */
         //Connects the plan with the UI
-        setDirections(Directions.findPath(copyStart,id.get(count),g,vertexInfo,edgeInfo));
+        setDirections(Directions.findPath(copyStart, id.get(count),g,vertexInfo,edgeInfo));
         //Updates the Textview UI if the Next button is clicked
         getNextDirectionClicked();
         //If the goBack button is clicked, exit DirectionsAcitivty class
         goBackClicked();
         shareData();
 
-// <<<<<<< HEAD
 
+        stepBackClicked();
+        setLocationClicked();
+
+
+        stepBackClicked();
+    }
+
+    private void stepBackClicked() {
         getStepBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -170,38 +172,68 @@ public class DirectionsActivity extends AppCompatActivity {
                 Log.d("Count", String.valueOf(count));
             }
         });
-// =======
+    }
+
+    private void setLocationClicked() {
         set.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Need to show alert w/ yes or no option
                 //if yes, replan
                 //if no, exit alert
+                double lat = Double.parseDouble(userLat.getText().toString());
+                double lng = Double.parseDouble(userLng.getText().toString());
+                Coord inputStart = new Coord(lat, lng);
+                double shortestDis = Double.MAX_VALUE;
+                double temp = 0.0d;
+                boolean needToReplan = false;
+                String newStart = "";
+                for(ExhibitsItem ex : exhibitsItems){
+                    Coord coord = new Coord(ex.lat, ex.lng);
+                    temp = Coord.getDist(inputStart, coord);
+                    Log.d("new start", String.valueOf(ex.id));
+                    Log.d("new dis", String.valueOf(temp));
+                    if(temp < shortestDis){
+                        shortestDis = temp;
+                        newStart = ex.id;
+                    }
+                }
+                //copyStart = newStart;
+                if(newStart.equals(id.get(count))){
+//                    if(exhibitsId.contains(newStart)){
+//                        exhibitsId.remove(newStart);
+//                    }
+//                    copyStart = newStart;
+                    replan(newStart);
+                }
+                else{
+                    needToReplan = true;
+                }
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(DirectionsActivity.this);
                 builder.setMessage("Off-route! Want to re-plan?");
-                int counter = 0;
+                final String  newStart1 = newStart;
                 builder.setPositiveButton("re-plan", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        double lat = Double.parseDouble(userLat.getText().toString());
-                        double lng = Double.parseDouble(userLng.getText().toString());
-//                        double lat;
-//                        double lng;
-//                        lat = 32.74476120197887;
-//                        lng = -117.18369973246877;
-                        Coord inputStart = new Coord(lat, lng);
-                        double shortestDis = Double.MAX_VALUE;
-                        for(ExhibitsItem ex : exhibitsItems){
-                            Coord coord = new Coord(ex.lat, ex.lng);
-                            double temp = Coord.getDist(inputStart, coord);
-                            Log.d("new start", String.valueOf(ex.id));
-                            Log.d("new dis", String.valueOf(temp));
-                            if(temp < shortestDis){
-                                shortestDis = temp;
-                                copyStart = ex.id;
-
-                            }
-                        }
-                        Log.d("new copy", String.valueOf(copyStart));
+//                        double lat = Double.parseDouble(userLat.getText().toString());
+//                        double lng = Double.parseDouble(userLng.getText().toString());
+////                        double lat;
+////                        double lng;
+////                        lat = 32.74476120197887;
+////                        lng = -117.18369973246877;
+//                        String newStart = "";
+//                        Coord inputStart = new Coord(lat, lng);
+//
+//                        //int counter = count + 1;
+//                        if(temp != 0.0d || !newStart.equals(exhibitsId.get(count))){
+//                            if(exhibitsId.contains(newStart)){
+//                                exhibitsId.remove(newStart);
+//                            }
+//                            copyStart = newStart;
+//                            replan();
+//                        }
+//                        Log.d("new copy", String.valueOf(copyStart));
+                        replan(newStart1);
                     }
                 });
 
@@ -212,20 +244,18 @@ public class DirectionsActivity extends AppCompatActivity {
                     }
                 });
                 //Log.d("new start", String.valueOf(copyStart));
-                if(id.contains(copyStart)){
-                    Log.d("check exist", String.valueOf(id.contains(copyStart)));
-                    id.remove(copyStart);
-
-                }
+//                if(exhibitsId.contains(copyStart)){
+//                    Log.d("check exist", String.valueOf(exhibitsId.contains(copyStart)));
+//                    exhibitsId.remove(copyStart);
+//
+//                }
                 Log.d("check exist", String.valueOf(id.contains(copyStart)));
-                AlertDialog di = builder.create();
-                di.show();
+                if(needToReplan){
+                    Dialog builder1 = builder.create();
+                    builder1.show();
+                }
             }
         });
-
-        //setLocationClicked();
-
-        stepBackClicked();
     }
 
 
@@ -245,97 +275,23 @@ public class DirectionsActivity extends AppCompatActivity {
         });
     }
 
-    private void setLocationClicked() {
-        set.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Need to show alert w/ yes or no option
-                //if yes, replan
-                //if no, exit alert
-                AlertDialog.Builder builder = new AlertDialog.Builder(DirectionsActivity.this);
-                builder.setMessage("Off-route! Want to re-plan?");
-                builder.setPositiveButton("re-plan", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        double lat = Double.parseDouble(userLat.getText().toString());
-                        double lng = Double.parseDouble(userLng.getText().toString());
-                        Coord inputStart = new Coord(lat, lng);
-                        double shortestDis = Double.MAX_VALUE;
-                        for(ExhibitsItem ex : exhibitsItems){
-                            Coord coord = new Coord(ex.lat, ex.lng);
-                            double temp = Coord.getDist(inputStart, coord);
-                            if(temp < shortestDis){
-                                temp = shortestDis;
-                                copyStart = ex.id;
 
-                            }
-                        }
-                    }
-                });
 
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                Log.d("new start", String.valueOf(copyStart));
-                AlertDialog di = builder.create();
-                di.show();
-            }
-        });
+
+    private void replan(String newStart) {
+        copyStart = newStart;
+        if(id.contains(copyStart)){
+            Log.d("check exist", String.valueOf(id.contains(copyStart)));
+            id.remove(copyStart);
+        }
+        id = Route.sortExhibits(id, copyStart, g, vertexInfo, edgeInfo);
+        List<String> newRoute = Route.createRoute(id, copyStart, g, vertexInfo, edgeInfo);
+        //directions.subList(count + 1, directions.size()).clear();
+        //directions.addAll(newRoute);
+        count++;
+        //setDirections(Directions.findPath(copyStart, ));
+
     }
-
-    private void stepBackClicked() {
-        getStepBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(stepBack.empty()){
-                    Utilities.showAlert(DirectionsActivity.this, "No previous item!");
-                }
-                else{
-                    String endPoint = stepBack.pop();
-                    if(count != directions.size()){
-                        id.add(0, copyStart);
-                    }
-                    count--;
-//                    for(String s: id){
-//                        Log.d("Test", String.valueOf(s));
-//                  }
-                    Log.d("stepBack", "Copy Start: " + copyStart);
-                    Log.d("stepBack", "EndPoint: " + endPoint);
-                    String toPrevious = Directions.findPath(copyStart, endPoint, g, vertexInfo, edgeInfo);
-                    setDirections(toPrevious);
-                    copyStart = endPoint;
-                }
-                Log.d("Count", String.valueOf(count));
-            }
-        });
-    }
-
-//    private void replan() {
-//        double lat = Double.parseDouble(userLat.getText().toString());
-//        double lng = Double.parseDouble(userLng.getText().toString());
-//        Coord inputStart = new Coord(lat, lng);
-//        double shorestDis = Double.MAX_VALUE;
-//        String newStart = "";
-//        //find the closest exhibit from the input
-//        for(ExhibitsItem ex : exhibitsItems){
-//            Coord coord = new Coord(ex.lat, ex.lng);
-//            double temp = Coord.getDist(inputStart, coord);
-//            if(temp < shorestDis){
-//                temp = shorestDis;
-//                newStart = ex.id;
-//
-//            }
-//        }
-//        id = Route.sortExhibits(id, newStart, g, vertexInfo, edgeInfo);
-//        List<String> newRoute = Route.createRoute(id, newStart, g, vertexInfo, edgeInfo);
-//        directions.subList(count + 1, directions.size()).clear();
-//        directions.addAll(newRoute);
-//        count++;
-//        setDirections(directions);
-//
-//    }
 
 
     private void shareData(){;
@@ -376,7 +332,7 @@ public class DirectionsActivity extends AppCompatActivity {
                     count++;
                     //Log.d("direction", String.valueOf(directions.get(count)));
 
-                    setDirections(Directions.findPath(copyStart,id.get(count), g, vertexInfo,edgeInfo));
+                    setDirections(Directions.findPath(copyStart, id.get(count), g, vertexInfo,edgeInfo));
                     stepBack.push(copyStart);
 //                    copyStart = id.get(0);
                     //id.remove(0);
