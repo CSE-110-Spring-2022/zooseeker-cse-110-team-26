@@ -225,7 +225,7 @@ public class DirectionsActivity extends AppCompatActivity {
 
         //setLocationClicked();
 
-        stepBackClicked();
+        //stepBackClicked();
     }
 
 
@@ -241,73 +241,6 @@ public class DirectionsActivity extends AppCompatActivity {
                         DirectionsActivity.this);
 
 // >>>>>>> origin/BugFix
-            }
-        });
-    }
-
-    private void setLocationClicked() {
-        set.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Need to show alert w/ yes or no option
-                //if yes, replan
-                //if no, exit alert
-                AlertDialog.Builder builder = new AlertDialog.Builder(DirectionsActivity.this);
-                builder.setMessage("Off-route! Want to re-plan?");
-                builder.setPositiveButton("re-plan", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        double lat = Double.parseDouble(userLat.getText().toString());
-                        double lng = Double.parseDouble(userLng.getText().toString());
-                        Coord inputStart = new Coord(lat, lng);
-                        double shortestDis = Double.MAX_VALUE;
-                        for(ExhibitsItem ex : exhibitsItems){
-                            Coord coord = new Coord(ex.lat, ex.lng);
-                            double temp = Coord.getDist(inputStart, coord);
-                            if(temp < shortestDis){
-                                temp = shortestDis;
-                                copyStart = ex.id;
-
-                            }
-                        }
-                    }
-                });
-
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-                Log.d("new start", String.valueOf(copyStart));
-                AlertDialog di = builder.create();
-                di.show();
-            }
-        });
-    }
-
-    private void stepBackClicked() {
-        getStepBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(stepBack.empty()){
-                    Utilities.showAlert(DirectionsActivity.this, "No previous item!");
-                }
-                else{
-                    String endPoint = stepBack.pop();
-                    if(count != directions.size()){
-                        id.add(0, copyStart);
-                    }
-                    count--;
-//                    for(String s: id){
-//                        Log.d("Test", String.valueOf(s));
-//                  }
-                    Log.d("stepBack", "Copy Start: " + copyStart);
-                    Log.d("stepBack", "EndPoint: " + endPoint);
-                    String toPrevious = Directions.findPath(copyStart, endPoint, g, vertexInfo, edgeInfo);
-                    setDirections(toPrevious);
-                    copyStart = endPoint;
-                }
-                Log.d("Count", String.valueOf(count));
             }
         });
     }
@@ -362,11 +295,11 @@ public class DirectionsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(count >= directions.size()){
+                if(count >= id.size()){
                     Utilities.showAlert(DirectionsActivity.this,
                             "The route is done!");
                 }
-                else if(count == directions.size() - 1) {
+                else if(count == id.size() - 1) {
                     count++;
                     setDirections(Directions.findPath(copyStart, start, g, vertexInfo, edgeInfo));
                     stepBack.push(copyStart);
@@ -418,27 +351,32 @@ public class DirectionsActivity extends AppCompatActivity {
                     for (int i = 0; i < id.size(); i++) {
                         Log.d("hi", id.get(i));
                     }
-                    id.remove(0);
-                    id = Route.sortExhibits(id, copyStart, g, vertexInfo, edgeInfo);
-                    List<String> newDirections = Route.createRoute(id, copyStart, g, vertexInfo, edgeInfo);
+                    List<String> toAppend;
+                    Log.d("toRemove" , "toRemove" + id.get(count));
+                    id.remove(count);
+                    toAppend = Route.sortExhibits(id.subList(count, id.size()), copyStart, g, vertexInfo, edgeInfo);
+                    id.subList(count, id.size()).clear();
+                    id.addAll(toAppend);
+/*                     List<String> newDirections = Route.createRoute(id, copyStart, g, vertexInfo, edgeInfo);
                     directions.subList(count + 1, directions.size()).clear();
-                    directions.addAll(newDirections);
+                    directions.addAll(newDirections);*/
                     //count = 0;
                     //id.remove(0);
-                    count++;
-                    setDirections(directions);
+                    //count++;
+                    //setDirections(directions);
+                    setDirections(Directions.findPath(copyStart, id.get(count), g, vertexInfo, edgeInfo));
 //                    for (int i = 0; i < id.size(); i++) {
 //                        Log.d("hi", id.get(i));
 //                    }
 //                    for (int i = 0; i < id.size(); i++) {
 //                        Log.d("hi", directions.get(i));
 //                    }
-                    stepBack.push(copyStart);
-                    copyStart = id.get(0);
-                    id.remove(0);
-                    for(String s : stepBack){
-                        Log.d("Stack", String.valueOf(s));
-                    }
+                    //stepBack.push(copyStart);
+                    //copyStart = id.get(0);
+                    //id.remove(0);
+                    //for(String s : stepBack){
+                    //    Log.d("Stack", String.valueOf(s));
+                   // }
                 }
             }
         });
