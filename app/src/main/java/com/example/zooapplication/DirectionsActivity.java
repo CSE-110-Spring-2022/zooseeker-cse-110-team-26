@@ -51,14 +51,6 @@ public class DirectionsActivity extends AppCompatActivity {
     EditText userLat;
     EditText userLng;
 
-    private void setDirections(List<String> directions){
-        if(detailed.isChecked()) {
-            displayDirection.setText(directions.get(count));
-        }
-        else {
-            displayDirection.setText(DetailedtoBrief.toBrief(directions.get(count)));
-        }
-    }
     private void setDirections(String directions){
         if(detailed.isChecked()) {
             displayDirection.setText(directions);
@@ -400,14 +392,11 @@ public class DirectionsActivity extends AppCompatActivity {
         detailed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if(count >= directions.size() - 1) {
-                    copyStart = stepBack.peek();
+                if(count >= id.size()) {
                     setDirections(Directions.findPath(copyStart, start, g, vertexInfo, edgeInfo));
-                    copyStart = start;
                 }
                 else {
-                    setDirections(directions);
+                    setDirections(Directions.findPath(copyStart, id.get(count), g, vertexInfo, edgeInfo));
                 }
 
             }
