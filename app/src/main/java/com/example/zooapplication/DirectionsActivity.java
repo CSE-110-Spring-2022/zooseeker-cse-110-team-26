@@ -235,6 +235,7 @@ public class DirectionsActivity extends AppCompatActivity {
                 }
             }
         });
+
     }
 
     /**
@@ -254,6 +255,7 @@ public class DirectionsActivity extends AppCompatActivity {
             }
         });
     }
+
 
     /**
      * replan if the user's location is set
@@ -275,6 +277,7 @@ public class DirectionsActivity extends AppCompatActivity {
     /**
      * save last activity and necessary infomation
      */
+
     private void shareData(){;
         ShareData.setLastActivity(App.getContext(), "last activity", getClass().getName());
     }
@@ -306,11 +309,11 @@ public class DirectionsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if(count >= directions.size()){
+                if(count >= id.size()){
                     Utilities.showAlert(DirectionsActivity.this,
                             "The route is done!");
                 }
-                else if(count == directions.size() - 1) {
+                else if(count == id.size() - 1) {
                     count++;
                     setDirections(Directions.findPath(copyStart, start, g, vertexInfo, edgeInfo));
                     stepBack.push(copyStart);
@@ -362,27 +365,32 @@ public class DirectionsActivity extends AppCompatActivity {
                     for (int i = 0; i < id.size(); i++) {
                         Log.d("hi", id.get(i));
                     }
-                    id.remove(0);
-                    id = Route.sortExhibits(id, copyStart, g, vertexInfo, edgeInfo);
-                    List<String> newDirections = Route.createRoute(id, copyStart, g, vertexInfo, edgeInfo);
+                    List<String> toAppend;
+                    Log.d("toRemove" , "toRemove" + id.get(count));
+                    id.remove(count);
+                    toAppend = Route.sortExhibits(id.subList(count, id.size()), copyStart, g, vertexInfo, edgeInfo);
+                    id.subList(count, id.size()).clear();
+                    id.addAll(toAppend);
+/*                     List<String> newDirections = Route.createRoute(id, copyStart, g, vertexInfo, edgeInfo);
                     directions.subList(count + 1, directions.size()).clear();
-                    directions.addAll(newDirections);
+                    directions.addAll(newDirections);*/
                     //count = 0;
                     //id.remove(0);
-                    count++;
-                    setDirections(directions);
+                    //count++;
+                    //setDirections(directions);
+                    setDirections(Directions.findPath(copyStart, id.get(count), g, vertexInfo, edgeInfo));
 //                    for (int i = 0; i < id.size(); i++) {
 //                        Log.d("hi", id.get(i));
 //                    }
 //                    for (int i = 0; i < id.size(); i++) {
 //                        Log.d("hi", directions.get(i));
 //                    }
-                    stepBack.push(copyStart);
-                    copyStart = id.get(0);
-                    id.remove(0);
-                    for(String s : stepBack){
-                        Log.d("Stack", String.valueOf(s));
-                    }
+                    //stepBack.push(copyStart);
+                    //copyStart = id.get(0);
+                    //id.remove(0);
+                    //for(String s : stepBack){
+                    //    Log.d("Stack", String.valueOf(s));
+                   // }
                 }
             }
         });
