@@ -70,14 +70,14 @@ public class TestSearchBar {
         scenario.onActivity(activity -> {
             AutoCompleteTextView auto = activity.autoComplete;
             EditText editText = activity.findViewById(R.id.search_bar);
-            String testText = "a";
+            String testText = "go";
 
             Adapter adapter = auto.getAdapter();
             editText.setText(testText);
 
 
             int key = adapter.getCount();
-            assertEquals(12, key);
+            assertEquals(3, key);
 
         });
     }

@@ -26,9 +26,9 @@ public class TestCreateRoute {
     @Before
     public void setUp() {
         context = ApplicationProvider.getApplicationContext();
-        g = ZooData.loadZooGraphJSON("sample_zoo_graph.json",context);
-        vInfo = ZooData.loadVertexInfoJSON("sample_node_info.json",context);
-        eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json",context);
+        g = ZooData.loadZooGraphJSON("old_assets/sample_zoo_graph.json",context);
+        vInfo = ZooData.loadVertexInfoJSON("old_assets/sample_node_info.json",context);
+        eInfo = ZooData.loadEdgeInfoJSON("old_assets/sample_edge_info.json",context);
     }
 
 
@@ -47,7 +47,6 @@ public class TestCreateRoute {
         route.forEach(System.out::println);
 
         List<String> expected = new LinkedList<>();
-        expected.add("");
         expected.add("Proceed on Entrance Way 10.0 ft towards Entrance Plaza\n" +
                 "Proceed on Arctic Avenue 300.0 ft towards Arctic Foxes\n");
 
@@ -71,7 +70,6 @@ public class TestCreateRoute {
         route.forEach(System.out::println);
 
         List<String> expected = new LinkedList<>();
-        expected.add("");
         expected.add("Proceed on Entrance Way 10.0 ft towards Entrance Plaza\n" +
                 "Proceed on Arctic Avenue 300.0 ft towards Arctic Foxes\n");
         expected.add("Proceed on Arctic Avenue 300.0 ft towards Entrance Plaza\n" +
@@ -100,7 +98,6 @@ public class TestCreateRoute {
         route.forEach(System.out::println);
 
         List<String> expected = new LinkedList<>();
-        expected.add("");
         expected.add("Proceed on Entrance Way 10.0 ft towards Entrance Plaza\n" +
                 "Proceed on Reptile Road 100.0 ft towards Alligators\n");
         expected.add("Proceed on Sharp Teeth Shortcut 200.0 ft towards Lions\n");
@@ -134,7 +131,6 @@ public class TestCreateRoute {
         route.forEach(System.out::println);
 
         List<String> expected = new LinkedList<>();
-        expected.add("");
         expected.add("Proceed on Entrance Way 10.0 ft towards Entrance Plaza\n" +
                 "Proceed on Reptile Road 100.0 ft towards Alligators\n");
         expected.add("Proceed on Sharp Teeth Shortcut 200.0 ft towards Lions\n");

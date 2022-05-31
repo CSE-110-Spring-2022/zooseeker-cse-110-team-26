@@ -23,23 +23,25 @@ public class Route {
         while(id.size() > 0){
             int distance = Integer.MAX_VALUE;
             int count = 0;
-            if(group.containsKey(copyStart)){
-                copyStart = group.get(copyStart);
-            }
-            while(count < id.size()){
-                String end = id.get((count));
-                if(group.containsKey(id.get(count))){
-                    end = group.get(id.get(count));
+            if (group != null && group.containsKey(copyStart)) {
+                    copyStart = group.get(copyStart);
                 }
-                int tempDis = Directions.findDistance
-                        (copyStart, end, g, vertexInfo, edgeInfo);
-                //Takes smallest distance
-                if(tempDis < distance) {
-                    endPoint = id.get(count);
-                    distance = tempDis;
+                while (count < id.size()) {
+                    String end = id.get((count));
+                    if (group != null && group.containsKey(id.get(count))) {
+                        end = group.get(id.get(count));
+                    }
+                    int tempDis = Directions.findDistance
+                            (copyStart, end, g, vertexInfo, edgeInfo);
+                    //Takes smallest distance
+                    if (tempDis < distance) {
+                        endPoint = id.get(count);
+                        distance = tempDis;
+                    }
+
+                    count++;
                 }
-                count++;
-            }
+
             sortUnvisited.add(endPoint);
             id.remove(endPoint);
             copyStart = endPoint;
@@ -54,7 +56,7 @@ public class Route {
         Gson gson = new Gson();
         Map<String, String> group = gson.fromJson(temp, HashMap.class);
         for(String s: sortUnvisited){
-            if(group.containsKey(s)){
+            if(group != null && group.containsKey(s)){
                 s = group.get(s);
             }
             plan.add(Directions.findPath(startExhibit, s, g, vertexInfo, edgeInfo));

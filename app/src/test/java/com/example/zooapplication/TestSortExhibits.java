@@ -27,9 +27,9 @@ public class TestSortExhibits {
     @Before
     public void setUp() {
         context = ApplicationProvider.getApplicationContext();
-        g = ZooData.loadZooGraphJSON("sample_zoo_graph.json",context);
-        vInfo = ZooData.loadVertexInfoJSON("sample_node_info.json",context);
-        eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json",context);
+        g = ZooData.loadZooGraphJSON("old_assets/sample_zoo_graph.json",context);
+        vInfo = ZooData.loadVertexInfoJSON("old_assets/sample_node_info.json",context);
+        eInfo = ZooData.loadEdgeInfoJSON("old_assets/sample_edge_info.json",context);
     }
 
 
@@ -45,7 +45,6 @@ public class TestSortExhibits {
         List<String> srtEx = Route.sortExhibits(ids,"entrance_exit_gate",g,vInfo,eInfo);
 
         List<String> expected = new ArrayList<>();
-        expected.add("entrance_exit_gate");
         expected.add("arctic_foxes");
 
 
@@ -71,7 +70,6 @@ public class TestSortExhibits {
         List<String> srtEx = Route.sortExhibits(ids,"entrance_exit_gate",g,vInfo,eInfo);
 
         List<String> expected = new ArrayList<>();
-        expected.add("entrance_exit_gate");
         expected.add("gorillas");
         expected.add("lions");
         expected.add("arctic_foxes");
@@ -99,7 +97,6 @@ public class TestSortExhibits {
         List<String> srtEx = Route.sortExhibits(ids,"entrance_exit_gate",g,vInfo,eInfo);
 
         List<String> expected = new ArrayList<>();
-        expected.add("entrance_exit_gate");
         expected.add("gators");
         expected.add("arctic_foxes");
         expected.add("elephant_odyssey");
@@ -127,7 +124,6 @@ public class TestSortExhibits {
         List<String> srtEx = Route.sortExhibits(ids,"entrance_exit_gate",g,vInfo,eInfo);
 
         List<String> expected = new ArrayList<>();
-        expected.add("entrance_exit_gate");
         expected.add("arctic_foxes");
         expected.add("elephant_odyssey");
 

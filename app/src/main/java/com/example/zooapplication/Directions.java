@@ -44,15 +44,19 @@ public class Directions {
 
         Gson gson = new Gson();
         String temp = ShareData.getGroup(App.getContext(), "group");
-        Map<String, String> map = gson.fromJson(temp, HashMap.class);
-        String plan = "";
-        if(map.containsKey(start)){
-            start = map.get(start);
-        }
+        //allow for testing
 
-        if(map.containsKey(end)){
-            end = map.get(end);
-        }
+            Map<String, String> map = gson.fromJson(temp, HashMap.class);
+            String plan = "";
+            if(map != null) {
+                if (map.containsKey(start)) {
+                    start = map.get(start);
+                }
+
+                if (map.containsKey(end)) {
+                    end = map.get(end);
+                }
+            }
 
         GraphPath<String, IdentifiedWeightedEdge> shortestPath =
                 DijkstraShortestPath.findPathBetween(g, start, end);
@@ -97,12 +101,14 @@ public class Directions {
         Gson gson = new Gson();
         String temp = ShareData.getGroup(App.getContext(), "group");
         Map<String, String> map = gson.fromJson(temp, HashMap.class);
-        if(map.containsKey(start)){
-            start = map.get(start);
-        }
+        if(map != null) {
+            if (map.containsKey(start)) {
+                start = map.get(start);
+            }
 
-        if(map.containsKey(end)){
-            end = map.get(end);
+            if (map.containsKey(end)) {
+                end = map.get(end);
+            }
         }
 
         GraphPath<String, IdentifiedWeightedEdge> shortestPath =

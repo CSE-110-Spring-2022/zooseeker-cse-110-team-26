@@ -34,36 +34,21 @@ public class DetailedToBriefTest {
     }
 
 
-    //Test from entrance/exit gate to the gorillas exhibit
-    //Why does CREATE ROUTE return the first index as empty
+    //Basic Sanity test of function
     @Test
-    public void testSample(){
-
-        List<String> ids = new ArrayList<>();
-        ids.add("elephant_odyssey");
-        ids.add("gorillas");
-
-        List<String> srtEx = Route.sortExhibits(ids,"entrance_exit_gate",g,vInfo,eInfo);
-        List<String> route = Route.createRoute(srtEx,"entrance_exit_gate",g,vInfo,eInfo);
-
-
-
-        List<String> expected = new LinkedList<>();
-        expected.add("");
-        expected.add("Proceed on Entrance Way 10.0 ft towards Entrance Plaza\n" +
-                "Proceed on Africa Rocks Street 200.0 ft towards Gorillas\n");
-        expected.add("Proceed on Africa Rocks Street 400.0 ft towards Elephant Odyssey\n");
-
-        List<String> brief = new LinkedList<>();
-        brief.add("");
-
-        for(int i = 1; i < route.size(); i++){
-            brief.add(DetailedtoBrief.toBrief(route.get(i)));
-        }
-
-        assertEquals(expected,brief);
-
-
+    public void testSample1(){
+        String test = "Proceed on Power Lane 200.50 ft towards Monkeys\nContinue on Power Lane 300.50 ft towards Goldfish";
+        String expected = "Proceed on Power Lane 501.00 ft towards Goldfish\n";
+        String actual = DetailedtoBrief.toBrief(test);
+        assertEquals(expected, actual);
+    }
+    //Test of a more robust case
+    @Test
+    public void testSample2(){
+        String test = "Proceed on Power Lane 200.50 ft towards Monkeys\nContinue on Power Lane 300.50 ft towards Goldfish\nContinue on Power Lane 400.00 ft towards Apes\nProceed on Treetops Way 100.00ft towards Birds";
+        String expected = "Proceed on Power Lane 901.00 ft towards Apes\nProceed on Treetops Way 100.00ft towards Birds\n";
+        String actual = DetailedtoBrief.toBrief(test);
+        assertEquals(expected, actual);
     }
 
 }
