@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -117,6 +118,10 @@ public class DirectionsActivity extends AppCompatActivity {
         setLocationClicked();
 
         stepBackClicked();
+
+        skipButtonClicked();
+
+        detailClicked();
     }
 
     /**
@@ -169,6 +174,10 @@ public class DirectionsActivity extends AppCompatActivity {
                 //Need to show alert w/ yes or no option
                 //if yes, replan
                 //if no, exit alert
+                if(userLat.getText().toString().equals("") || userLng.getText().toString().equals("")){
+                    Utilities.showAlert(DirectionsActivity.this, "Enter numeric for lat and lng! ");
+                    return;
+                }
                 double lat = Double.parseDouble(userLat.getText().toString());
                 double lng = Double.parseDouble(userLng.getText().toString());
                 //Coord inputStart = new Coord(lat, lng);
@@ -327,15 +336,27 @@ public class DirectionsActivity extends AppCompatActivity {
                 Log.d("Count", String.valueOf(count));
             }
         });
+    }
 
-        //If the goBack button is clicked, exit DirectionsAcitivty class
-        goBack.setOnClickListener(new View.OnClickListener() {
+    /**
+     * detail switch is switched
+     */
+    private void detailClicked() {
+        detailed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                if(count >= id.size()) {
+                    setDirections(Directions.findPath(copyStart, start, g, vertexInfo, edgeInfo));
+                }
+                else {
+                    setDirections(Directions.findPath(copyStart, id.get(count), g, vertexInfo, edgeInfo));
+                }
+
             }
         });
+    }
 
+    private void skipButtonClicked() {
         skipDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
@@ -384,21 +405,6 @@ public class DirectionsActivity extends AppCompatActivity {
                     //    Log.d("Stack", String.valueOf(s));
                    // }
                 }
-            }
-        });
-
-
-
-        detailed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(count >= id.size()) {
-                    setDirections(Directions.findPath(copyStart, start, g, vertexInfo, edgeInfo));
-                }
-                else {
-                    setDirections(Directions.findPath(copyStart, id.get(count), g, vertexInfo, edgeInfo));
-                }
-
             }
         });
     }
