@@ -10,7 +10,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class name: Route.java
+ * Description: Given a unsorted plan list, we need to sort the list base on the distance
+ *              Given a list, we need to create a route.
+ */
 public class Route {
+    /**
+     * Using the graph to sort the list base on the distance
+     * @param id unsorted list
+     * @param copyStart starting point
+     * @param g the whole graph
+     * @param vertexInfo all vertex
+     * @param edgeInfo all edge
+     * @return a sorted list
+     */
     public static List<String> sortExhibits(List<String> id, String copyStart, Graph g, Map<String,
             ZooData.VertexInfo> vertexInfo, Map<String, ZooData.EdgeInfo> edgeInfo){
         String temp = ShareData.getGroup(App.getContext(), "group");
@@ -48,6 +62,16 @@ public class Route {
         }
         return sortUnvisited;
     }
+
+    /**
+     * Create a route by using a graph.
+     * @param sortUnvisited Use the order of the list to create a route
+     * @param startExhibit Starting point
+     * @param g the whole graph
+     * @param vertexInfo all vertex
+     * @param edgeInfo alledge
+     * @return a list that contains the description of the route
+     */
     public static List<String> createRoute(List<String> sortUnvisited, String startExhibit,
                                            Graph g, Map<String, ZooData.VertexInfo> vertexInfo,
                                            Map<String, ZooData.EdgeInfo> edgeInfo){

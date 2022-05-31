@@ -302,10 +302,12 @@ public class ExhibitsActivity extends AppCompatActivity {
         Gson gson = new Gson();
         String name = gson.toJson(resultName);
         String id = gson.toJson(resultId);
+        String ex = gson.toJson(result);
         String temGroup = gson.toJson(group);
         ShareData.setResultName(context, "result name", name);
         ShareData.setResultId(context, "result id", id);
         ShareData.setGroup(context, "group", temGroup);
+        ShareData.setExhibits(context,"exhibits", ex);
 
     }
 

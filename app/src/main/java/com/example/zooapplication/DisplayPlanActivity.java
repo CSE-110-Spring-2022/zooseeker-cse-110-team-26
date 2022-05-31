@@ -58,34 +58,14 @@ public class DisplayPlanActivity extends AppCompatActivity {
         String unvisitedId = ShareData.getResultId(App.getContext(), "result id");
         unvisited = gson.fromJson(unvisitedName, ArrayList.class);
         id = gson.fromJson(unvisitedId, ArrayList.class);
-
         //load data from json file
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                vertexInfo = ZooData.loadVertexInfoJSON("sample_node_info.json",
-                        DisplayPlanActivity.this);
-                edgeInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json",
-                        DisplayPlanActivity.this);
-                g = ZooData.loadZooGraphJSON("sample_zoo_graph.json",
-                        DisplayPlanActivity.this);
-
-            }
-        });
+        loadZooData();
         String copyStart = start;
-
         sortUnvisited = Route.sortExhibits(id, copyStart, g, vertexInfo, edgeInfo);
         //find the path according to the sortVisited list
         copyStart = start;
-        /*for(String s: sortUnvisited){
-            plan.add(Directions.findPath(copyStart, s, g, vertexInfo, edgeInfo));
-            copyStart = s;
-        }
-        */
         plan = Route.createRoute(sortUnvisited, copyStart, g, vertexInfo, edgeInfo);
         List<String> displayPlan = new LinkedList<>(sortUnvisited);
-
-//        displayPlan.remove(0);
 
         //looking for distance to planned item, and location where planned item is located
         for(int i = 0; i < displayPlan.size(); i++){
@@ -102,8 +82,6 @@ public class DisplayPlanActivity extends AppCompatActivity {
             displayPlan.set(i,displayPlan.get(i) + '\n'+ "Distance: " + dist + "\n" + "Street: " + street);
         }
 
-        //displayPlan.remove(0);
-
         ListView view1 = findViewById(R.id.planlist);
         ArrayAdapter displayAdapter = new ArrayAdapter
                 (this, android.R.layout.simple_list_item_1, displayPlan);
@@ -114,6 +92,28 @@ public class DisplayPlanActivity extends AppCompatActivity {
         ShareData.setLastActivity(App.getContext(),"last activity", getClass().getName());
     }
 
+    /**
+     * load zoo data from json file
+     */
+    private void loadZooData() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                vertexInfo = ZooData.loadVertexInfoJSON("sample_node_info.json",
+                        DisplayPlanActivity.this);
+                edgeInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json",
+                        DisplayPlanActivity.this);
+                g = ZooData.loadZooGraphJSON("sample_zoo_graph.json",
+                        DisplayPlanActivity.this);
+            }
+        });
+    }
+
+    /**
+     * direction button is clicked
+     * We need to pass the sorted plan list to next
+     * activity
+     */
     private void directionButtonClicked() {
         directionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,6 +131,9 @@ public class DisplayPlanActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * If go back is clicked, the go back to the previou UI
+     */
     private void goBackClicked() {
         goBack.setOnClickListener(new View.OnClickListener() {
             @Override
