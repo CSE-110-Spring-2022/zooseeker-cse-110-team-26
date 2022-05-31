@@ -12,8 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,9 +26,9 @@ public class DetailedToBriefTest {
     @Before
     public void setUp() {
         context = ApplicationProvider.getApplicationContext();
-        g = ZooData.loadZooGraphJSON("sample_zoo_graph.json",context);
-        vInfo = ZooData.loadVertexInfoJSON("sample_node_info.json",context);
-        eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json",context);
+        g = ZooData.loadZooGraphJSON("zoo_graph.json",context);
+        vInfo = ZooData.loadVertexInfoJSON("exhibit_info.json",context);
+        eInfo = ZooData.loadEdgeInfoJSON("trail_info.json",context);
     }
 
 

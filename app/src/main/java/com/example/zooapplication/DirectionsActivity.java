@@ -15,7 +15,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.webkit.URLUtil;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Switch;
@@ -24,7 +23,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 
 import org.jgrapht.Graph;
-import org.jgrapht.graph.DefaultDirectedGraph;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -229,7 +227,7 @@ public class DirectionsActivity extends AppCompatActivity {
                 //     else use N replan needToReplan = true;
 
                 tempDis = Double.MAX_VALUE;
-                //find the closest point of above loop
+//              find the closest point of above loop
                 for(ExhibitsItem ex: planList){
                     Coord cur = new Coord(ex.lat, ex.lng);
                     double temp = Coord.getDist(cur, cloestPoint);
@@ -240,7 +238,9 @@ public class DirectionsActivity extends AppCompatActivity {
                 }
 
                 if(tempDis != 0.0d && newItem.id.equals(id.get(count))){
-                    needToReplan = true;
+                    needToReplan = false;
+                    String s = Directions.findPath(copyStart, id.get(count), g, vertexInfo, edgeInfo);
+                    setDirections(s);
                     //String s = Directions.findPath(copyStart, id.get(count), g, vertexInfo, edgeInfo);
                 }
 
@@ -250,6 +250,7 @@ public class DirectionsActivity extends AppCompatActivity {
 //                    setDirections(s);
                     return;
                 }
+
 
                 else{
                     needToReplan = true;
@@ -288,11 +289,11 @@ public class DirectionsActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                vertexInfo = ZooData.loadVertexInfoJSON("sample_node_info.json",
+                vertexInfo = ZooData.loadVertexInfoJSON("exhibit_info.json",
                         DirectionsActivity.this);
-                edgeInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json",
+                edgeInfo = ZooData.loadEdgeInfoJSON("trail_info.json",
                         DirectionsActivity.this);
-                g = ZooData.loadZooGraphJSON("sample_zoo_graph.json",
+                g = ZooData.loadZooGraphJSON("zoo_graph.json",
                         DirectionsActivity.this);
 
             }
@@ -314,7 +315,13 @@ public class DirectionsActivity extends AppCompatActivity {
         //rearrange the sublist
         toAppend = Route.sortExhibits(id.subList(count, id.size()), copyStart, g, vertexInfo, edgeInfo);
         String s = Directions.findPath(copyStart, toAppend.get(0),g,vertexInfo, edgeInfo);
-        setDirections(s);
+        if(!s.equals("")){
+            setDirections(s);
+        }
+        else{
+            String str = "We are already at " + toAppend.get(0);
+            setDirections(str);
+        }
         id.subList(count, id.size()).clear();
         id.addAll((toAppend));
     }
@@ -369,7 +376,7 @@ public class DirectionsActivity extends AppCompatActivity {
                 //exit gate if next button is clicked.
                 else if(count == id.size() - 1) {
                     count++;
-                    String s = Directions.findPath(id.get(id.size() - 1), start, g, vertexInfo, edgeInfo);
+                    String s = Directions.findPath(copyStart, start, g, vertexInfo, edgeInfo);
                     setDirections(s);
                     stepBack.push(copyStart);
                 }

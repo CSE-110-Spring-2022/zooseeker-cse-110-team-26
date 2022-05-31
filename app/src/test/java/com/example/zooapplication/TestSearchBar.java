@@ -36,7 +36,7 @@ public class TestSearchBar {
                 .build();
        ExhibitsDatabase.injectTestDatabase(testDb);
 
-        List<ExhibitsItem> todos = ExhibitsItem.loadJSON(context, "sample_node_info.json");
+        List<ExhibitsItem> todos = ExhibitsItem.loadJSON(context, "exhibit_info.json");
         ExhibitsItemDao = testDb.exhibitsItemDao();
         ExhibitsItemDao.insertAll(todos);
     }

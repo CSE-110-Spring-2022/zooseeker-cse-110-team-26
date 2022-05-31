@@ -5,13 +5,9 @@
 package com.example.zooapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -22,12 +18,9 @@ import com.google.gson.Gson;
 import org.jgrapht.Graph;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class DisplayPlanActivity extends AppCompatActivity {
     private ArrayList<String> unvisited;
@@ -99,11 +92,11 @@ public class DisplayPlanActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                vertexInfo = ZooData.loadVertexInfoJSON("sample_node_info.json",
+                vertexInfo = ZooData.loadVertexInfoJSON("exhibit_info.json",
                         DisplayPlanActivity.this);
-                edgeInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json",
+                edgeInfo = ZooData.loadEdgeInfoJSON("trail_info.json",
                         DisplayPlanActivity.this);
-                g = ZooData.loadZooGraphJSON("sample_zoo_graph.json",
+                g = ZooData.loadZooGraphJSON("zoo_graph.json",
                         DisplayPlanActivity.this);
             }
         });
