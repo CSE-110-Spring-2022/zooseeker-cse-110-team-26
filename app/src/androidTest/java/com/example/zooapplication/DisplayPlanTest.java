@@ -8,15 +8,11 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.anything;
 import static java.lang.Thread.sleep;
-
-import android.util.Log;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.contrib.RecyclerViewActions;
@@ -31,16 +27,16 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class DetailedSwitchTest {
+public class DisplayPlanTest {
 
     @Rule
     public ActivityTestRule<ExhibitsActivity> mActivityTestRule = new ActivityTestRule<>(ExhibitsActivity.class);
 
     @Test
     /**
-     * Test if the detailed setting works correctly
+     * Test if the Display Plan has the right distances
      * */
-    public void detailed_switch_test() throws InterruptedException {
+    public void checkCorrectDistanceNumbers() throws InterruptedException {
         // clear the recyclerView
         sleep(500);
         onView(withId(R.id.clear_all)).perform(click());
@@ -64,50 +60,11 @@ public class DetailedSwitchTest {
         sleep(500);
         onView(withId(R.id.button11)).perform(click());
 
-
-        // Click "Direction" button
+        //Check if the text view has the correct distance numbers
         sleep(500);
-        onView(withId(R.id.direction)).perform(click());
-
-        // Click the "Next" button
-        sleep(500);
-        onView(withId(R.id.getNextDirection)).perform(click());
-
-        // Click the detailed switch
-        sleep(500);
-        onView(withId(R.id.setting)).perform(click());
-
-        //Check if directions are now detailed
-        onView(withId(R.id.currentDirection)).check(matches(withText(containsString("Continue"))));
-
-        // Click the detailed switch
-        sleep(500);
-        onView(withId(R.id.setting)).perform(click());
-
-        //Check if directions are back to brief
-        onView(withId(R.id.currentDirection)).check(matches(not(withText(containsString("Continue")))));
-
-        // Click the detailed switch
-        sleep(500);
-        onView(withId(R.id.setting)).perform(click());
-
-        // Click the "Next" button
-        sleep(500);
-        onView(withId(R.id.getNextDirection)).perform(click());
-
-        //Click the "Step Back" button
-        sleep(500);
-        onView(withId(R.id.step_back)).perform(click());
-
-        //Check if directions are now detailed
-        onView(withId(R.id.currentDirection)).check(matches(withText(containsString("Continue"))));
-
-        // Click the detailed switch
-        sleep(500);
-        onView(withId(R.id.setting)).perform(click());
-
-        //Check if directions are back to brief
-        onView(withId(R.id.currentDirection)).check(matches(not(withText(containsString("Continue")))));
+        onData(anything()).inAdapterView(withId(R.id.planlist)).atPosition(0).check(matches(withText(containsString("5300"))));
+        onData(anything()).inAdapterView(withId(R.id.planlist)).atPosition(1).check(matches(withText(containsString("13100"))));
+        onData(anything()).inAdapterView(withId(R.id.planlist)).atPosition(2).check(matches(withText(containsString("29800"))));
 
     }
 }
