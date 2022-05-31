@@ -37,7 +37,7 @@ public class TestFindDistance {
     @Test
     public void testSample(){
 
-        int acutal_distance = findDistance("entrance_exit_gate","flamingo",g,vInfo,eInfo);
+        int acutal_distance = findDistance("entrance_exit_gate","siamang",g,vInfo,eInfo);
         int expected_distance = 210;
 
         assertEquals(acutal_distance, expected_distance);
