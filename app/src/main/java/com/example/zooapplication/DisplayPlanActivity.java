@@ -61,6 +61,8 @@ public class DisplayPlanActivity extends AppCompatActivity {
         List<String> displayPlan = new LinkedList<>(sortUnvisited);
 
         //looking for distance to planned item, and location where planned item is located
+        String disStrt = start;
+        double dist = 0;
         for(int i = 0; i < displayPlan.size(); i++){
             String id = displayPlan.get(i);
 
@@ -68,11 +70,12 @@ public class DisplayPlanActivity extends AppCompatActivity {
             id = Directions.getID(id,g,vertexInfo,edgeInfo);
 
             //Getting Street and Distance
-            double dist = Directions.findDistance("entrance_exit_gate",id,g,vertexInfo,edgeInfo);
+            dist = dist + Directions.findDistance(disStrt,id,g,vertexInfo,edgeInfo);
+            disStrt = id;
             String street = Directions.findStreet(id,g,vertexInfo,edgeInfo);
 
             //updating displayPlan list items to include distance and street
-            displayPlan.set(i,displayPlan.get(i) + '\n'+ "Distance: " + dist + "\n" + "Street: " + street);
+            displayPlan.set(i,displayPlan.get(i) + '\n'+ "Distance: " + dist + " ft." + "\n" + "Street: " + street);
         }
 
         ListView view1 = findViewById(R.id.planlist);
