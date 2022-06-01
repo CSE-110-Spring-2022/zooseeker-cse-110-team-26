@@ -27,16 +27,16 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class SkipDirectionsTest {
+public class NextDirectionsTest {
 
     @Rule
     public ActivityTestRule<ExhibitsActivity> mActivityTestRule = new ActivityTestRule<>(ExhibitsActivity.class);
 
     @Test
     /**
-     * Test if the skip button works correctly
+     * Test if the next button works correctly
      * */
-    public void skipButtonTest() throws InterruptedException {
+    public void nextButtonTest() throws InterruptedException {
         // clear the recyclerView
         sleep(500);
         onView(withId(R.id.clear_all)).perform(click());
@@ -66,16 +66,17 @@ public class SkipDirectionsTest {
         onView(withId(R.id.direction)).perform(click());
         // Click the "Skip" button
         sleep(500);
-        onView(withId(R.id.skip)).perform(click());
+        onView(withId(R.id.getNextDirection)).perform(click());
         sleep(500);
-        onView(withId(R.id.skip)).perform(click());
+        onView(withId(R.id.getNextDirection)).perform(click());
         sleep(500);
-        onView(withId(R.id.skip)).perform(click());
+        onView(withId(R.id.getNextDirection)).perform(click());
         sleep(500);
-        onView(withId(R.id.skip)).perform(click());
+        onView(withId(R.id.getNextDirection)).perform(click());
         sleep(500);
 
+
         // An error message should be displayed after skipping all route
-        onView(withText("Unable to skip. No exhibits left!")).check(matches(isDisplayed()));
+        onView(withText("The route is done!")).check(matches(isDisplayed()));
     }
 }

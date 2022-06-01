@@ -5,8 +5,6 @@
  * location to another.
  */
 package com.example.zooapplication;
-
-
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -23,7 +21,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 /**
  * find the closest exhibit and the path base on current location
  */
@@ -36,24 +33,24 @@ public class Directions {
      */
     public static String findPath(String start, String end, Graph g, Map<String,
             ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> eInfo){
-
-
         if(start.equals(end)){
-            return "We are already here";
+            return "We are already here " + end;
         }
-
         Gson gson = new Gson();
         String temp = ShareData.getGroup(App.getContext(), "group");
-        Map<String, String> map = gson.fromJson(temp, HashMap.class);
-        String plan = "";
-        if(map.containsKey(start)){
-            start = map.get(start);
-        }
+        //allow for testing
 
-        if(map.containsKey(end)){
-            end = map.get(end);
-        }
+            Map<String, String> map = gson.fromJson(temp, HashMap.class);
+            String plan = "";
+            if(map != null) {
+                if (map.containsKey(start)) {
+                    start = map.get(start);
+                }
 
+                if (map.containsKey(end)) {
+                    end = map.get(end);
+                }
+            }
         GraphPath<String, IdentifiedWeightedEdge> shortestPath =
                 DijkstraShortestPath.findPathBetween(g, start, end);
         String currentLoc = start;
@@ -93,16 +90,17 @@ public class Directions {
      */
     public static int findDistance(String start, String end, Graph g, Map<String,
             ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> eInfo) {
-
         Gson gson = new Gson();
         String temp = ShareData.getGroup(App.getContext(), "group");
         Map<String, String> map = gson.fromJson(temp, HashMap.class);
-        if(map.containsKey(start)){
-            start = map.get(start);
-        }
+        if(map != null) {
+            if (map.containsKey(start)) {
+                start = map.get(start);
+            }
 
-        if(map.containsKey(end)){
-            end = map.get(end);
+            if (map.containsKey(end)) {
+                end = map.get(end);
+            }
         }
 
         GraphPath<String, IdentifiedWeightedEdge> shortestPath =
@@ -179,9 +177,6 @@ public class Directions {
      */
     public static String getID (String exhibit,Graph g, Map<String,
             ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> edgeInfo){
-
-
-
         Gson gson = new Gson();
         String temp = ShareData.getGroup(App.getContext(), "group");
         Map<String, String> map = gson.fromJson(temp, HashMap.class);

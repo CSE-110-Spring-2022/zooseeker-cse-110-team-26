@@ -39,22 +39,22 @@ public class RetainItemsTest {
         onView(withId(R.id.clear_all)).perform(click());
         sleep(500);
         // Add exhibits to the list
-        onView(withId(R.id.search_bar)).perform(typeText("el"));
+        onView(withId(R.id.search_bar)).perform(typeText("go"));
         sleep(500);
-        onView(withText(containsString("elephant"))).inRoot(isPlatformPopup()).perform(click());
+        onView(withText(containsString("gorilla"))).inRoot(isPlatformPopup()).perform(click());
         sleep(500);
-        onView(withId(R.id.search_bar)).perform(typeText("li"));
+        onView(withId(R.id.search_bar)).perform(typeText("fl"));
         sleep(500);
-        onView(withText(containsString("lions"))).inRoot(isPlatformPopup()).perform(click());
+        onView(withText(containsString("flamingo"))).inRoot(isPlatformPopup()).perform(click());
         sleep(500);
-        onView(withId(R.id.search_bar)).perform(typeText("f"));
+        onView(withId(R.id.search_bar)).perform(typeText("ko"));
         sleep(500);
-        onView(withText(containsString("fox"))).inRoot(isPlatformPopup()).perform(click());
+        onView(withText(containsString("koi"))).inRoot(isPlatformPopup()).perform(click());
         sleep(500);
         Espresso.closeSoftKeyboard();
 
         // Check if the context of the list is correct
-        String[] context = new String[]{"Elephant Odyssey", "Lions", "Arctic Foxes"}; // a string list contains the excepted output value
+        String[] context = new String[]{"Gorillas", "Flamingos", "Koi Fish"}; // a string list contains the excepted output value
         for (int idx = 0; idx <context.length; idx++) {
             // try ti scroll to an item that contains the exhibit
             onView(ViewMatchers.withId(R.id.dis))
@@ -72,7 +72,7 @@ public class RetainItemsTest {
 
         // check items again when re-open the app
         for (int idx = 0; idx <context.length; idx++) {
-            // try ti scroll to an item that contains the exhibit
+            // try to scroll to an item that contains the exhibit
             onView(ViewMatchers.withId(R.id.dis))
                     // scroll with fail if item is not on the recyclerView
                     .perform(RecyclerViewActions.scrollTo(

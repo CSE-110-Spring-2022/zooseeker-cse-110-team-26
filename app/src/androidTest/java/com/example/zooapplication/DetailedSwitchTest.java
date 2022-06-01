@@ -8,11 +8,15 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.Matchers.anything;
 import static java.lang.Thread.sleep;
+
+import android.util.Log;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.contrib.RecyclerViewActions;
@@ -27,16 +31,16 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class SkipDirectionsTest {
+public class DetailedSwitchTest {
 
     @Rule
     public ActivityTestRule<ExhibitsActivity> mActivityTestRule = new ActivityTestRule<>(ExhibitsActivity.class);
 
     @Test
     /**
-     * Test if the skip button works correctly
+     * Test if the detailed setting works correctly
      * */
-    public void skipButtonTest() throws InterruptedException {
+    public void detailed_switch_test() throws InterruptedException {
         // clear the recyclerView
         sleep(500);
         onView(withId(R.id.clear_all)).perform(click());
@@ -64,18 +68,46 @@ public class SkipDirectionsTest {
         // Click "Direction" button
         sleep(500);
         onView(withId(R.id.direction)).perform(click());
-        // Click the "Skip" button
-        sleep(500);
-        onView(withId(R.id.skip)).perform(click());
-        sleep(500);
-        onView(withId(R.id.skip)).perform(click());
-        sleep(500);
-        onView(withId(R.id.skip)).perform(click());
-        sleep(500);
-        onView(withId(R.id.skip)).perform(click());
-        sleep(500);
 
-        // An error message should be displayed after skipping all route
-        onView(withText("Unable to skip. No exhibits left!")).check(matches(isDisplayed()));
+        // Click the "Next" button
+        sleep(500);
+        onView(withId(R.id.getNextDirection)).perform(click());
+
+        // Click the detailed switch
+        sleep(500);
+        onView(withId(R.id.setting)).perform(click());
+
+        //Check if directions are now detailed
+        onView(withId(R.id.currentDirection)).check(matches(withText(containsString("Continue"))));
+
+        // Click the detailed switch
+        sleep(500);
+        onView(withId(R.id.setting)).perform(click());
+
+        //Check if directions are back to brief
+        onView(withId(R.id.currentDirection)).check(matches(not(withText(containsString("Continue")))));
+
+        // Click the detailed switch
+        sleep(500);
+        onView(withId(R.id.setting)).perform(click());
+
+        // Click the "Next" button
+        sleep(500);
+        onView(withId(R.id.getNextDirection)).perform(click());
+
+        //Click the "Step Back" button
+        sleep(500);
+        onView(withId(R.id.step_back)).perform(click());
+
+        //Check if directions are now detailed
+        onView(withId(R.id.currentDirection)).check(matches(withText(containsString("Continue"))));
+
+        // Click the detailed switch
+        sleep(500);
+        onView(withId(R.id.setting)).perform(click());
+
+        //Check if directions are back to brief
+        onView(withId(R.id.currentDirection)).check(matches(not(withText(containsString("Continue")))));
+
     }
 }

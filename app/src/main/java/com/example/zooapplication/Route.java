@@ -10,7 +10,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class name: Route.java
+ * Description: Given a unsorted plan list, we need to sort the list base on the distance
+ *              Given a list, we need to create a route.
+ */
 public class Route {
+    /**
+     * Using the graph to sort the list base on the distance
+     * @param id unsorted list
+     * @param copyStart starting point
+     * @param g the whole graph
+     * @param vertexInfo all vertex
+     * @param edgeInfo all edge
+     * @return a sorted list
+     */
     public static List<String> sortExhibits(List<String> id, String copyStart, Graph g, Map<String,
             ZooData.VertexInfo> vertexInfo, Map<String, ZooData.EdgeInfo> edgeInfo){
         String temp = ShareData.getGroup(App.getContext(), "group");
@@ -23,29 +37,41 @@ public class Route {
         while(id.size() > 0){
             int distance = Integer.MAX_VALUE;
             int count = 0;
-            if(group.containsKey(copyStart)){
-                copyStart = group.get(copyStart);
-            }
-            while(count < id.size()){
-                String end = id.get((count));
-                if(group.containsKey(id.get(count))){
-                    end = group.get(id.get(count));
+            if (group != null && group.containsKey(copyStart)) {
+                    copyStart = group.get(copyStart);
                 }
-                int tempDis = Directions.findDistance
-                        (copyStart, end, g, vertexInfo, edgeInfo);
-                //Takes smallest distance
-                if(tempDis < distance) {
-                    endPoint = id.get(count);
-                    distance = tempDis;
+                while (count < id.size()) {
+                    String end = id.get((count));
+                    if (group != null && group.containsKey(id.get(count))) {
+                        end = group.get(id.get(count));
+                    }
+                    int tempDis = Directions.findDistance
+                            (copyStart, end, g, vertexInfo, edgeInfo);
+                    //Takes smallest distance
+                    if (tempDis < distance) {
+                        endPoint = id.get(count);
+                        distance = tempDis;
+                    }
+
+                    count++;
                 }
-                count++;
-            }
+
             sortUnvisited.add(endPoint);
             id.remove(endPoint);
             copyStart = endPoint;
         }
         return sortUnvisited;
     }
+
+    /**
+     * Create a route by using a graph.
+     * @param sortUnvisited Use the order of the list to create a route
+     * @param startExhibit Starting point
+     * @param g the whole graph
+     * @param vertexInfo all vertex
+     * @param edgeInfo alledge
+     * @return a list that contains the description of the route
+     */
     public static List<String> createRoute(List<String> sortUnvisited, String startExhibit,
                                            Graph g, Map<String, ZooData.VertexInfo> vertexInfo,
                                            Map<String, ZooData.EdgeInfo> edgeInfo){
@@ -54,7 +80,7 @@ public class Route {
         Gson gson = new Gson();
         Map<String, String> group = gson.fromJson(temp, HashMap.class);
         for(String s: sortUnvisited){
-            if(group.containsKey(s)){
+            if(group != null && group.containsKey(s)){
                 s = group.get(s);
             }
             plan.add(Directions.findPath(startExhibit, s, g, vertexInfo, edgeInfo));

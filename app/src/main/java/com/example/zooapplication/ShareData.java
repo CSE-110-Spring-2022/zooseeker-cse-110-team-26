@@ -73,6 +73,16 @@ public class ShareData {
         edit.commit();
     }
 
+    public static void setExhibits(Context context, String key, String value){
+        SharedPreferences.Editor edit = getSharePref(context).edit();
+        edit.putString(key, value);
+        edit.commit();
+    }
+
+    public static String getExhibits(Context context, String key){
+        return getSharePref(context).getString(key, "");
+    }
+
     /**
      *
      */
