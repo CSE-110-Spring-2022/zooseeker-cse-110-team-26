@@ -27,16 +27,16 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class SkipDirectionsTest {
+public class DisplayPlanTest {
 
     @Rule
     public ActivityTestRule<ExhibitsActivity> mActivityTestRule = new ActivityTestRule<>(ExhibitsActivity.class);
 
     @Test
     /**
-     * Test if the skip button works correctly
+     * Test if the Display Plan has the right distances
      * */
-    public void skipButtonTest() throws InterruptedException {
+    public void checkCorrectDistanceNumbers() throws InterruptedException {
         // clear the recyclerView
         sleep(500);
         onView(withId(R.id.clear_all)).perform(click());
@@ -60,22 +60,11 @@ public class SkipDirectionsTest {
         sleep(500);
         onView(withId(R.id.button11)).perform(click());
 
+        //Check if the text view has the correct distance numbers
+        sleep(500);
+        onData(anything()).inAdapterView(withId(R.id.planlist)).atPosition(0).check(matches(withText(containsString("5300"))));
+        onData(anything()).inAdapterView(withId(R.id.planlist)).atPosition(1).check(matches(withText(containsString("13100"))));
+        onData(anything()).inAdapterView(withId(R.id.planlist)).atPosition(2).check(matches(withText(containsString("29800"))));
 
-        // Click "Direction" button
-        sleep(500);
-        onView(withId(R.id.direction)).perform(click());
-        // Click the "Skip" button
-        sleep(500);
-        onView(withId(R.id.skip)).perform(click());
-        sleep(500);
-        onView(withId(R.id.skip)).perform(click());
-        sleep(500);
-        onView(withId(R.id.skip)).perform(click());
-        sleep(500);
-        onView(withId(R.id.skip)).perform(click());
-        sleep(500);
-
-        // An error message should be displayed after skipping all route
-        onView(withText("Unable to skip. No exhibits left!")).check(matches(isDisplayed()));
     }
 }

@@ -27,25 +27,16 @@ public class TestFindDistance {
     @Before
     public void setUp() {
         context = ApplicationProvider.getApplicationContext();
-        g = ZooData.loadZooGraphJSON("sample_zoo_graph.json",context);
-        vInfo = ZooData.loadVertexInfoJSON("sample_node_info.json",context);
-        eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json",context);
+        g = ZooData.loadZooGraphJSON("old_assets/sample_zoo_graph.json",context);
+        vInfo = ZooData.loadVertexInfoJSON("old_assets/sample_node_info.json",context);
+        eInfo = ZooData.loadEdgeInfoJSON("old_assets/sample_edge_info.json",context);
     }
 
 
-    //Test from entrance/exit gate to the gorillas exhibit
-    @Test
-    public void testSample(){
-
-        int acutal_distance = findDistance("entrance_exit_gate","gorillas",g,vInfo,eInfo);
-        int expected_distance = 210;
-
-        assertEquals(acutal_distance, expected_distance);
-    }
 
     //Test from entrance/exit gate to the lions exhibit
     @Test
-    public void testSample2(){
+    public void testSample1(){
 
         int acutal_distance = findDistance("entrance_exit_gate","lions",g,vInfo,eInfo);
         int expected_distance = 310;
@@ -55,7 +46,7 @@ public class TestFindDistance {
 
     //Test from entrance/exit gate to the elephants exhibit
     @Test
-    public void testSample3(){
+    public void testSample2(){
 
         int acutal_distance = findDistance("entrance_exit_gate","elephant_odyssey",g,vInfo,eInfo);
         int expected_distance = 510;
@@ -65,7 +56,7 @@ public class TestFindDistance {
 
     //Test from elephants gate to the elephants exhibit
     @Test
-    public void testSample4(){
+    public void testSample3(){
 
         int acutal_distance = findDistance("elephant_odyssey","arctic_foxes",g,vInfo,eInfo);
         int expected_distance = 800;

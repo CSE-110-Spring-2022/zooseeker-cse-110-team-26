@@ -52,14 +52,14 @@ public class ExhibitsDatabaseTest {
         list1.add("enter");
         list1.add("start");
         list1.add("begin");
-        ExhibitsItem item1 = new ExhibitsItem("entrance-exit-gate-1", "gate", list1, "Entrance and Exit Gate");
+        ExhibitsItem item1 = new ExhibitsItem("entrance-exit-gate-1", "gate", list1, "Entrance and Exit Gate","Group",100,100);
         long id = dao.insert(item1);
         List<String> list2 = new LinkedList<String>();
         list2.add("gorilla");
         list2.add("monkey");
         list2.add("ape");
         list2.add("mammal");
-        ExhibitsItem item2 = new ExhibitsItem("gorilla-viewpoint-1", "exhibit", list2,"Gorilla Viewpoint");
+        ExhibitsItem item2 = new ExhibitsItem("gorilla-viewpoint-1", "exhibit", list2,"Gorilla Viewpoint","Group", 200, 200);
         long id2 = dao.insert(item2);
         assertNotEquals(id,id2);
 
@@ -70,7 +70,7 @@ public class ExhibitsDatabaseTest {
         list1.add("enter");
         list1.add("start");
         list1.add("begin");
-        ExhibitsItem item1 = new ExhibitsItem("entrance-exit-gate-1", "gate", list1,"Entrance and Exit Gate");
+        ExhibitsItem item1 = new ExhibitsItem("entrance-exit-gate-1", "gate", list1,"Entrance and Exit Gate","Group", 100, 100);
         long key = dao.insert(item1);
 
         ExhibitsItem item2 = dao.get(key);
@@ -86,7 +86,7 @@ public class ExhibitsDatabaseTest {
         list1.add("enter");
         list1.add("start");
         list1.add("begin");
-        ExhibitsItem item1 = new ExhibitsItem("entrance-exit-gate-1", "gate", list1,"Entrance and Exit Gate");
+        ExhibitsItem item1 = new ExhibitsItem("entrance-exit-gate-1", "gate", list1,"Entrance and Exit Gate","Group", 200, 200);
         long key = dao.insert(item1);
 
         item1 = dao.get(key);
@@ -104,7 +104,7 @@ public class ExhibitsDatabaseTest {
         list1.add("enter");
         list1.add("start");
         list1.add("begin");
-        ExhibitsItem item1 = new ExhibitsItem("entrance-exit-gate-1", "gate", list1,"Entrance and Exit Gate");
+        ExhibitsItem item1 = new ExhibitsItem("entrance-exit-gate-1", "gate", list1,"Entrance and Exit Gate","Group", 300, 300);
         long key = dao.insert(item1);
 
         item1 = dao.get(key);
@@ -119,7 +119,7 @@ public class ExhibitsDatabaseTest {
         list1.add("enter");
         list1.add("start");
         list1.add("begin");
-        ExhibitsItem item1 = new ExhibitsItem("entrance-exit-gate-1", "gate", list1,"Entrance and Exit Gate");
+        ExhibitsItem item1 = new ExhibitsItem("entrance-exit-gate-1", "gate", list1,"Entrance and Exit Gate","Group", 100, 100);
         long key = dao.insert(item1);
 
         List<String> list2 = new LinkedList<String>();
@@ -127,7 +127,7 @@ public class ExhibitsDatabaseTest {
         list2.add("monkey");
         list2.add("ape");
         list2.add("mammal");
-        ExhibitsItem item2 = new ExhibitsItem("gorilla-viewpoint-1", "exhibit", list2, "Gorilla Viewpoint");
+        ExhibitsItem item2 = new ExhibitsItem("gorilla-viewpoint-1", "exhibit", list2, "Gorilla Viewpoint","Group", 200, 200);
         long id2 = dao.insert(item2);
         List<ExhibitsItem> ex = new LinkedList<>();
         ex.add(item1);

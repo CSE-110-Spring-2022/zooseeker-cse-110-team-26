@@ -6,7 +6,6 @@ package com.example.zooapplication;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -22,7 +21,7 @@ import java.util.concurrent.Executors;
  * load into local database
  * Similar to Lab 5
  */
-@Database(entities = {ExhibitsItem.class}, version = 4, exportSchema = false)
+@Database(entities = {ExhibitsItem.class}, version = 5, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class ExhibitsDatabase extends RoomDatabase {
     private static ExhibitsDatabase singleton = null;
@@ -43,7 +42,7 @@ public abstract class ExhibitsDatabase extends RoomDatabase {
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
                         super.onCreate(db);
                         Executors.newSingleThreadExecutor().execute(() ->{
-                            List<ExhibitsItem> exhibitsItems = ExhibitsItem.loadJSON(context, "sample_node_info.json");
+                            List<ExhibitsItem> exhibitsItems = ExhibitsItem.loadJSON(context, "exhibit_info.json");
                             getSingleton(context).exhibitsItemDao().insertAll(exhibitsItems);
                         });
 

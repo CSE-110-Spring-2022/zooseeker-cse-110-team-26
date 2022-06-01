@@ -36,7 +36,7 @@ public class TestSearchBar {
                 .build();
        ExhibitsDatabase.injectTestDatabase(testDb);
 
-        List<ExhibitsItem> todos = ExhibitsItem.loadJSON(context, "sample_node_info.json");
+        List<ExhibitsItem> todos = ExhibitsItem.loadJSON(context, "exhibit_info.json");
         ExhibitsItemDao = testDb.exhibitsItemDao();
         ExhibitsItemDao.insertAll(todos);
     }
@@ -70,14 +70,14 @@ public class TestSearchBar {
         scenario.onActivity(activity -> {
             AutoCompleteTextView auto = activity.autoComplete;
             EditText editText = activity.findViewById(R.id.search_bar);
-            String testText = "a";
+            String testText = "go";
 
             Adapter adapter = auto.getAdapter();
             editText.setText(testText);
 
 
             int key = adapter.getCount();
-            assertEquals(12, key);
+            assertEquals(3, key);
 
         });
     }
