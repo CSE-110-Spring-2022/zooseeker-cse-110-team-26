@@ -61,7 +61,7 @@ public class DisplayPlanActivity extends AppCompatActivity {
         List<String> displayPlan = new LinkedList<>(sortUnvisited);
 
         //looking for distance to planned item, and location where planned item is located
-        String disStrt = "entrance_exit_gate";
+        String disStrt = start;
         double dist = 0;
         for(int i = 0; i < displayPlan.size(); i++){
             String id = displayPlan.get(i);
