@@ -63,6 +63,7 @@ public class DirectionsActivity extends AppCompatActivity {
         dao = ExhibitsDatabase.getSingleton(this).exhibitsItemDao();
         //get all the exhibits with lat and lng
         exhibitsItems = dao.getAllWithLatLng();
+        List<ExhibitsItem> allExhibitItems = dao.getAll();
         getStepBack = findViewById(R.id.step_back);
         stepBack = new Stack<>();
         Gson gson = new Gson();
@@ -79,6 +80,8 @@ public class DirectionsActivity extends AppCompatActivity {
         for(String s: id){
             Log.d("id1234", String.valueOf(s));
         }
+        //load data from json file
+        loadZooData();
         //Connects to UI
         displayDirection = findViewById(R.id.currentDirection);
         getNextDirection = findViewById(R.id.getNextDirection);
@@ -88,17 +91,29 @@ public class DirectionsActivity extends AppCompatActivity {
         set = findViewById(R.id.set);
         userLat = findViewById(R.id.lat);
         userLng = findViewById(R.id.lng);
+//        for (ExhibitsItem e : allExhibitItems){
+//            if(e.group_id != null){
+//                for(int j = 0; j < allExhibitItems.size(); j++){
+//                    if(e.group_id.equals(allExhibitItems.get(j).id)){
+//                        e.lat = allExhibitItems.get(j).lat;
+//                        e.lng = allExhibitItems.get(j).lng;
+//                    }
+//                }
+//            }
+//        }
 
-        for(ExhibitsItem e: exhibitsItems){
-            for(String s : id){
+        for(String s : id){
+            for(ExhibitsItem e: exhibitsItems){
+                Log.d("allE" , e.id);
+                s = Directions.getID(s, g, vertexInfo, edgeInfo);
                 if(e.id.equals(s) && !e.name.equals("add")){
                     planList.add(e);
+                    Log.d("PlanList", e.id);
+                    Log.d("PlanList Lat", String.valueOf(e.lat));
+                    Log.d("PlanList Lng", String.valueOf(e.lng));
                 }
             }
         }
-
-        //load data from json file
-        loadZooData();
 
         for(String s : id){
             Log.d("Test", String.valueOf(s));
@@ -211,6 +226,7 @@ public class DirectionsActivity extends AppCompatActivity {
                     Coord current = new Coord(ex.lat, ex.lng);
                     double temp = Coord.getDist(current,  inputLocation);
                     if(temp < tempDis){
+                        Log.d("New Shortest", ex.id);
                         tempDis = temp;
                         newItem = ex;
                         newStart = ex.id;
@@ -236,18 +252,19 @@ public class DirectionsActivity extends AppCompatActivity {
                         newItem = ex;
                     }
                 }
-
-                if(tempDis != 0.0d && newItem.id.equals(id.get(count))){
+                Log.d("SetTest newItem: ", newItem.id);
+                Log.d("SetTest id.getcount: ", id.get(count));
+                if(tempDis != 0.0d && newItem.id.equals(Directions.getID(id.get(count), g, vertexInfo, edgeInfo))){
                     needToReplan = false;
                     String s = Directions.findPath(copyStart, id.get(count), g, vertexInfo, edgeInfo);
                     setDirections(s);
                     //String s = Directions.findPath(copyStart, id.get(count), g, vertexInfo, edgeInfo);
                 }
 
-                else if(tempDis == 0.0d && newItem.id.equals(id.get(count))){
+                else if(tempDis == 0.0d && newItem.id.equals(Directions.getID(id.get(count), g, vertexInfo, edgeInfo))){
                     needToReplan = false;
-//                    String s = Directions.findPath(copyStart, id.get(count), g, vertexInfo, edgeInfo);
-//                    setDirections(s);
+                    String s = Directions.findPath(copyStart, copyStart, g, vertexInfo, edgeInfo);
+                    setDirections(s);
                     return;
                 }
 
@@ -255,7 +272,7 @@ public class DirectionsActivity extends AppCompatActivity {
                 else{
                     needToReplan = true;
                 }
-
+                //needToReplan = true;
                 //construct a alert box;
                 AlertDialog.Builder builder = new AlertDialog.Builder(DirectionsActivity.this);
                 builder.setMessage("Off-route! Want to re-plan?");
@@ -307,10 +324,10 @@ public class DirectionsActivity extends AppCompatActivity {
      */
     private void replan() {
         //The input location is one the exhibits that in the unvisited list
-        if(id.contains(copyStart)){
-            Log.d("check exist", String.valueOf(id.contains(copyStart)));
-            id.remove(copyStart);
-        }
+//        if(id.contains(copyStart)){
+//            Log.d("check exist", String.valueOf(id.contains(copyStart)));
+//            id.remove(copyStart);
+//        }
         List<String> toAppend = new LinkedList<>();
         //rearrange the sublist
         toAppend = Route.sortExhibits(id.subList(count, id.size()), copyStart, g, vertexInfo, edgeInfo);
@@ -457,6 +474,12 @@ public class DirectionsActivity extends AppCompatActivity {
                     }
                     List<String> toAppend;
                     Log.d("toRemove" , "toRemove" + id.get(count));
+                    planList.remove(count);
+//                    for(int j = 0; j < planList.size(); j++){
+//                        if (planList.get(j).id.equals(id.get(count))){
+//                            planList.remove(j);
+//                        }
+//                    }
                     id.remove(count);
                     toAppend = Route.sortExhibits(id.subList(count, id.size()), copyStart, g, vertexInfo, edgeInfo);
                     id.subList(count, id.size()).clear();

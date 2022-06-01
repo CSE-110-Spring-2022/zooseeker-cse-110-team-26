@@ -33,7 +33,8 @@ public class Directions {
      */
     public static String findPath(String start, String end, Graph g, Map<String,
             ZooData.VertexInfo> vInfo, Map<String, ZooData.EdgeInfo> eInfo){
-        if(start.equals(end)){
+        if(start.equals(end) || getID(start, g, vInfo, eInfo).equals(end) || getID(end, g, vInfo, eInfo).equals(start)){
+            end = getID(end, g, vInfo, eInfo);
             return "We are already here " + end;
         }
         Gson gson = new Gson();
