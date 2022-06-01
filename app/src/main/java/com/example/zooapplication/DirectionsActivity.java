@@ -217,7 +217,6 @@ public class DirectionsActivity extends AppCompatActivity {
                         cloestPoint = current;
                     }
                 }
-
                 copyStart = newStart;
                 //currentPoint = copyStart;
 
